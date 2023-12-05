@@ -20,10 +20,10 @@ jobs:
     container:
       image: docker://ghcr.io/pulumi/devcontainer:latest
       options: --user root
-    # permissions:
-    #   contents: read
-    #   packages: read
-    #   actions: read
+    permissions:
+      contents: read
+      packages: read
+      actions: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
