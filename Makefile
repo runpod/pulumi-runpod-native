@@ -92,7 +92,7 @@ up::
 	pulumi stack init dev && \
 	pulumi stack select dev && \
 	pulumi config set name dev && \
-	pulumi up -y
+	pulumi up --config="runpod:token=${RUNPOD_TOKEN}" -y
 
 down::
 	$(call pulumi_login) \
