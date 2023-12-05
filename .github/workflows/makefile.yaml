@@ -24,8 +24,6 @@ jobs:
       contents: read
       packages: read
       actions: read
-    env:
-      RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -47,12 +45,9 @@ jobs:
         run: |
           set -ex
           make install
-      # - name: PulumiConfig
-      #   id: config
-      #   run: pulumi config set --secret runpod:token ${{env.RUNPOD_DEV_TOKEN}}
       - name: PulumiUp
         id: up
-        run: RUNPOD_TOKEN=${{env.RUNPOD_DEV_TOKEN}} make up
+        run: RUNPOD_TOKEN=${{ env.RUNPOD_TOKEN }} make up
       - name: PulumiDown
         id: down
         run: make down
