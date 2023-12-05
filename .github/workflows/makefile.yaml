@@ -12,7 +12,7 @@ on:
     - cron: "0 0 * * *"
 
 env:
-  RUNPOD_TOKEN: BCDEFGHIJKLMNOPQRSTUVWXYZ
+  RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
 
 jobs:
   build:
@@ -47,7 +47,9 @@ jobs:
           make install
       - name: PulumiUp
         id: up
-        run: RUNPOD_TOKEN=${{ env.RUNPOD_TOKEN }} make up
+        run: make up
+        env:
+          RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
       - name: PulumiDown
         id: down
         run: make down
