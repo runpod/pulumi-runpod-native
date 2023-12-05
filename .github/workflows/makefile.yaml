@@ -11,6 +11,9 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+env:
+  RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,6 +45,9 @@ jobs:
         run: |
           set -ex
           make install
+      - name: PulumiConfig
+        id: config
+        run: pulumi config set --secret runpod:token ${{env.RUNPOD_DEV_TOKEN}}
       - name: PulumiUp
         id: up
         run: make up
