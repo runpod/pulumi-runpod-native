@@ -52,7 +52,7 @@ jobs:
       #   run: pulumi config set --secret runpod:token ${{env.RUNPOD_DEV_TOKEN}}
       - name: PulumiUp
         id: up
-        run: make up
+        run: RUNPOD_TOKEN=${{env.RUNPOD_DEV_TOKEN}} make up
       - name: PulumiDown
         id: down
         run: make down
