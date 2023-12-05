@@ -13,9 +13,15 @@
         "strict": true
     },
     "files": [
+        "config/index.ts",
+        "config/vars.ts",
         "index.ts",
+        "networkStorage.ts",
+        "pod.ts",
         "provider.ts",
-        "random.ts",
+        "types/index.ts",
+        "types/input.ts",
+        "types/output.ts",
         "utilities.ts"
     ]
 }

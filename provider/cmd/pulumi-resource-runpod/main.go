@@ -15,10 +15,17 @@
 package main
 
 import (
+	"fmt"
+
 	p "github.com/pulumi/pulumi-go-provider"
 
-	xyz "github.com/pulumi/pulumi-xyz/provider"
+	runpod "github.com/runpod/pulumi-runpod-native/provider"
 )
 
 // Serve the provider against Pulumi's Provider protocol.
-func main() { p.RunProvider(xyz.Name, xyz.Version, xyz.Provider()) }
+func main() {
+	err := p.RunProvider(runpod.Name, runpod.Version, runpod.Provider())
+	if err != nil {
+		fmt.Println("err:", err.Error())
+	}
+}

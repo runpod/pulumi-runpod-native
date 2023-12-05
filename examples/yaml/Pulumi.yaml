@@ -1,16 +1,40 @@
-name: provider-xyz-native
+name: provider-runpod-native
 runtime: yaml
 plugins:
   providers:
-    - name: xyz
+    - name: runpod
       path: ../../bin
 
 resources:
-  myRandomResource:
-    type: xyz:Random
+  testNetworkStorage:
+    type: runpod:NetworkStorage
     properties:
-      length: 24
+      name: "testStorage1"
+      size: 20
+      dataCenterId: "US-NJ"
+
+  myRandomPod:
+    type: runpod:Pod
+    properties:
+      cloudType: ALL
+      networkVolumeId: ${testNetworkStorage.networkStorage.id}
+      gpuCount: 1
+      volumeInGb: 50
+      containerDiskInGb: 50
+      minVcpuCount: 2
+      minMemoryInGb: 15
+      gpuTypeId: "NVIDIA GeForce RTX 3080"
+      name: "RunPod Tensorflow"
+      imageName: "runpod/tensorflow"
+      dockerArgs: ""
+      ports: "8888/http"
+      volumeMountPath: "/workspace"
+      env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
 
 outputs:
-  output:
-    value: ${myRandomResource.result}
+  pod:
+    value: ${myRandomPod.pod}
+  networkStorage:
+    value: ${testNetworkStorage.networkStorage}
+
+
