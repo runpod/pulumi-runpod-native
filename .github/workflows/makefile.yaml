@@ -25,7 +25,7 @@ jobs:
       packages: read
       actions: read
     env:
-      RUNPOD_TOKEN: ${{ secrets.RUNPOD_TOKEN }}
+      RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
