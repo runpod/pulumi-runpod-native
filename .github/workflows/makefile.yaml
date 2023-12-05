@@ -32,7 +32,7 @@ jobs:
           submodules: "recursive"
 
       - name: Print Secret Value
-        run: echo secret value ${{ secrets.RUNPOD_DEV_TOKEN }}
+        run: echo secret value ${{ secrets }}
 
       - name: Unshallow clone for tags
         id: tags
