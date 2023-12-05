@@ -30,10 +30,8 @@ jobs:
         id: git
         with:
           submodules: "recursive"
-
       # - name: Print Secret Value
       #   run: echo secret value ${{ secrets.RUNPOD_DEV_TOKEN }} token
-
       - name: Unshallow clone for tags
         id: tags
         run: |
