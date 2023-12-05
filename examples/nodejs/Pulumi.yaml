@@ -1,6 +1,6 @@
-name: provider-xyz-native
+name: provider-runpod-native
 runtime: nodejs
 plugins:
   providers:
-    - name: xyz
+    - name: runpod
       path: ../../bin

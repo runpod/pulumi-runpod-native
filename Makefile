@@ -1,10 +1,10 @@
-PROJECT_NAME := Pulumi Xyz Resource Provider
+PROJECT_NAME := Pulumi Runpod Resource Provider
 
-PACK             := xyz
+PACK             := runpod
 PACKDIR          := sdk
-PROJECT          := github.com/pulumi/pulumi-xyz
-NODE_MODULE_NAME := @pulumi/xyz
-NUGET_PKG_NAME   := Pulumi.Xyz
+PROJECT          := github.com/runpod/pulumi-runpod-native
+NODE_MODULE_NAME := @pulumi/runpod
+NUGET_PKG_NAME   := Pulumi.Runpod
 
 PROVIDER        := pulumi-resource-${PACK}
 VERSION         ?= $(shell pulumictl get version)
@@ -92,7 +92,7 @@ up::
 	pulumi stack init dev && \
 	pulumi stack select dev && \
 	pulumi config set name dev && \
-	pulumi up -y
+	pulumi up --config="runpod:token=${RUNPOD_TOKEN}" -y
 
 down::
 	$(call pulumi_login) \
@@ -108,7 +108,9 @@ devcontainer::
 
 .PHONY: build
 
-build:: provider dotnet_sdk go_sdk nodejs_sdk python_sdk
+build:: provider go_sdk nodejs_sdk python_sdk
+# dotnet_sdk 
+
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
@@ -118,7 +120,8 @@ lint::
 		pushd $$DIR && golangci-lint run -c ../.golangci.yml --timeout 10m && popd ; \
 	done
 
-install:: install_nodejs_sdk install_dotnet_sdk
+# install_dotnet_sdk
+install:: install_nodejs_sdk
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
 GO_TEST 	 := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
