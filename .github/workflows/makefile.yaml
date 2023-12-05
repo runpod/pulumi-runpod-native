@@ -20,10 +20,10 @@ jobs:
     container:
       image: docker://ghcr.io/pulumi/devcontainer:latest
       options: --user root
-    permissions:
-      contents: read
-      packages: read
-      actions: read
+    # permissions:
+    #   contents: read
+    #   packages: read
+    #   actions: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
           submodules: "recursive"
 
       - name: Print Secret Value
-        run: echo secret value ${{ secrets }}
+        run: echo secret value ${{ secrets.RUNPOD_DEV_TOKEN }} token
 
       - name: Unshallow clone for tags
         id: tags
