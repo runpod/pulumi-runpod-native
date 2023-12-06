@@ -50,7 +50,7 @@ jobs:
       - name: PulumiUp
         id: up
         env:
-          RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
+          RUNPOD_TOKEN: 075HSC4QVAW6LVPBUYM5CSV9JQ0SV5VAOR5JGZWG
         run: make up
       - name: PulumiDown
         id: down
