@@ -81,18 +81,9 @@ jobs:
         with:
           node-version: ${{matrix.nodeversion}}
           registry-url: ${{env.NPM_REGISTRY_URL}}
-
-      # - name: Setup DotNet
-      #   uses: actions/setup-dotnet@v1
-      #   with:
-      #     dotnet-version: ${{matrix.dotnetversion}}
-      # - name: Setup Python
-      #   uses: actions/setup-python@v1
-      #   with:
-      #     python-version: ${{matrix.pythonversion}}
-      - name: Build
-        id: build
-        run: make build
+      - name: build
+        run: |
+          make build
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       - name: Check worktree clean
