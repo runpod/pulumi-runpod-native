@@ -37,8 +37,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Print Secret Value
-        run: echo secret value ${{ env.NPM_TOKEN }} token
       - name: Unshallow clone for tags
         run: git fetch --prune --unshallow --tags
       - name: Install Go
@@ -83,6 +81,7 @@ jobs:
         with:
           node-version: ${{matrix.nodeversion}}
           registry-url: ${{env.NPM_REGISTRY_URL}}
+
       # - name: Setup DotNet
       #   uses: actions/setup-dotnet@v1
       #   with:
@@ -91,6 +90,9 @@ jobs:
       #   uses: actions/setup-python@v1
       #   with:
       #     python-version: ${{matrix.pythonversion}}
+      - name: Build
+        id: build
+        run: make build
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       - name: Check worktree clean

@@ -5,6 +5,9 @@ plugins:
     - name: runpod
       path: ../../bin
 
+# config:
+#   runpod:token: "runpod api token"
+
 resources:
   testNetworkStorage:
     type: runpod:NetworkStorage
