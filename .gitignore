@@ -11,3 +11,7 @@ yarn.lock
 ci-scripts
 /nuget/
 provider/**/schema-embed.json
+examples/dotnet/**
+examples/nodejs/** */
+examples/go/** */
+examples/python/** */
