@@ -89,8 +89,6 @@ jobs:
       - name: build
         run: |
           make build
-        env:
-          VERSION: v0.0.5
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       # - name: Check worktree clean
@@ -116,14 +114,14 @@ jobs:
           user: ${{ env.PYPI_USERNAME }}
           password: ${{ env.PYPI_PASSWORD }}
           packages-dir: ${{github.workspace}}/sdk/python/bin/dist
+      - name: Cat package.json
+        run: cat ${{github.workspace}}/sdk/nodejs/bin/package.json
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         uses: JS-DevTools/npm-publish@v3
         with:
           access: "public"
           token: ${{ env.NPM_TOKEN }}
           package: ${{github.workspace}}/sdk/nodejs/bin/package.json
-        env:
-          VERSION: v0.0.5
       - if: ${{ matrix.language == 'dotnet' && env.PUBLISH_NUGET == 'true' }}
         name: publish nuget package
         run: |
