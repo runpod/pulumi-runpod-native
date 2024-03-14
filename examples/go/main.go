@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pulumi/pulumi-runpod/sdk/go/runpod"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/runpod/pulumi-runpod-native/sdk/go/runpod"
 )
 
 func main() {
@@ -25,9 +25,9 @@ func main() {
 			ContainerDiskInGb: pulumi.Int(50),
 			MinVcpuCount:      pulumi.Int(2),
 			MinMemoryInGb:     pulumi.Int(15),
-			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 3080"),
-			Name:              pulumi.String("RunPod Tensorflow"),
-			ImageName:         pulumi.String("runpod/tensorflow"),
+			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 3070"),
+			Name:              pulumi.String("RunPod Pytorch"),
+			ImageName:         pulumi.String("runpod/pytorch"),
 			DockerArgs:        pulumi.String(""),
 			Ports:             pulumi.String("8888/http"),
 			VolumeMountPath:   pulumi.String("/workspace"),

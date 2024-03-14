@@ -6,12 +6,20 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Serialization;
+using Pulumi;
 
-namespace Pulumi.Xyz
+namespace RunpodInfra.Runpod
 {
-    [XyzResourceType("pulumi:providers:xyz")]
+    [RunpodResourceType("pulumi:providers:runpod")]
     public partial class Provider : global::Pulumi.ProviderResource
     {
+        /// <summary>
+        /// Runpod API Token
+        /// </summary>
+        [Output("token")]
+        public Output<string> Token { get; private set; } = null!;
+
+
         /// <summary>
         /// Create a Provider resource with the given unique name, arguments, and options.
         /// </summary>
@@ -19,8 +27,8 @@ namespace Pulumi.Xyz
         /// <param name="name">The unique name of the resource</param>
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public Provider(string name, ProviderArgs? args = null, CustomResourceOptions? options = null)
-            : base("xyz", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
+        public Provider(string name, ProviderArgs args, CustomResourceOptions? options = null)
+            : base("runpod", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
         {
         }
 
@@ -29,6 +37,7 @@ namespace Pulumi.Xyz
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
+                PluginDownloadURL = "github://api.github.com/runpod/pulumi-runpod-native",
             };
             var merged = CustomResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.
@@ -39,6 +48,12 @@ namespace Pulumi.Xyz
 
     public sealed class ProviderArgs : global::Pulumi.ResourceArgs
     {
+        /// <summary>
+        /// Runpod API Token
+        /// </summary>
+        [Input("token", required: true)]
+        public Input<string> Token { get; set; } = null!;
+
         public ProviderArgs()
         {
         }

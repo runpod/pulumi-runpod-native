@@ -120,7 +120,11 @@ File name must be main.go.
 
 {{% choosable language python %}}
 
-File name must be __main__.py
+Note: File name must be __main__.py. You must download pulumi_runpod and run any commands from inside the venv created by pulumi.
+
+```bash
+    source venv/bin/activate
+```
 
 ```python
     import pulumi

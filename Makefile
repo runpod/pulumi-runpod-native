@@ -3,7 +3,7 @@ PROJECT_NAME := Pulumi Runpod Resource Provider
 PACK             := runpod
 PACKDIR          := sdk
 PROJECT          := github.com/runpod/pulumi-runpod-native
-NODE_MODULE_NAME := @pulumi/runpod
+NODE_MODULE_NAME := @runpod-infra/pulumi
 NUGET_PKG_NAME   := Pulumi.Runpod
 
 PROVIDER        := pulumi-resource-${PACK}
@@ -12,18 +12,30 @@ PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}.Version
 
 GOPATH			:= $(shell go env GOPATH)
-
+CODEGEN         := pulumi-gen-${PACK}
 WORKING_DIR     := $(shell pwd)
 EXAMPLES_DIR    := ${WORKING_DIR}/examples/yaml
 TESTPARALLELISM := 4
+SCHEMA_FILE     := provider/schema.json
+PULUMI_CONVERT := 0
 
 ensure::
 	cd provider && go mod tidy
 	cd sdk && go mod tidy
 	cd tests && go mod tidy
 
-provider::
+provider:: codegen generate
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
+
+codegen::
+	(cd provider && VERSION=${VERSION} go generate cmd/${PROVIDER}/main.go)
+	(cd provider && go build -o $(WORKING_DIR)/bin/${CODEGEN} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" ${PROJECT}/${PROVIDER_PATH}/cmd/$(CODEGEN))
+	$(WORKING_DIR)/bin/${CODEGEN} $(SCHEMA_FILE) --version ${VERSION}
+
+generate:
+	@echo "Generating Go client from Swagger definition..."
+	@go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+	@go generate ./${PROVIDER_PATH}/provider.go
 
 provider_debug::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -gcflags="all=-N -l" -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
@@ -34,19 +46,18 @@ test_provider::
 dotnet_sdk:: DOTNET_VERSION := $(shell pulumictl get version --language dotnet)
 dotnet_sdk::
 	rm -rf sdk/dotnet
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language dotnet
+	pulumi package gen-sdk --language dotnet $(SCHEMA_FILE)
 	cd ${PACKDIR}/dotnet/&& \
-		echo "${DOTNET_VERSION}" >version.txt && \
-		dotnet build /p:Version=${DOTNET_VERSION}
+		echo "${DOTNET_VERSION}" >version.txt
 
 go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
+	pulumi package gen-sdk --language go $(SCHEMA_FILE)
 
-nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
+nodejs_sdk:: VERSION := $(shell pulumictl get version)
 nodejs_sdk::
 	rm -rf sdk/nodejs
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
+	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language nodejs $(SCHEMA_FILE)
 	cd ${PACKDIR}/nodejs/ && \
 		yarn install && \
 		yarn run tsc && \
@@ -57,7 +68,7 @@ nodejs_sdk::
 python_sdk:: PYPI_VERSION := $(shell pulumictl get version --language python)
 python_sdk::
 	rm -rf sdk/python
-	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language python
+	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language python $(SCHEMA_FILE)
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
 		python3 setup.py clean --all 2>/dev/null && \

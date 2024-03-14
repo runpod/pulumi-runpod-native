@@ -6,6 +6,6 @@
 	"dependencies": {
 		"typescript": "^4.0.0",
 		"@pulumi/pulumi": "^3.0.0",
-		"@pulumi/runpod": "0.0.1-alpha.1700620360+fc797fb9.dirty"
+		"@runpod-infra/pulumi": "0.9.30+dirty"
 	}
 }

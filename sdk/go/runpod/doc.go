@@ -1,2 +1,2 @@
-// Package runpod exports types, functions, subpackages for provisioning runpod resources.
+// The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.
 package runpod

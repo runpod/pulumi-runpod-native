@@ -26,9 +26,9 @@ resources:
       containerDiskInGb: 50
       minVcpuCount: 2
       minMemoryInGb: 15
-      gpuTypeId: "NVIDIA GeForce RTX 3080"
-      name: "RunPod Tensorflow"
-      imageName: "runpod/tensorflow"
+      gpuTypeId: "NVIDIA GeForce RTX 3070"
+      name: "RunPod Pytorch"
+      imageName: "runpod/pytorch"
       dockerArgs: ""
       ports: "8888/http"
       volumeMountPath: "/workspace"

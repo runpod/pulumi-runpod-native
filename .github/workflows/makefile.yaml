@@ -11,8 +11,8 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-# env:
-#   RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
+env:
+  RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
 
 jobs:
   build:
@@ -50,7 +50,7 @@ jobs:
       - name: PulumiUp
         id: up
         env:
-          RUNPOD_TOKEN: 075HSC4QVAW6LVPBUYM5CSV9JQ0SV5VAOR5JGZWG
+          RUNPOD_TOKEN: a3e34a47a29c4afd9fbf8e287bcf571823a61f7748e71b38a973aee6bbf4de81ac829aebaca5ce88f90df736c6f557a4a38dcd97b6810ae26ece675a5d80d5b9
         run: make up
       - name: PulumiDown
         id: down

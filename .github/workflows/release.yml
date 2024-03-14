@@ -1,5 +1,6 @@
 name: release
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*.*.*
@@ -7,7 +8,7 @@ on:
 env:
   PROVIDER: "runpod"
   # THIS GITHUB_TOKEN IS A REQUIREMENT TO BE ABLE TO WRITE TO GH RELEASES
-  GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+  # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # IF YOU NEED TO PUBLISH A NPM PACKAGE THEN ENSURE A NPM_TOKEN SECRET IS SET
   # AND PUBLISH_NPM: TRUE. IF YOU WANT TO PUBLISH TO A PRIVATE NPM REGISTRY
   # THEN ENSURE THE NPM_REGISTRY_URL IS CHANGED
@@ -18,9 +19,9 @@ env:
   # IF YOU NEED TO PUBLISH A NUGET PACKAGE THEN ENSURE AN NUGET_PUBLISH_KEY
   # SECRET IS SET AND PUBLISH_NUGET: TRUE. IF YOU WANT TO PUBLISH TO AN ALTERNATIVE
   # NPM REGISTRY THEN ENSURE THE NPM_REGISTRY_URL IS CHANGED
-  # NUGET_PUBLISH_KEY: ${{ YOUR NUGET PUBLISH KEY HERE }}
+  NUGET_PUBLISH_KEY: ${{ secrets.NUGET_PUBLISH_KEY }}
   NUGET_FEED_URL: https://api.nuget.org/v3/index.json
-  PUBLISH_NUGET: false
+  PUBLISH_NUGET: true
   # IF YOU NEED TO PUBLISH A PYPI PACKAGE THEN ENSURE AN PYPI_API_TOKEN
   # SECRET IS SET AND PUBLISH_PYPI: TRUE. IF YOU WANT TO PUBLISH TO AN ALTERNATIVE
   # PYPI REGISTRY THEN ENSURE THE PYPI_REPOSITORY_URL IS SET. IF YOU ARE USING AN API_TOKEN THEN
@@ -29,55 +30,65 @@ env:
   # PYPI_PASSWORD: ${{ YOUR PYPI PASSWORD HERE }}
   PYPI_USERNAME: "YOUR PYPI USERNAME HERE"
   PYPI_REPOSITORY_URL: ""
-  PUBLISH_PYPI: false
+  PUBLISH_PYPI: true
 jobs:
   publish_binary:
     name: publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Unshallow clone for tags
         run: git fetch --prune --unshallow --tags
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: ${{matrix.goversion}}
       - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.5.0
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
         with:
+          tag: v0.0.46
           repo: pulumi/pulumictl
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v5
         with:
-          args: -p 3 release --rm-dist
+          args: -p 3 release --clean
           version: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: true
       matrix:
         goversion:
-          - 1.21.x
+          - 1.22.x
   publish_sdk:
     name: Publish SDKs
     runs-on: ubuntu-latest
     needs: publish_binary
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       # - name: Unshallow clone for tags
       #   run: git fetch --prune --unshallow --tags
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.goversion }}
       - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.5.0
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
         with:
+          tag: v0.0.46
           repo: pulumi/pulumictl
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Pulumi CLI
         uses: pulumi/action-install-pulumi-cli@v2.0.0
+        with: 
+          pulumi-version: 3.112.0
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{matrix.nodeversion}}
           registry-url: ${{env.NPM_REGISTRY_URL}}
@@ -86,19 +97,19 @@ jobs:
           make build
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
-      # - name: Check worktree clean
-      #   run: |
-      #     git update-index -q --refresh
-      #     if ! git diff-files --quiet; then
-      #         >&2 echo "error: working tree is not clean, aborting!"
-      #         git status
-      #         git diff
-      #         exit 1
-      #     fi
+      - name: Check worktree clean
+        run: |
+          git update-index -q --refresh
+          if ! git diff-files --quiet; then
+              >&2 echo "error: working tree is not clean, aborting!"
+              git status
+              git diff
+              exit 1
+          fi
       - name: Compress SDK folder
         run: tar -zcf sdk/${{ matrix.language }}.tar.gz -C sdk/${{ matrix.language }} .
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.language  }}-sdk.tar.gz
           path: ${{ github.workspace}}/sdk/${{ matrix.language }}.tar.gz
@@ -106,11 +117,12 @@ jobs:
         name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: ${{ env.PYPI_USERNAME }}
-          password: ${{ env.PYPI_PASSWORD }}
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
           packages-dir: ${{github.workspace}}/sdk/python/bin/dist
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
-        uses: JS-DevTools/npm-publish@v1
+        name: Publish package to NPM
+        uses: JS-DevTools/npm-publish@v3
         with:
           access: "public"
           token: ${{ env.NPM_TOKEN }}
@@ -126,13 +138,12 @@ jobs:
         dotnetversion:
           - 3.1.301
         goversion:
-          - 1.21.x
+          - 1.22.x
         language:
           - nodejs
-          # - python
-          # - dotnet
+          - python
           - go
         nodeversion:
-          - 14.x
+          - 18.x
         pythonversion:
           - "3.9"

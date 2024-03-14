@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@pulumi/runpod";
+import * as runpod from "@runpod-infra/pulumi";
 
 const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
     name: "testStorage1",
@@ -14,9 +14,9 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
     containerDiskInGb: 50,
     minVcpuCount: 2,
     minMemoryInGb: 15,
-    gpuTypeId: "NVIDIA GeForce RTX 3080",
-    name: "RunPod Tensorflow",
-    imageName: "runpod/tensorflow",
+    gpuTypeId: "NVIDIA GeForce RTX 3070",
+    name: "RunPod Pytorch",
+    imageName: "runpod/pytorch",
     dockerArgs: "",
     ports: "8888/http",
     volumeMountPath: "/workspace",

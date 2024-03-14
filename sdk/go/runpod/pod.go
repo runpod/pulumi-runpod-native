@@ -9,7 +9,7 @@ import (
 
 	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"internal"
+	"github.com/runpod/pulumi-runpod-native/sdk/go/runpod/internal"
 )
 
 type Pod struct {
@@ -192,6 +192,56 @@ func (i *Pod) ToPodOutputWithContext(ctx context.Context) PodOutput {
 	return pulumi.ToOutputWithContext(ctx, i).(PodOutput)
 }
 
+// PodArrayInput is an input type that accepts PodArray and PodArrayOutput values.
+// You can construct a concrete instance of `PodArrayInput` via:
+//
+//	PodArray{ PodArgs{...} }
+type PodArrayInput interface {
+	pulumi.Input
+
+	ToPodArrayOutput() PodArrayOutput
+	ToPodArrayOutputWithContext(context.Context) PodArrayOutput
+}
+
+type PodArray []PodInput
+
+func (PodArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]*Pod)(nil)).Elem()
+}
+
+func (i PodArray) ToPodArrayOutput() PodArrayOutput {
+	return i.ToPodArrayOutputWithContext(context.Background())
+}
+
+func (i PodArray) ToPodArrayOutputWithContext(ctx context.Context) PodArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PodArrayOutput)
+}
+
+// PodMapInput is an input type that accepts PodMap and PodMapOutput values.
+// You can construct a concrete instance of `PodMapInput` via:
+//
+//	PodMap{ "key": PodArgs{...} }
+type PodMapInput interface {
+	pulumi.Input
+
+	ToPodMapOutput() PodMapOutput
+	ToPodMapOutputWithContext(context.Context) PodMapOutput
+}
+
+type PodMap map[string]PodInput
+
+func (PodMap) ElementType() reflect.Type {
+	return reflect.TypeOf((*map[string]*Pod)(nil)).Elem()
+}
+
+func (i PodMap) ToPodMapOutput() PodMapOutput {
+	return i.ToPodMapOutputWithContext(context.Background())
+}
+
+func (i PodMap) ToPodMapOutputWithContext(ctx context.Context) PodMapOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(PodMapOutput)
+}
+
 type PodOutput struct{ *pulumi.OutputState }
 
 func (PodOutput) ElementType() reflect.Type {
@@ -338,7 +388,51 @@ func (o PodOutput) VolumeMountPath() pulumi.StringPtrOutput {
 	return o.ApplyT(func(v *Pod) pulumi.StringPtrOutput { return v.VolumeMountPath }).(pulumi.StringPtrOutput)
 }
 
+type PodArrayOutput struct{ *pulumi.OutputState }
+
+func (PodArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]*Pod)(nil)).Elem()
+}
+
+func (o PodArrayOutput) ToPodArrayOutput() PodArrayOutput {
+	return o
+}
+
+func (o PodArrayOutput) ToPodArrayOutputWithContext(ctx context.Context) PodArrayOutput {
+	return o
+}
+
+func (o PodArrayOutput) Index(i pulumi.IntInput) PodOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) *Pod {
+		return vs[0].([]*Pod)[vs[1].(int)]
+	}).(PodOutput)
+}
+
+type PodMapOutput struct{ *pulumi.OutputState }
+
+func (PodMapOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*map[string]*Pod)(nil)).Elem()
+}
+
+func (o PodMapOutput) ToPodMapOutput() PodMapOutput {
+	return o
+}
+
+func (o PodMapOutput) ToPodMapOutputWithContext(ctx context.Context) PodMapOutput {
+	return o
+}
+
+func (o PodMapOutput) MapIndex(k pulumi.StringInput) PodOutput {
+	return pulumi.All(o, k).ApplyT(func(vs []interface{}) *Pod {
+		return vs[0].(map[string]*Pod)[vs[1].(string)]
+	}).(PodOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*PodInput)(nil)).Elem(), &Pod{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PodArrayInput)(nil)).Elem(), PodArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*PodMapInput)(nil)).Elem(), PodMap{})
 	pulumi.RegisterOutputType(PodOutput{})
+	pulumi.RegisterOutputType(PodArrayOutput{})
+	pulumi.RegisterOutputType(PodMapOutput{})
 }

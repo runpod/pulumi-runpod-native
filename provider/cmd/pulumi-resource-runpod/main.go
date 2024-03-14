@@ -16,6 +16,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	p "github.com/pulumi/pulumi-go-provider"
 
@@ -24,7 +25,8 @@ import (
 
 // Serve the provider against Pulumi's Provider protocol.
 func main() {
-	err := p.RunProvider(runpod.Name, runpod.Version, runpod.Provider())
+	trimmedVersion := strings.TrimPrefix(runpod.Version, "v")
+	err := p.RunProvider(runpod.Name, trimmedVersion, runpod.Provider())
 	if err != nil {
 		fmt.Println("err:", err.Error())
 	}

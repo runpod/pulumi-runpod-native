@@ -13,10 +13,10 @@ from . import outputs
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
-    import pulumi_runpod.config as __config
+    import pulumi-runpod.config as __config
     config = __config
 else:
-    config = _utilities.lazy_import('pulumi_runpod.config')
+    config = _utilities.lazy_import('pulumi-runpod.config')
 
 _utilities.register(
     resource_modules="""
@@ -24,7 +24,7 @@ _utilities.register(
  {
   "pkg": "runpod",
   "mod": "index",
-  "fqn": "pulumi_runpod",
+  "fqn": "pulumi-runpod",
   "classes": {
    "runpod:index:NetworkStorage": "NetworkStorage",
    "runpod:index:Pod": "Pod"
@@ -37,7 +37,7 @@ _utilities.register(
  {
   "pkg": "runpod",
   "token": "pulumi:providers:runpod",
-  "fqn": "pulumi_runpod",
+  "fqn": "pulumi-runpod",
   "class": "Provider"
  }
 ]
