@@ -135,7 +135,7 @@ jobs:
         language:
           - nodejs
           - python
-          - dotnet
+          # - dotnet
           - go
         nodeversion:
           - 18.x
