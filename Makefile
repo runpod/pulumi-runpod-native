@@ -45,6 +45,8 @@ go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 
 nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
 nodejs_sdk::
+	$(eval VERSION := $(shell pulumictl get version --language javascript))
+	@echo "Version: $(VERSION)"
 	rm -rf sdk/nodejs
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs
 	cd ${PACKDIR}/nodejs/ && \
