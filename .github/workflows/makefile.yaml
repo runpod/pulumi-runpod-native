@@ -11,8 +11,8 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-# env:
-#   RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
+env:
+  RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}
 
 jobs:
   build:
