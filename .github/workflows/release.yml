@@ -134,10 +134,10 @@ jobs:
           - 1.21.x
         language:
           - nodejs
-          # - python
-          # - dotnet
+          - python
+          - dotnet
           - go
         nodeversion:
-          - 14.x
+          - 18.x
         pythonversion:
           - "3.9"
