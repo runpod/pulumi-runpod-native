@@ -89,6 +89,8 @@ jobs:
       - name: build
         run: |
           make build
+        env:
+          VERSION: v0.0.5
       - name: Generate SDK
         run: make ${{ matrix.language }}_sdk
       # - name: Check worktree clean
