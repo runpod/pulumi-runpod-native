@@ -15,8 +15,12 @@
 package provider
 
 import (
+	"strings"
+
+	"github.com/blang/semver"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
+	"github.com/pulumi/pulumi-go-provider/integration"
 	"github.com/pulumi/pulumi-go-provider/middleware/schema"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/tokens"
 )
@@ -79,4 +83,11 @@ type Config struct {
 
 func (c *Config) Annotate(a infer.Annotator) {
 	a.Describe(&c.Token, "Runpod API Token")
+}
+
+func Schema(version string) (string, error) {
+	version = strings.TrimPrefix(version, "v")
+	s, err := integration.NewServer("runpod", semver.MustParse(version), Provider()).
+		GetSchema(p.GetSchemaRequest{})
+	return s.Schema, err
 }

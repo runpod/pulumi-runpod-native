@@ -160,6 +160,8 @@ github.com/pulumi/pulumi-go-provider v0.11.1 h1:htCTrWwTKf3r+vgSpgQhQOCYEs14zqUe
 github.com/pulumi/pulumi-go-provider v0.11.1/go.mod h1:6yOfJ+g5JkflllURGekK7lncGBaLLbSuwAfHpuTD+E4=
 github.com/pulumi/pulumi-go-provider v0.13.0 h1:AH0Q30moRj/XgmnXEW+6DNosT8k7VgRr1rv+pn6Ztt0=
 github.com/pulumi/pulumi-go-provider v0.13.0/go.mod h1:bFuSDnrSPNIrUWBOPUg+rx4y1IlGA2vEI5m4mvwK7Bg=
+github.com/pulumi/pulumi-go-provider/integration v0.10.0 h1:GHesnrrvkboSjkZpC+qRwjkXBp5d+fSXqlIO92zQxvc=
+github.com/pulumi/pulumi-go-provider/integration v0.10.0/go.mod h1:qAbKHpPzANFKOyjiQ0CzdgJh4DtM0gtujKhO7+l3/+w=
 github.com/pulumi/pulumi/pkg/v3 v3.79.0 h1:Rzrv7pmn51D7r41ua/wtQxhSt0ZM0bx4JrXvifXmSx4=
 github.com/pulumi/pulumi/pkg/v3 v3.79.0/go.mod h1:VHC3YWL53JMEbsuq6nj3M93G9TiB1L6aVxjepjnJKTY=
 github.com/pulumi/pulumi/pkg/v3 v3.90.1 h1:RFC/eqTbDfIvfeVQL8WaPmyQr1KzZhAGIIDGr9jj9y8=
@@ -207,6 +209,7 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.3 h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=
 github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/texttheater/golang-levenshtein v1.0.1 h1:+cRNoVrfiwufQPhoMzB6N0Yf/Mqajr6t1lOv8GyGE2U=
 github.com/texttheater/golang-levenshtein v1.0.1/go.mod h1:PYAKrbF5sAiq9wd+H82hs7gNaen0CplQ9uvm6+enD/8=
 github.com/tweekmonster/luser v0.0.0-20161003172636-3fa38070dbd7 h1:X9dsIWPuuEJlPX//UmRKophhOKCGXc46RVIGuttks68=
