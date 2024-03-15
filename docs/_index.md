@@ -1,3 +1,18 @@
+---
+title: Runpod
+meta_desc: Provides an overview of the Runpod Provider for Pulumi.
+layout: package
+---
+
+The Runpod provider for Pulumi can be used to provision Runpod resources.
+The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Aquasec.
+
+## Example
+
+{{< chooser language "typescript,go" >}}
+{{% choosable language typescript %}}
+
+```typescript
 import * as pulumi from "@pulumi/pulumi";
 import * as runpod from "@pierre78181/runpod";
 
@@ -31,3 +46,11 @@ export const pod = {
 export const networkStorage = {
     value: testNetworkStorage.networkStorage,
 };
+```
+
+{{% /choosable %}}
+{{% choosable language go %}}
+
+```go
+COMING SOON
+```

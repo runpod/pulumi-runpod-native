@@ -4,8 +4,8 @@
 		"@types/node": "^14"
 	},
 	"dependencies": {
-		"typescript": "^4.0.0",
+		"@pierre78181/runpod": "^0.0.62",
 		"@pulumi/pulumi": "^3.0.0",
-		"@pulumi/runpod": "0.0.5-alpha.1710450599+e6bddcea.dirty"
+		"typescript": "^4.0.0"
 	}
 }
