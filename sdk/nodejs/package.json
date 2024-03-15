@@ -1,5 +1,5 @@
 {
-    "name": "@pulumi/runpod",
+    "name": "@runpod/pulumi",
     "version": "${VERSION}",
     "scripts": {
         "build": "tsc"
