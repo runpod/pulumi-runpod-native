@@ -52,6 +52,7 @@ nodejs_sdk::
 		yarn run tsc && \
 		cp ../../README.md ../../LICENSE package.json yarn.lock bin/ && \
 		sed -i.bak 's/$${VERSION}/$(VERSION)/g' bin/package.json && \
+		sed -i.bak 's/@pulumi\/runpod/@pierre78181\/runpod/g' bin/package.json && \
 		rm ./bin/package.json.bak
 
 python_sdk:: PYPI_VERSION := $(shell pulumictl get version --language python)
