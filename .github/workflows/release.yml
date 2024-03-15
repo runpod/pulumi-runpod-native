@@ -30,7 +30,7 @@ env:
   # PYPI_PASSWORD: ${{ YOUR PYPI PASSWORD HERE }}
   PYPI_USERNAME: "YOUR PYPI USERNAME HERE"
   PYPI_REPOSITORY_URL: ""
-  PUBLISH_PYPI: false
+  PUBLISH_PYPI: true
 jobs:
   publish_binary:
     name: publish
@@ -115,8 +115,8 @@ jobs:
         name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          user: ${{ env.PYPI_USERNAME }}
-          password: ${{ env.PYPI_PASSWORD }}
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
           packages-dir: ${{github.workspace}}/sdk/python/bin/dist
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         name: Publish package to NPM

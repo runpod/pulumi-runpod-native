@@ -64,6 +64,9 @@ func Provider() p.Provider {
 					"dependencies": map[string]string{
 						"@pulumi/pulumi": "^3.42.0",
 					},
+					"devDependencies": map[string]string{
+						"typescript": "^3.7.0",
+					},
 				},
 			},
 		},
