@@ -7,7 +7,7 @@ NODE_MODULE_NAME := @runpod/pulumi
 NUGET_PKG_NAME   := Pulumi.Runpod
 
 PROVIDER        := pulumi-resource-${PACK}
-VERSION         ?= v0.0.1
+VERSION         ?= $(shell pulumictl get version)
 PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}.Version
 
@@ -43,7 +43,7 @@ go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language go
 
-nodejs_sdk:: VERSION := v0.0.1
+nodejs_sdk:: VERSION := $(shell pulumictl get version)
 nodejs_sdk::
 	rm -rf sdk/nodejs
 	pulumi package gen-sdk $(WORKING_DIR)/bin/$(PROVIDER) --language nodejs

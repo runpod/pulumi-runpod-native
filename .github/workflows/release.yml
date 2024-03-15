@@ -45,8 +45,9 @@ jobs:
         with:
           go-version: ${{matrix.goversion}}
       - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.7.1
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
         with:
+          tag: v0.0.46
           repo: pulumi/pulumictl
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,8 +75,9 @@ jobs:
         with:
           go-version: ${{ matrix.goversion }}
       - name: Install pulumictl
-        uses: jaxxstorm/action-install-gh-release@v1.7.1
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
         with:
+          tag: v0.0.46
           repo: pulumi/pulumictl
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
