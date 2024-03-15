@@ -29,7 +29,7 @@ setup(name='pulumi_runpod',
       project_urls={
           'Repository': 'https://github.com/runpod/pulumi-runpod-native'
       },
-      license='MPL-2.0',
+      license='Apache-2.0',
       packages=find_packages(),
       package_data={
           'pulumi_runpod': [

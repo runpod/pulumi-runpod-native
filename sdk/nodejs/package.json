@@ -10,7 +10,7 @@
     ],
     "homepage": "https://runpod.io",
     "repository": "https://github.com/runpod/pulumi-runpod-native",
-    "license": "MPL-2.0",
+    "license": "Apache-2.0",
     "scripts": {
         "build": "tsc"
     },

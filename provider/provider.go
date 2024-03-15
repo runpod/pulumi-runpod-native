@@ -53,7 +53,7 @@ func Provider() p.Provider {
 				"ai",
 			},
 			Homepage:          "https://runpod.io",
-			License:           "MPL-2.0",
+			License:           "Apache-2.0",
 			Repository:        "https://github.com/runpod/pulumi-runpod-native",
 			PluginDownloadURL: "github://api.github.com/runpod/pulumi-runpod-native",
 			Publisher:         "Runpod",
