@@ -15,4 +15,3 @@ examples/dotnet/**
 examples/nodejs/** */
 examples/go/** */
 examples/python/** */
-sdk/** */

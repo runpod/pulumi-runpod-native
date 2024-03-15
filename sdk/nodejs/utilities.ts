@@ -53,7 +53,7 @@ export function getVersion(): string {
 
 /** @internal */
 export function resourceOptsDefaults(): any {
-    return { version: getVersion(), pluginDownloadURL: "github://github.com/runpod/pulumi-runpod-native" };
+    return { version: getVersion(), pluginDownloadURL: "github://api.github.com/runpod/pulumi-runpod-native" };
 }
 
 /** @internal */
