@@ -3,7 +3,7 @@ PROJECT_NAME := Pulumi Runpod Resource Provider
 PACK             := runpod
 PACKDIR          := sdk
 PROJECT          := github.com/runpod/pulumi-runpod-native
-NODE_MODULE_NAME := @pulumi/runpod
+NODE_MODULE_NAME := @runpod/pulumi
 NUGET_PKG_NAME   := Pulumi.Runpod
 
 PROVIDER        := pulumi-resource-${PACK}
