@@ -9,7 +9,7 @@ import (
 
 	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"internal"
+	"github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod/internal"
 )
 
 type NetworkStorage struct {
@@ -105,6 +105,56 @@ func (i *NetworkStorage) ToNetworkStorageOutputWithContext(ctx context.Context) 
 	return pulumi.ToOutputWithContext(ctx, i).(NetworkStorageOutput)
 }
 
+// NetworkStorageArrayInput is an input type that accepts NetworkStorageArray and NetworkStorageArrayOutput values.
+// You can construct a concrete instance of `NetworkStorageArrayInput` via:
+//
+//	NetworkStorageArray{ NetworkStorageArgs{...} }
+type NetworkStorageArrayInput interface {
+	pulumi.Input
+
+	ToNetworkStorageArrayOutput() NetworkStorageArrayOutput
+	ToNetworkStorageArrayOutputWithContext(context.Context) NetworkStorageArrayOutput
+}
+
+type NetworkStorageArray []NetworkStorageInput
+
+func (NetworkStorageArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]*NetworkStorage)(nil)).Elem()
+}
+
+func (i NetworkStorageArray) ToNetworkStorageArrayOutput() NetworkStorageArrayOutput {
+	return i.ToNetworkStorageArrayOutputWithContext(context.Background())
+}
+
+func (i NetworkStorageArray) ToNetworkStorageArrayOutputWithContext(ctx context.Context) NetworkStorageArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NetworkStorageArrayOutput)
+}
+
+// NetworkStorageMapInput is an input type that accepts NetworkStorageMap and NetworkStorageMapOutput values.
+// You can construct a concrete instance of `NetworkStorageMapInput` via:
+//
+//	NetworkStorageMap{ "key": NetworkStorageArgs{...} }
+type NetworkStorageMapInput interface {
+	pulumi.Input
+
+	ToNetworkStorageMapOutput() NetworkStorageMapOutput
+	ToNetworkStorageMapOutputWithContext(context.Context) NetworkStorageMapOutput
+}
+
+type NetworkStorageMap map[string]NetworkStorageInput
+
+func (NetworkStorageMap) ElementType() reflect.Type {
+	return reflect.TypeOf((*map[string]*NetworkStorage)(nil)).Elem()
+}
+
+func (i NetworkStorageMap) ToNetworkStorageMapOutput() NetworkStorageMapOutput {
+	return i.ToNetworkStorageMapOutputWithContext(context.Background())
+}
+
+func (i NetworkStorageMap) ToNetworkStorageMapOutputWithContext(ctx context.Context) NetworkStorageMapOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(NetworkStorageMapOutput)
+}
+
 type NetworkStorageOutput struct{ *pulumi.OutputState }
 
 func (NetworkStorageOutput) ElementType() reflect.Type {
@@ -135,7 +185,51 @@ func (o NetworkStorageOutput) Size() pulumi.IntOutput {
 	return o.ApplyT(func(v *NetworkStorage) pulumi.IntOutput { return v.Size }).(pulumi.IntOutput)
 }
 
+type NetworkStorageArrayOutput struct{ *pulumi.OutputState }
+
+func (NetworkStorageArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]*NetworkStorage)(nil)).Elem()
+}
+
+func (o NetworkStorageArrayOutput) ToNetworkStorageArrayOutput() NetworkStorageArrayOutput {
+	return o
+}
+
+func (o NetworkStorageArrayOutput) ToNetworkStorageArrayOutputWithContext(ctx context.Context) NetworkStorageArrayOutput {
+	return o
+}
+
+func (o NetworkStorageArrayOutput) Index(i pulumi.IntInput) NetworkStorageOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) *NetworkStorage {
+		return vs[0].([]*NetworkStorage)[vs[1].(int)]
+	}).(NetworkStorageOutput)
+}
+
+type NetworkStorageMapOutput struct{ *pulumi.OutputState }
+
+func (NetworkStorageMapOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*map[string]*NetworkStorage)(nil)).Elem()
+}
+
+func (o NetworkStorageMapOutput) ToNetworkStorageMapOutput() NetworkStorageMapOutput {
+	return o
+}
+
+func (o NetworkStorageMapOutput) ToNetworkStorageMapOutputWithContext(ctx context.Context) NetworkStorageMapOutput {
+	return o
+}
+
+func (o NetworkStorageMapOutput) MapIndex(k pulumi.StringInput) NetworkStorageOutput {
+	return pulumi.All(o, k).ApplyT(func(vs []interface{}) *NetworkStorage {
+		return vs[0].(map[string]*NetworkStorage)[vs[1].(string)]
+	}).(NetworkStorageOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*NetworkStorageInput)(nil)).Elem(), &NetworkStorage{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NetworkStorageArrayInput)(nil)).Elem(), NetworkStorageArray{})
+	pulumi.RegisterInputType(reflect.TypeOf((*NetworkStorageMapInput)(nil)).Elem(), NetworkStorageMap{})
 	pulumi.RegisterOutputType(NetworkStorageOutput{})
+	pulumi.RegisterOutputType(NetworkStorageArrayOutput{})
+	pulumi.RegisterOutputType(NetworkStorageMapOutput{})
 }

@@ -22,7 +22,7 @@ import (
 )
 
 // Version is initialized by the Go linker to contain the semver of this build.
-var Version = "0.0.64"
+var Version = "0.0.65"
 
 const Name string = "runpod"
 
@@ -51,7 +51,7 @@ func Provider() p.Provider {
 			Homepage:          "https://runpod.io",
 			License:           "MPL-2.0",
 			Repository:        "https://github.com/runpod/pulumi-runpod-native",
-			PluginDownloadURL: "github://github.com/runpod/pulumi-runpod-native",
+			PluginDownloadURL: "github://api.github.com/runpod/pulumi-runpod-native",
 			Publisher:         "Runpod",
 			LogoURL:           "https://avatars.githubusercontent.com/u/95939477?s=200&v=4",
 			LanguageMap: map[string]interface{}{

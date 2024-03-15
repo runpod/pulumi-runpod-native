@@ -8,7 +8,7 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"internal"
+	"github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod/internal"
 )
 
 type module struct {

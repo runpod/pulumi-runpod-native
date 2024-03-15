@@ -1,6 +1,16 @@
 {
-    "name": "@pulumi/runpod",
+    "name": "@pierre78181/runpod",
     "version": "${VERSION}",
+    "keywords": [
+        "pulumi",
+        "runpod",
+        "gpus",
+        "ml",
+        "ai"
+    ],
+    "homepage": "https://runpod.io",
+    "repository": "https://github.com/runpod/pulumi-runpod-native",
+    "license": "MPL-2.0",
     "scripts": {
         "build": "tsc"
     },
@@ -13,6 +23,7 @@
     },
     "pulumi": {
         "resource": true,
-        "name": "runpod"
+        "name": "runpod",
+        "server": "github://github.com/runpod/pulumi-runpod-native"
     }
 }

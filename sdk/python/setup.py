@@ -21,8 +21,15 @@ def readme():
 setup(name='pulumi_runpod',
       python_requires='>=3.8',
       version=VERSION,
+      description="The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
       long_description=readme(),
       long_description_content_type='text/markdown',
+      keywords='pulumi runpod gpus ml ai',
+      url='https://runpod.io',
+      project_urls={
+          'Repository': 'https://github.com/runpod/pulumi-runpod-native'
+      },
+      license='MPL-2.0',
       packages=find_packages(),
       package_data={
           'pulumi_runpod': [
