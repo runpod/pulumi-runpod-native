@@ -25,7 +25,7 @@ Filename must be index.ts.
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
-    import * as runpod from "@runpod/pulumi";
+    import * as runpod from "@runpod-infra/pulumi";
 
     const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
         name: "testStorage1",
@@ -160,7 +160,6 @@ File name must be __main__.py
                 ).__dict__,
             ],
         )
-        print(my_random_pod)
         pulumi.export(
             "pod",
             {

@@ -15,7 +15,6 @@ To begin with, please set your runpod API key using Pulumi.
   pulumi config set --secret runpod:token YOUR_API_KEY
 ```
 
-
 ## Example
 
 {{< chooser language "typescript,go,python" >}}
@@ -26,7 +25,7 @@ Filename must be index.ts.
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
-    import * as runpod from "@pierre78181/runpod";
+    import * as runpod from "@runpod-infra/pulumi";
 
     const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
         name: "testStorage1",
@@ -71,7 +70,7 @@ File name must be main.go.
 
     import (
         "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-        "github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod"
+        "github.com/runpod/pulumi-runpod-native/sdk/go/runpod"
     )
 
     func main() {
@@ -161,7 +160,6 @@ File name must be __main__.py
                 ).__dict__,
             ],
         )
-        print(my_random_pod)
         pulumi.export(
             "pod",
             {

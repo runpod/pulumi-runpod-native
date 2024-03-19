@@ -1,5 +1,5 @@
 {
-    "name": "@pierre78181/runpod",
+    "name": "@runpod-infra/pulumi",
     "version": "${VERSION}",
     "keywords": [
         "pulumi",

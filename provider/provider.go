@@ -66,7 +66,7 @@ func Provider() p.Provider {
 					"importBasePath":                 "github.com/runpod/pulumi-runpod-native/sdk/go/runpod",
 				},
 				"nodejs": map[string]interface{}{
-					"packageName": "@pierre78181/runpod",
+					"packageName": "@runpod-infra/pulumi",
 					"dependencies": map[string]string{
 						"@pulumi/pulumi": "^3.42.0",
 					},
