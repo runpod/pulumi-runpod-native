@@ -63,7 +63,7 @@ func Provider() p.Provider {
 			LanguageMap: map[string]interface{}{
 				"go": map[string]interface{}{
 					"generateResourceContainerTypes": true,
-					"importBasePath":                 "github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod",
+					"importBasePath":                 "github.com/runpod/pulumi-runpod-native/sdk/go/runpod",
 				},
 				"nodejs": map[string]interface{}{
 					"packageName": "@pierre78181/runpod",

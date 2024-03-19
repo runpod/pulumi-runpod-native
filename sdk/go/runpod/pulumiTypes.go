@@ -8,7 +8,7 @@ import (
 	"reflect"
 
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod/internal"
+	"github.com/runpod/pulumi-runpod-native/sdk/go/runpod/internal"
 )
 
 var _ = internal.GetEnvOrDefault

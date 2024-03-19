@@ -6,6 +6,6 @@
 	"dependencies": {
 		"typescript": "^4.0.0",
 		"@pulumi/pulumi": "^3.0.0",
-		"@pierre78181/runpod": "0.0.655+dirty"
+		"@pierre78181/runpod": "0.0.657"
 	}
 }
