@@ -41,8 +41,12 @@ func main() {
 		if err != nil {
 			return err
 		}
-		ctx.Export("pod", myRandomPod)
-		ctx.Export("networkStorage", testNetworkStorage)
+		ctx.Export("pod", map[string]interface{}{
+			"value": myRandomPod.Pod,
+		})
+		ctx.Export("networkStorage", map[string]interface{}{
+			"value": testNetworkStorage.NetworkStorage,
+		})
 		return nil
 	})
 }
