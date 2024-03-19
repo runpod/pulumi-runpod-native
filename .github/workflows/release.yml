@@ -30,7 +30,7 @@ env:
   # PYPI_PASSWORD: ${{ YOUR PYPI PASSWORD HERE }}
   PYPI_USERNAME: "YOUR PYPI USERNAME HERE"
   PYPI_REPOSITORY_URL: ""
-  PUBLISH_PYPI: true
+  PUBLISH_PYPI: false
 jobs:
   publish_binary:
     name: publish
