@@ -5,7 +5,7 @@ layout: package
 ---
 
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
-The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Aquasec.
+The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
 ## Config
 
