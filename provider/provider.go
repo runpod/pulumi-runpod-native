@@ -42,7 +42,7 @@ func Provider() p.Provider {
 		},
 		Config: infer.Config[*Config](),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{
-			"provider": "index",
+			"runpod": "index",
 		},
 		Metadata: schema.Metadata{
 			DisplayName: "Runpod",
