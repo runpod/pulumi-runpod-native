@@ -9,19 +9,20 @@ The Runpod provider must be configured with Runpod's API keys to deploy and upda
 
 ## Config
 
-The config file for your yaml must look like this:
+To begin with, please set your runpod API key using Pulumi.
 
-```yaml
-    encryptionsalt: v1:csrpeOgvGEc=:********************:**********+77ttjiVODP66dgB3l7+Q==
-    config:
-        runpod:token: 26b7e**************************************ae57
+```bash
+  pulumi config set --secret runpod:token YOUR_API_KEY
 ```
+
 
 ## Example
 
 {{< chooser language "typescript,go,python" >}}
 
 {{% choosable language typescript %}}
+
+Filename must be index.ts.
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
@@ -62,6 +63,8 @@ The config file for your yaml must look like this:
 {{% /choosable %}}
 
 {{% choosable language go %}}
+
+File name must be main.go.
 
 ```go
     package main
@@ -117,6 +120,8 @@ The config file for your yaml must look like this:
 {{% /choosable %}}
 
 {{% choosable language python %}}
+
+File name must be __main__.py
 
 ```python
     import pulumi

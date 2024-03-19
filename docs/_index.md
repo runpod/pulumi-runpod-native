@@ -9,12 +9,10 @@ The Runpod provider must be configured with Runpod's API keys to deploy and upda
 
 ## Config
 
-The config file for your yaml must look like this:
+To begin with, please set your runpod API key using Pulumi.
 
-```yaml
-    encryptionsalt: v1:csrpeOgvGEc=:********************:**********+77ttjiVODP66dgB3l7+Q==
-    config:
-        runpod:token: 26b7e**************************************ae57
+```bash
+  pulumi config set --secret runpod:token YOUR_API_KEY
 ```
 
 ## Example
@@ -27,7 +25,7 @@ Filename must be index.ts.
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
-    import * as runpod from "@pierre78181/runpod";
+    import * as runpod from "@runpod/pulumi";
 
     const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
         name: "testStorage1",
@@ -72,7 +70,7 @@ File name must be main.go.
 
     import (
         "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-        "github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod"
+        "github.com/runpod/pulumi-runpod-native/sdk/go/runpod"
     )
 
     func main() {

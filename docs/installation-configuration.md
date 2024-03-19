@@ -8,22 +8,30 @@ layout: package
 
 The Runpod provider is available as a package in all Runpod languages:
 
-* JavaScript/TypeScript: [`@pulumi/runpod`](https://www.npmjs.com/package/@pulumi/runpod)
+* JavaScript/TypeScript: [`@runpod/pulumi`](https://www.npmjs.com/package/@runpod/pulumi)
 * Python: [`runpod_pulumi`](https://pypi.org/project/runpod_pulumi/)
 * Go: [`github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod`](https://www.github.com/runpod/pulumi-runpod-native)
+
+## Config
+
+To begin with, please set your runpod API key using Pulumi.
+
+```bash
+  pulumi config set --secret runpod:token YOUR_API_KEY
+```
 
 ### Node.js (JavaScript/TypeScript)
 
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
 ```bash
-  npm install @pulumi/runpod
+  npm install @runpod/pulumi
 ```
 
 or `yarn`:
 
 ```bash
-  yarn add @pulumi/runpod
+  yarn add @runpod/pulumi
 ```
 
 ### Python
@@ -39,11 +47,12 @@ To use from Python, install using `pip`:
 To use from Go, use `go get` to grab the latest version of the library:
 
 ```bash
-  go get github.com/runpod/go-sdk
+  go get github.com/runpod/pulumi-runpod-native
 ```
 
 ## Configuration
 
-The following configuration points are available for the `pinecone` provider:
+The following configuration points are available for the `runpod` provider:
 
-- `runpod:token` - This is the Runpod API key. (environment: `PINECONE_API_KEY`)
+- `runpod:token` - This is the Runpod API key.
+Support for `RUNPOD_API_KEY` environment key is coming soon.
