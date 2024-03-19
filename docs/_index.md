@@ -4,53 +4,198 @@ meta_desc: Provides an overview of the Runpod Provider for Pulumi.
 layout: package
 ---
 
-The Runpod provider for Pulumi can be used to provision Runpod resources.
+The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
 The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Aquasec.
+
+## Config
+
+The config file for your yaml must look like this:
+
+```yaml
+    encryptionsalt: v1:csrpeOgvGEc=:********************:**********+77ttjiVODP66dgB3l7+Q==
+    config:
+        runpod:token: 26b7e**************************************ae57
+```
 
 ## Example
 
-{{< chooser language "typescript,go" >}}
+{{< chooser language "typescript,go,python" >}}
+
 {{% choosable language typescript %}}
 
 ```typescript
-import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@pierre78181/runpod";
+    import * as pulumi from "@pulumi/pulumi";
+    import * as runpod from "@pierre78181/runpod";
 
-const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
-    name: "testStorage1",
-    size: 20,
-    dataCenterId: "US-NJ",
-});
-const myRandomPod = new runpod.Pod("myRandomPod", {
-    cloudType: "ALL",
-    networkVolumeId: testNetworkStorage.networkStorage.apply(networkStorage => networkStorage.id),
-    gpuCount: 1,
-    volumeInGb: 50,
-    containerDiskInGb: 50,
-    minVcpuCount: 2,
-    minMemoryInGb: 15,
-    gpuTypeId: "NVIDIA GeForce RTX 3070",
-    name: "RunPod Pytorch",
-    imageName: "runpod/pytorch",
-    dockerArgs: "",
-    ports: "8888/http",
-    volumeMountPath: "/workspace",
-    env: [{
-        key: "JUPYTER_PASSWORD",
-        value: "rns1hunbsstltcpad22d",
-    }],
-});
-export const pod = {
-    value: myRandomPod.pod,
-};
-export const networkStorage = {
-    value: testNetworkStorage.networkStorage,
-};
+    const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
+        name: "testStorage1",
+        size: 20,
+        dataCenterId: "US-NJ",
+    });
+    const myRandomPod = new runpod.Pod("myRandomPod", {
+        cloudType: "ALL",
+        networkVolumeId: testNetworkStorage.networkStorage.apply(networkStorage => networkStorage.id),
+        gpuCount: 1,
+        volumeInGb: 50,
+        containerDiskInGb: 50,
+        minVcpuCount: 2,
+        minMemoryInGb: 15,
+        gpuTypeId: "NVIDIA GeForce RTX 3070",
+        name: "RunPod Pytorch",
+        imageName: "runpod/pytorch",
+        dockerArgs: "",
+        ports: "8888/http",
+        volumeMountPath: "/workspace",
+        env: [{
+            key: "JUPYTER_PASSWORD",
+            value: "rns1hunbsstltcpad22d",
+        }],
+    });
+    export const pod = {
+        value: myRandomPod.pod,
+    };
+    export const networkStorage = {
+        value: testNetworkStorage.networkStorage,
+    };
 ```
 
 {{% /choosable %}}
+
 {{% choosable language go %}}
 
 ```go
-COMING SOON
+    package main
+
+    import (
+        "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+        "github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod"
+    )
+
+    func main() {
+        pulumi.Run(func(ctx *pulumi.Context) error {
+            testNetworkStorage, err := runpod.NewNetworkStorage(ctx, "testNetworkStorage", &runpod.NetworkStorageArgs{
+                Name:         pulumi.String("testStorage1"),
+                Size:         pulumi.Int(20),
+                DataCenterId: pulumi.String("US-NJ"),
+            })
+            if err != nil {
+                return err
+            }
+            myRandomPod, err := runpod.NewPod(ctx, "myRandomPod", &runpod.PodArgs{
+                CloudType: pulumi.String("ALL"),
+                NetworkVolumeId: testNetworkStorage.NetworkStorage.ApplyT(func(networkStorage runpod.NetworkStorageType) (*string, error) {
+                    return &networkStorage.Id, nil
+                }).(pulumi.StringPtrOutput),
+                GpuCount:          pulumi.Int(1),
+                VolumeInGb:        pulumi.Int(50),
+                ContainerDiskInGb: pulumi.Int(50),
+                MinVcpuCount:      pulumi.Int(2),
+                MinMemoryInGb:     pulumi.Int(15),
+                GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 3070"),
+                Name:              pulumi.String("RunPod Pytorch"),
+                ImageName:         pulumi.String("runpod/pytorch"),
+                DockerArgs:        pulumi.String(""),
+                Ports:             pulumi.String("8888/http"),
+                VolumeMountPath:   pulumi.String("/workspace"),
+                Env: runpod.PodEnvArray{
+                    &runpod.PodEnvArgs{
+                        Key:   pulumi.String("JUPYTER_PASSWORD"),
+                        Value: pulumi.String("rns1hunbsstltcpad22d"),
+                    },
+                },
+            })
+            if err != nil {
+                return err
+            }
+            ctx.Export("pod", map[string]interface{}{
+                "value": myRandomPod.Pod,
+            })
+            ctx.Export("networkStorage", map[string]interface{}{
+                "value": testNetworkStorage.NetworkStorage,
+            })
+            return nil
+        })
+    }
+```
+
+{{% /choosable %}}
+
+{{% choosable language python %}}
+
+```python
+    import pulumi
+    import pulumi_runpod as runpod
+
+    test_network_storage = runpod.NetworkStorage("testNetworkStorage",
+        name="testStorage1",
+        size=20,
+        data_center_id="US-NJ")
+    my_random_pod = runpod.Pod("myRandomPod",
+        cloud_type="ALL",
+        network_volume_id=test_network_storage.network_storage.id,
+        gpu_count=1,
+        volume_in_gb=50,
+        container_disk_in_gb=50,
+        min_vcpu_count=2,
+        min_memory_in_gb=15,
+        gpu_type_id="NVIDIA GeForce RTX 3070",
+        name="RunPod Pytorch",
+        image_name="runpod/pytorch",
+        docker_args="",
+        ports="8888/http",
+        volume_mount_path="/workspace",
+        env=[runpod.PodEnvArgs(
+            key="JUPYTER_PASSWORD",
+            value="rns1hunbsstltcpad22d",
+        )])
+    pulumi.export("pod", {
+        "value": my_random_pod.pod,
+    })
+    pulumi.export("networkStorage", {
+        "value": test_network_storage.network_storage,
+    })
+```
+
+{{% /choosable %}}
+
+{{% choosable language yaml %}}
+
+name: provider-runpod-native
+runtime: yaml
+
+```yaml
+    resources:
+    plugins:
+    providers:
+        - name: runpod
+    testNetworkStorage:
+        type: runpod:NetworkStorage
+        properties:
+        name: "testStorage1"
+        size: 20
+        dataCenterId: "US-NJ"
+
+    myRandomPod:
+        type: runpod:Pod
+        properties:
+        cloudType: ALL
+        networkVolumeId: ${testNetworkStorage.networkStorage.id}
+        gpuCount: 1
+        volumeInGb: 50
+        containerDiskInGb: 50
+        minVcpuCount: 2
+        minMemoryInGb: 15
+        gpuTypeId: "NVIDIA GeForce RTX 3070"
+        name: "RunPod Pytorch"
+        imageName: "runpod/pytorch"
+        dockerArgs: ""
+        ports: "8888/http"
+        volumeMountPath: "/workspace"
+        env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+
+    outputs:
+    pod:
+        value: ${myRandomPod.pod}
+    networkStorage:
+        value: ${testNetworkStorage.networkStorage}
 ```

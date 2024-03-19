@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pulumi/pulumi-runpod/sdk/go/runpod"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod"
 )
 
 func main() {

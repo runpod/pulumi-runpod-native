@@ -15,6 +15,8 @@
 package provider
 
 import (
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/blang/semver"
@@ -79,6 +81,18 @@ func Provider() p.Provider {
 
 type Config struct {
 	Token string `pulumi:"token"`
+}
+
+func (c *Config) Configure(ctx p.Context) error {
+	if c.Token == "" {
+		Token, exists := os.LookupEnv("RUNPOD_API_KEY")
+		if exists {
+			c.Token = Token
+			return nil
+		}
+		return fmt.Errorf("API key is required")
+	}
+	return nil
 }
 
 func (c *Config) Annotate(a infer.Annotator) {
