@@ -12,7 +12,7 @@ The Runpod provider must be configured with Runpod's API keys to deploy and upda
 To begin with, please set your runpod API key using Pulumi.
 
 ```bash
-  pulumi config set --secret runpod:token YOUR_API_KEY
+  pulumi config set --secret runpod:token
 ```
 
 ## Example

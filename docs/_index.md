@@ -15,8 +15,6 @@ To begin with, please set your runpod API key using Pulumi.
   pulumi config set --secret runpod:token
 ```
 
-
-
 ## Example
 
 {{< chooser language "typescript,go,python" >}}
