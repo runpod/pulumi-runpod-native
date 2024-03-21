@@ -1,7 +1,7 @@
 {
     "name": "runpod",
     "displayName": "Runpod",
-    "version": "0.9.18",
+    "version": "0.9.20",
     "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
     "keywords": [
         "pulumi",
