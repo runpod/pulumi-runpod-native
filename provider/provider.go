@@ -28,7 +28,7 @@ import (
 )
 
 // Version is initialized by the Go linker to contain the semver of this build.
-var Version = "0.9.36"
+var Version = "v0.9.39"
 
 const Name string = "runpod"
 
