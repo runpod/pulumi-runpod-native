@@ -54,7 +54,7 @@ go_sdk:: $(WORKING_DIR)/bin/$(PROVIDER)
 	rm -rf sdk/go
 	pulumi package gen-sdk --language go $(SCHEMA_FILE)
 
-nodejs_sdk:: VERSION := $(shell pulumictl get version --language nodejs)
+nodejs_sdk:: VERSION := $(shell pulumictl get version --language javascript)
 nodejs_sdk::
 	rm -rf sdk/nodejs
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language nodejs $(SCHEMA_FILE)
