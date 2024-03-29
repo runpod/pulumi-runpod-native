@@ -41,7 +41,7 @@ jobs:
       - name: Unshallow clone for tags
         run: git fetch --prune --unshallow --tags
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{matrix.goversion}}
       - name: Install pulumictl
@@ -51,6 +51,8 @@ jobs:
           repo: pulumi/pulumictl
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set PreRelease Version
+        run: echo "GORELEASER_CURRENT_TAG=v$(pulumictl get version --language generic)" >> $GITHUB_ENV
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
         with:
@@ -73,7 +75,7 @@ jobs:
       # - name: Unshallow clone for tags
       #   run: git fetch --prune --unshallow --tags
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.goversion }}
       - name: Install pulumictl

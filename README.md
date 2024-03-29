@@ -9,7 +9,7 @@ The Runpod provider must be configured with Runpod's API keys to deploy and upda
 
 ## Config
 
-To begin with, please set your runpod API key using Pulumi.
+To begin with, please set your runpod API key to use with Pulumi.
 
 ```bash
   pulumi config set --secret runpod:token
@@ -219,3 +219,19 @@ runtime: yaml
     networkStorage:
         value: ${testNetworkStorage.networkStorage}
 ```
+
+
+### Internal
+If you get a dirty workflow in prod or are producing dirty workflow, try:
+
+```
+    make build
+```
+
+Also change Python's setup.py Find and remove these two lines:
+```
+    import os
+    VERSION = os.getenv("PULUMI_PYTHON_VERSION", "0.0.0")
+```
+
+And then push your changes.
