@@ -1,6 +1,6 @@
 module github.com/runpod/pulumi-runpod-native
 
-go 1.22.1
+go 1.22
 
 require (
 	github.com/blang/semver v3.5.1+incompatible
