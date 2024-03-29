@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Pulumi Corp.</Authors>
-    <Company>Pulumi Corp.</Company>
-    <Description></Description>
-    <PackageLicenseExpression></PackageLicenseExpression>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <Authors>Runpod</Authors>
+    <Company>Runpod</Company>
+    <Description>The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://runpod.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/runpod/pulumi-runpod-native</RepositoryUrl>
     <PackageIcon>logo.png</PackageIcon>
 
     <TargetFramework>net6.0</TargetFramework>
@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pulumi" Version="[3.54.1.0,4)" />
+    <PackageReference Include="Pulumi" Version="3.*" />
   </ItemGroup>
 
   <ItemGroup>

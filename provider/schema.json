@@ -21,6 +21,12 @@
         "ai"
     ],
     "language": {
+        "csharp": {
+            "packageReferences": {
+                "Pulumi": "3.*"
+            },
+            "rootNamespace": "RunpodInfra"
+        },
         "go": {
             "generateResourceContainerTypes": true,
             "importBasePath": "github.com/runpod/pulumi-runpod-native/sdk/go/runpod"

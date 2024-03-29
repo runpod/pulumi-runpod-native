@@ -80,6 +80,12 @@ func Provider() p.Provider {
 					},
 					"packageName": "pulumi-runpod",
 				},
+				"csharp": map[string]any{
+					"packageReferences": map[string]string{
+						"Pulumi": "3.*",
+					},
+					"rootNamespace": "RunpodInfra",
+				},
 			},
 		},
 	})
