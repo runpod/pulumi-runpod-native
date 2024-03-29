@@ -12,18 +12,29 @@ PROVIDER_PATH   := provider
 VERSION_PATH    := ${PROVIDER_PATH}.Version
 
 GOPATH			:= $(shell go env GOPATH)
-
+CODEGEN         := pulumi-gen-${PACK}
 WORKING_DIR     := $(shell pwd)
 EXAMPLES_DIR    := ${WORKING_DIR}/examples/yaml
 TESTPARALLELISM := 4
+SCHEMA_FILE     := provider/schema.json
 
 ensure::
 	cd provider && go mod tidy
 	cd sdk && go mod tidy
 	cd tests && go mod tidy
 
-provider::
+provider:: codegen generate
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))
+
+codegen::
+	(cd provider && VERSION=${VERSION} go generate cmd/${PROVIDER}/main.go)
+	(cd provider && go build -o $(WORKING_DIR)/bin/${CODEGEN} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" ${PROJECT}/${PROVIDER_PATH}/cmd/$(CODEGEN))
+	$(WORKING_DIR)/bin/${CODEGEN} $(SCHEMA_FILE) --version ${VERSION}
+
+generate:
+	@echo "Generating Go client from Swagger definition..."
+	@go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+	@go generate ./${PROVIDER_PATH}/provider.go
 
 provider_debug::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${PROVIDER} -gcflags="all=-N -l" -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" $(PROJECT)/${PROVIDER_PATH}/cmd/$(PROVIDER))

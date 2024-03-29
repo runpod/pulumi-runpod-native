@@ -1,22 +1,25 @@
 {
-    "name": "runpod",
-    "displayName": "Runpod",
-    "version": "0.9.20",
+    "config": {
+        "defaults": [
+            "token"
+        ],
+        "variables": {
+            "token": {
+                "description": "Runpod API Token",
+                "type": "string"
+            }
+        }
+    },
     "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
+    "displayName": "Runpod",
+    "homepage": "https://runpod.io",
     "keywords": [
         "pulumi",
         "runpod",
         "gpus",
         "ml",
-        "ai",
-        "category/infrastructure"
+        "ai"
     ],
-    "homepage": "https://runpod.io",
-    "license": "Apache-2.0",
-    "repository": "https://github.com/runpod/pulumi-runpod-native",
-    "logoUrl": "https://avatars.githubusercontent.com/u/95939477?s=200\u0026v=4",
-    "pluginDownloadURL": "github://api.github.com/runpod/pulumi-runpod-native",
-    "publisher": "Runpod",
     "language": {
         "go": {
             "generateResourceContainerTypes": true,
@@ -30,67 +33,44 @@
                 "typescript": "^3.7.0"
             },
             "packageName": "@runpod-infra/pulumi"
+        },
+        "python": {
+            "packageName": "pulumi-runpod",
+            "requires": {
+                "pulumi": ">=3.0.0,<4.0.0"
+            }
         }
     },
-    "config": {
-        "variables": {
+    "license": "Apache-2.0",
+    "logoUrl": "https://avatars.githubusercontent.com/u/95939477?s=200&v=4",
+    "name": "runpod",
+    "pluginDownloadURL": "github://api.github.com/runpod/pulumi-runpod-native",
+    "provider": {
+        "inputProperties": {
             "token": {
-                "type": "string",
-                "description": "Runpod API Token"
+                "description": "Runpod API Token",
+                "type": "string"
             }
         },
-        "defaults": [
+        "properties": {
+            "token": {
+                "description": "Runpod API Token",
+                "type": "string"
+            }
+        },
+        "required": [
+            "token"
+        ],
+        "requiredInputs": [
             "token"
         ]
     },
-    "types": {
-        "runpod:index:DataCenter": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "location": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "storageSupport": {
-                    "type": "boolean"
-                }
-            },
-            "type": "object",
-            "required": [
-                "id",
-                "name",
-                "location",
-                "storageSupport"
-            ]
-        },
-        "runpod:index:Gpu": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "podId": {
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "required": [
-                "id",
-                "podId"
-            ]
-        },
+    "publisher": "Runpod",
+    "repository": "https://github.com/runpod/pulumi-runpod-native",
+    "resources": {
         "runpod:index:NetworkStorage": {
-            "properties": {
-                "dataCenter": {
-                    "$ref": "#/types/runpod:index:DataCenter"
-                },
+            "inputProperties": {
                 "dataCenterId": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "name": {
@@ -100,250 +80,6 @@
                     "type": "integer"
                 }
             },
-            "type": "object",
-            "required": [
-                "id",
-                "name",
-                "size",
-                "dataCenterId",
-                "dataCenter"
-            ]
-        },
-        "runpod:index:Pod": {
-            "properties": {
-                "adjustedCostPerHr": {
-                    "type": "number"
-                },
-                "aiApiId": {
-                    "type": "string"
-                },
-                "apiKey": {
-                    "type": "string"
-                },
-                "consumerUserId": {
-                    "type": "string"
-                },
-                "containerDiskInGb": {
-                    "type": "integer"
-                },
-                "containerRegistryAuthId": {
-                    "type": "string"
-                },
-                "costMultiplier": {
-                    "type": "number"
-                },
-                "costPerHr": {
-                    "type": "number"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "desiredStatus": {
-                    "type": "string"
-                },
-                "dockerArgs": {
-                    "type": "string"
-                },
-                "dockerId": {
-                    "type": "string"
-                },
-                "env": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "gpuCount": {
-                    "type": "integer"
-                },
-                "gpuPowerLimitPercent": {
-                    "type": "integer"
-                },
-                "gpus": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/types/runpod:index:Gpu"
-                    }
-                },
-                "id": {
-                    "type": "string"
-                },
-                "imageName": {
-                    "type": "string"
-                },
-                "lastStartedAt": {
-                    "type": "string"
-                },
-                "lastStatusChange": {
-                    "type": "string"
-                },
-                "locked": {
-                    "type": "boolean"
-                },
-                "machineId": {
-                    "type": "string"
-                },
-                "memoryInGb": {
-                    "type": "number"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "podType": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": "integer"
-                },
-                "ports": {
-                    "type": "string"
-                },
-                "registry": {
-                    "$ref": "#/types/runpod:index:PodRegistry"
-                },
-                "templateId": {
-                    "type": "string"
-                },
-                "uptimeSeconds": {
-                    "type": "integer"
-                },
-                "vcpuCount": {
-                    "type": "number"
-                },
-                "version": {
-                    "type": "integer"
-                },
-                "volumeEncrypted": {
-                    "type": "boolean"
-                },
-                "volumeInGb": {
-                    "type": "number"
-                },
-                "volumeKey": {
-                    "type": "string"
-                },
-                "volumeMountPath": {
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "required": [
-                "aiApiId",
-                "apiKey",
-                "consumerUserId",
-                "containerDiskInGb",
-                "containerRegistryAuthId",
-                "costMultiplier",
-                "costPerHr",
-                "createdAt",
-                "adjustedCostPerHr",
-                "desiredStatus",
-                "dockerArgs",
-                "dockerId",
-                "gpuCount",
-                "gpuPowerLimitPercent",
-                "id",
-                "imageName",
-                "lastStatusChange",
-                "locked",
-                "machineId",
-                "memoryInGb",
-                "name",
-                "podType",
-                "port",
-                "ports",
-                "registry",
-                "templateId",
-                "uptimeSeconds",
-                "vcpuCount",
-                "version",
-                "volumeEncrypted",
-                "volumeInGb",
-                "volumeKey",
-                "volumeMountPath",
-                "lastStartedAt"
-            ]
-        },
-        "runpod:index:PodEnv": {
-            "properties": {
-                "key": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "required": [
-                "key",
-                "value"
-            ]
-        },
-        "runpod:index:PodRegistry": {
-            "properties": {
-                "auth": {
-                    "type": "string"
-                },
-                "pass": {
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                },
-                "user": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            },
-            "type": "object",
-            "required": [
-                "auth",
-                "pass",
-                "url",
-                "user",
-                "username"
-            ]
-        },
-        "runpod:index:SavingsPlanInput": {
-            "properties": {
-                "planLength": {
-                    "type": "string"
-                },
-                "upfrontCost": {
-                    "type": "number"
-                }
-            },
-            "type": "object",
-            "required": [
-                "planLength",
-                "upfrontCost"
-            ]
-        }
-    },
-    "provider": {
-        "properties": {
-            "token": {
-                "type": "string",
-                "description": "Runpod API Token"
-            }
-        },
-        "required": [
-            "token"
-        ],
-        "inputProperties": {
-            "token": {
-                "type": "string",
-                "description": "Runpod API Token"
-            }
-        },
-        "requiredInputs": [
-            "token"
-        ]
-    },
-    "resources": {
-        "runpod:index:NetworkStorage": {
             "properties": {
                 "dataCenterId": {
                     "type": "string"
@@ -364,17 +100,6 @@
                 "dataCenterId",
                 "networkStorage"
             ],
-            "inputProperties": {
-                "dataCenterId": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "size": {
-                    "type": "integer"
-                }
-            },
             "requiredInputs": [
                 "name",
                 "size",
@@ -382,6 +107,110 @@
             ]
         },
         "runpod:index:Pod": {
+            "inputProperties": {
+                "aiApiId": {
+                    "type": "string"
+                },
+                "cloudType": {
+                    "type": "string"
+                },
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "countryCode": {
+                    "type": "string"
+                },
+                "cudaVersion": {
+                    "type": "string"
+                },
+                "dataCenterId": {
+                    "type": "string"
+                },
+                "deployCost": {
+                    "type": "number"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:PodEnv"
+                    },
+                    "type": "array"
+                },
+                "gpuCount": {
+                    "type": "integer"
+                },
+                "gpuTypeId": {
+                    "type": "string"
+                },
+                "gpuTypeIdList": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "minDisk": {
+                    "type": "integer"
+                },
+                "minDownload": {
+                    "type": "integer"
+                },
+                "minMemoryInGb": {
+                    "type": "integer"
+                },
+                "minUpload": {
+                    "type": "integer"
+                },
+                "minVcpuCount": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "networkVolumeId": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "savingsPlan": {
+                    "$ref": "#/types/runpod:index:SavingsPlanInput"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "stopAfter": {
+                    "type": "string"
+                },
+                "supportPublicIp": {
+                    "type": "boolean"
+                },
+                "templateId": {
+                    "type": "string"
+                },
+                "terminateAfter": {
+                    "type": "string"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeKey": {
+                    "type": "string"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
             "properties": {
                 "aiApiId": {
                     "type": "string"
@@ -408,10 +237,10 @@
                     "type": "string"
                 },
                 "env": {
-                    "type": "array",
                     "items": {
                         "$ref": "#/types/runpod:index:PodEnv"
-                    }
+                    },
+                    "type": "array"
                 },
                 "gpuCount": {
                     "type": "integer"
@@ -420,10 +249,10 @@
                     "type": "string"
                 },
                 "gpuTypeIdList": {
-                    "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "type": "array"
                 },
                 "imageName": {
                     "type": "string"
@@ -495,71 +324,160 @@
                 "imageName",
                 "pod"
             ],
-            "inputProperties": {
+            "requiredInputs": [
+                "gpuCount",
+                "gpuTypeId",
+                "imageName"
+            ]
+        }
+    },
+    "types": {
+        "runpod:index:DataCenter": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "storageSupport": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "location",
+                "storageSupport"
+            ],
+            "type": "object"
+        },
+        "runpod:index:Gpu": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "podId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "podId"
+            ],
+            "type": "object"
+        },
+        "runpod:index:NetworkStorage": {
+            "properties": {
+                "dataCenter": {
+                    "$ref": "#/types/runpod:index:DataCenter"
+                },
+                "dataCenterId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "size",
+                "dataCenterId",
+                "dataCenter"
+            ],
+            "type": "object"
+        },
+        "runpod:index:Pod": {
+            "properties": {
+                "adjustedCostPerHr": {
+                    "type": "number"
+                },
                 "aiApiId": {
                     "type": "string"
                 },
-                "cloudType": {
+                "apiKey": {
+                    "type": "string"
+                },
+                "consumerUserId": {
                     "type": "string"
                 },
                 "containerDiskInGb": {
                     "type": "integer"
                 },
-                "countryCode": {
+                "containerRegistryAuthId": {
                     "type": "string"
                 },
-                "cudaVersion": {
-                    "type": "string"
-                },
-                "dataCenterId": {
-                    "type": "string"
-                },
-                "deployCost": {
+                "costMultiplier": {
                     "type": "number"
+                },
+                "costPerHr": {
+                    "type": "number"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "desiredStatus": {
+                    "type": "string"
                 },
                 "dockerArgs": {
                     "type": "string"
                 },
+                "dockerId": {
+                    "type": "string"
+                },
                 "env": {
-                    "type": "array",
                     "items": {
-                        "$ref": "#/types/runpod:index:PodEnv"
-                    }
+                        "type": "string"
+                    },
+                    "type": "array"
                 },
                 "gpuCount": {
                     "type": "integer"
                 },
-                "gpuTypeId": {
-                    "type": "string"
+                "gpuPowerLimitPercent": {
+                    "type": "integer"
                 },
-                "gpuTypeIdList": {
-                    "type": "array",
+                "gpus": {
                     "items": {
-                        "type": "string"
-                    }
+                        "$ref": "#/types/runpod:index:Gpu"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "imageName": {
                     "type": "string"
                 },
-                "minDisk": {
-                    "type": "integer"
+                "lastStartedAt": {
+                    "type": "string"
                 },
-                "minDownload": {
-                    "type": "integer"
+                "lastStatusChange": {
+                    "type": "string"
                 },
-                "minMemoryInGb": {
-                    "type": "integer"
+                "locked": {
+                    "type": "boolean"
                 },
-                "minUpload": {
-                    "type": "integer"
+                "machineId": {
+                    "type": "string"
                 },
-                "minVcpuCount": {
-                    "type": "integer"
+                "memoryInGb": {
+                    "type": "number"
                 },
                 "name": {
                     "type": "string"
                 },
-                "networkVolumeId": {
+                "podType": {
                     "type": "string"
                 },
                 "port": {
@@ -568,29 +486,26 @@
                 "ports": {
                     "type": "string"
                 },
-                "savingsPlan": {
-                    "$ref": "#/types/runpod:index:SavingsPlanInput"
-                },
-                "startJupyter": {
-                    "type": "boolean"
-                },
-                "startSsh": {
-                    "type": "boolean"
-                },
-                "stopAfter": {
-                    "type": "string"
-                },
-                "supportPublicIp": {
-                    "type": "boolean"
+                "registry": {
+                    "$ref": "#/types/runpod:index:PodRegistry"
                 },
                 "templateId": {
                     "type": "string"
                 },
-                "terminateAfter": {
-                    "type": "string"
+                "uptimeSeconds": {
+                    "type": "integer"
+                },
+                "vcpuCount": {
+                    "type": "number"
+                },
+                "version": {
+                    "type": "integer"
+                },
+                "volumeEncrypted": {
+                    "type": "boolean"
                 },
                 "volumeInGb": {
-                    "type": "integer"
+                    "type": "number"
                 },
                 "volumeKey": {
                     "type": "string"
@@ -599,11 +514,100 @@
                     "type": "string"
                 }
             },
-            "requiredInputs": [
+            "required": [
+                "aiApiId",
+                "apiKey",
+                "consumerUserId",
+                "containerDiskInGb",
+                "containerRegistryAuthId",
+                "costMultiplier",
+                "costPerHr",
+                "createdAt",
+                "adjustedCostPerHr",
+                "desiredStatus",
+                "dockerArgs",
+                "dockerId",
                 "gpuCount",
-                "gpuTypeId",
-                "imageName"
-            ]
+                "gpuPowerLimitPercent",
+                "id",
+                "imageName",
+                "lastStatusChange",
+                "locked",
+                "machineId",
+                "memoryInGb",
+                "name",
+                "podType",
+                "port",
+                "ports",
+                "registry",
+                "templateId",
+                "uptimeSeconds",
+                "vcpuCount",
+                "version",
+                "volumeEncrypted",
+                "volumeInGb",
+                "volumeKey",
+                "volumeMountPath",
+                "lastStartedAt"
+            ],
+            "type": "object"
+        },
+        "runpod:index:PodEnv": {
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "key",
+                "value"
+            ],
+            "type": "object"
+        },
+        "runpod:index:PodRegistry": {
+            "properties": {
+                "auth": {
+                    "type": "string"
+                },
+                "pass": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "auth",
+                "pass",
+                "url",
+                "user",
+                "username"
+            ],
+            "type": "object"
+        },
+        "runpod:index:SavingsPlanInput": {
+            "properties": {
+                "planLength": {
+                    "type": "string"
+                },
+                "upfrontCost": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "planLength",
+                "upfrontCost"
+            ],
+            "type": "object"
         }
     }
 }

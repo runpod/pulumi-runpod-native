@@ -74,6 +74,12 @@ func Provider() p.Provider {
 						"typescript": "^3.7.0",
 					},
 				},
+				"python": map[string]any{
+					"requires": map[string]string{
+						"pulumi": ">=3.0.0,<4.0.0",
+					},
+					"packageName": "pulumi-runpod",
+				},
 			},
 		},
 	})

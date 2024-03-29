@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@pierre78181/runpod";
+import * as runpod from "@runpod-infra/pulumi";
 
 const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
     name: "testStorage1",
