@@ -12,6 +12,15 @@ The Runpod provider is available as a package in all Runpod languages:
 * Python: [`pulumi-runpod`](https://pypi.org/project/pulumi-runpod/)
 * Go: [`github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod`](https://www.github.com/runpod/pulumi-runpod-native)
 
+### Go
+
+To use from Go, use `go get` to grab the latest version of the library:
+
+```bash
+  go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod
+```
+We advise you to pin to a specific version.
+
 ### Node.js (JavaScript/TypeScript)
 
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
@@ -32,14 +41,6 @@ To use from Python, follow the following steps:
 
 ```bash
   pip install pulumi-runpod
-```
-
-### Go
-
-To use from Go, use `go get` to grab the latest version of the library:
-
-```bash
-  go get github.com/runpod/pulumi-runpod-native
 ```
 
 ## Configuration

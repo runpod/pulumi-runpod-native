@@ -17,10 +17,25 @@ To begin with, please set your runpod API key to use with Pulumi.
 
 ## Example
 
-This is an example of how to deploy over typescript. We also serve pulumi over Python and Go. For more examples, please go read through the examples in the examples directory
+This is an example of how to deploy it over Golang. We also serve pulumi over Typescript and Python. For more examples, please navigate to the examples directory
 or the documents inside docs. If you have any problems in doing so, please contact support@runpod.io.
 
-Filename must be index.ts for Typescript.
+1. Create a new Pulumi Go example:
+```
+    pulumi new
+```
+Select either the Go template or Runpod's Go template.
+
+2. Set your API keys using the config shown above. 
+
+3. Install the official Go package:
+
+```
+    go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod@v1.1.8
+```
+Replace the version above to any that you want. We advise you to pin a certain version as there will be fewer breaking changes.
+
+4. Use this example as a simple building guide for your example project:
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
@@ -57,5 +72,21 @@ Filename must be index.ts for Typescript.
         value: testNetworkStorage.networkStorage,
     };
 ```
+
+5. PULUMI UP
+Create your resources using the command below:
+
+```
+    pulumi up
+```
+
+6. PULUMI DOWN
+If you want to remove your resources, you can use the command below:
+
+```
+    pulumi down
+```
+
+If you have any issues, please feel free to create an issue or reach out to us directly at support@runpod.io.
 
 > **Note:** For examples in Go and Python, please visit the documentation inside the docs directory or click [here](https://github.com/runpod/pulumi-runpod-native/tree/main/docs).
