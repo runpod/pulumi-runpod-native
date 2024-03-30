@@ -2,14 +2,6 @@ name: Makefile
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  schedule:
-    - cron: "0 0 * * *"
 
 env:
   RUNPOD_TOKEN: ${{ secrets.RUNPOD_DEV_TOKEN }}

@@ -17,10 +17,10 @@ To begin with, please set your runpod API key to use with Pulumi.
 
 ## Example
 
-This is an example of how to deploy over typescript. We also serve pulumi over Python and Go. For more examples, please go through the examples folder or the documents inside
-docs. 
+This is an example of how to deploy over typescript. We also serve pulumi over Python and Go. For more examples, please go read through the examples in the examples directory
+or the documents inside docs. If you have any problems in doing so, please contact support@runpod.io.
 
-Filename must be index.ts.
+Filename must be index.ts for Typescript.
 
 ```typescript
     import * as pulumi from "@pulumi/pulumi";
