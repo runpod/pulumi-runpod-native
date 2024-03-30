@@ -43,6 +43,21 @@ To use from Python, follow the following steps:
   pip install pulumi-runpod
 ```
 
+### Dotnet
+The package for dotnet is available here:
+
+> **Note:** Runpod does not maintain LTS for dotnet packages.
+
+```csharp
+  dotnet add package Pulumi
+```
+
+Inside your dotnet file, you can import it using this:
+```
+  using Pulumi;
+  using Runpod = Pulumi.Runpod;
+```
+
 ## Configuration
 
 To begin with, please set your runpod API key using Pulumi.
