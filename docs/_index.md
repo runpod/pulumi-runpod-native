@@ -17,7 +17,7 @@ To begin with, please set your runpod API key using Pulumi.
 
 ## Example
 
-{{< chooser language "typescript,go,python" >}}
+{{< chooser language "typescript,go,python,csharp,yaml" >}}
 
 {{% choosable language typescript %}}
 
@@ -227,7 +227,7 @@ runtime: yaml
 
 {{% /choosable %}}
 
-{{% choosable language dotnet %}}
+{{% choosable language csharp %}}
 
 name: provider-runpod-native
 runtime: csharp
@@ -287,3 +287,5 @@ Runpod's support for csharp is a bit shaky and might not always work.
         };
     });
 ```
+
+{{% /choosable %}}
