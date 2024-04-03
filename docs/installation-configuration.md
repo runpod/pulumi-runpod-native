@@ -1,24 +1,26 @@
 ---
-title: Runpod Setup
-meta_desc: Information on how to install the Runpod Provider for Pulumi.
+title: RunPod Setup
+meta_desc: Information on how to install the RunPod Provider for Pulumi.
 layout: package
 ---
 
 ## Installation
 
-The Runpod provider is available as a package in all Runpod languages:
+The RunPod provider is available as a package in these Pulumi languages:
 
 * JavaScript/TypeScript: [`@runpod-infra/pulumi`](https://www.npmjs.com/package/@runpod-infra/pulumi)
 * Python: [`pulumi-runpod`](https://pypi.org/project/pulumi-runpod/)
 * Go: [`github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod`](https://www.github.com/runpod/pulumi-runpod-native)
+* Pulumi YAML
 
 ### Go
 
 To use from Go, use `go get` to grab the latest version of the library:
 
 ```bash
-  go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod
+go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod
 ```
+
 We advise you to pin to a specific version.
 
 ### Node.js (JavaScript/TypeScript)
@@ -26,13 +28,13 @@ We advise you to pin to a specific version.
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
 ```bash
-  npm install @runpod-infra/pulumi
+npm install @runpod-infra/pulumi
 ```
 
 or `yarn`:
 
 ```bash
-  yarn add @runpod-infra/pulumi
+yarn add @runpod-infra/pulumi
 ```
 
 ### Python
@@ -40,28 +42,13 @@ or `yarn`:
 To use from Python, follow the following steps:
 
 ```bash
-  pip install pulumi-runpod
-```
-
-### Dotnet
-The package for dotnet is available here:
-
-> **Note:** Runpod does not maintain LTS for dotnet packages.
-
-```csharp
-  dotnet add package Pulumi
-```
-
-Inside your dotnet file, you can import it using this:
-```
-  using Pulumi;
-  using Runpod = Pulumi.Runpod;
+pip install pulumi-runpod
 ```
 
 ## Configuration
 
-To begin with, please set your runpod API key using Pulumi.
+To begin with, please set your RunPod API key using Pulumi.
 
 ```bash
-  pulumi config set runpod:token --secret
+pulumi config set runpod:token --secret
 ```
