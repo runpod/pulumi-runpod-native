@@ -45,6 +45,12 @@ To use from Python, follow the following steps:
 pip install pulumi-runpod
 ```
 
+Also make sure to be inside the python virtual environment created when you run the ```pulumi up``` command:
+
+```bash
+    source venv/bin/activate
+```
+
 ## Configuration
 
 To begin with, please set your RunPod API key using Pulumi.

@@ -14,6 +14,10 @@ To begin with, please set your RunPod API key using Pulumi.
 pulumi config set --secret runpod:token
 ```
 
+## Note
+
+Please make sure that you are inside the Python virtual environment created by Pulumi when using the Python SDK.
+
 ## Example
 
 {{< chooser language "typescript,go,python,yaml" />}}
@@ -112,6 +116,10 @@ func main() {
 {{% /choosable %}}
 
 {{% choosable language python %}}
+
+```
+  source venv/bin/activate
+```
 
 ```python
 import pulumi

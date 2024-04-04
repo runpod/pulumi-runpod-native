@@ -28,7 +28,7 @@ import (
 )
 
 // Version is initialized by the Go linker to contain the semver of this build.
-var Version = "v1.1.9"
+var Version = "v1.2.4"
 
 const Name string = "runpod"
 
@@ -78,7 +78,7 @@ func Provider() p.Provider {
 					"requires": map[string]string{
 						"pulumi": ">=3.0.0,<4.0.0",
 					},
-					"packageName": "runpodinfra",
+					"packageName": "pulumi-runpod",
 				},
 				"csharp": map[string]any{
 					"packageReferences": map[string]string{
