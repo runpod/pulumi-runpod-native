@@ -20,7 +20,6 @@
         "ml",
         "ai"
     ],
-    "version": "v1.1.8",
     "language": {
         "csharp": {
             "packageReferences": {
@@ -42,7 +41,7 @@
             "packageName": "@runpod-infra/pulumi"
         },
         "python": {
-            "packageName": "pulumi-runpod",
+            "packageName": "runpod_pulumi_infra",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
