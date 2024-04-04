@@ -10,6 +10,7 @@
             }
         }
     },
+    "version": "v1.2.4",
     "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
     "displayName": "Runpod",
     "homepage": "https://runpod.io",
