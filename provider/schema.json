@@ -41,7 +41,7 @@
             "packageName": "@runpod-infra/pulumi"
         },
         "python": {
-            "packageName": "runpod_pulumi_infra",
+            "packageName": "runpodinfra",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
