@@ -18,7 +18,8 @@
         "runpod",
         "gpus",
         "ml",
-        "ai"
+        "ai",
+        "category/cloud"
     ],
     "version": "v1.2.7",
     "language": {
