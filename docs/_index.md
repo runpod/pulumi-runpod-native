@@ -123,7 +123,7 @@ func main() {
 
 ```python
 import pulumi
-import pulumi_runpod as runpod
+import runpodinfra as runpod
 from loguru import logger
 import json
 

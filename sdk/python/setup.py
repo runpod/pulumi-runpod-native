@@ -17,7 +17,7 @@ def readme():
         return "runpod Pulumi Package - Development Version"
 
 
-setup(name='pulumi-runpod',
+setup(name='runpodinfra',
       python_requires='>=3.8',
       version=VERSION,
       description="The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
@@ -31,7 +31,7 @@ setup(name='pulumi-runpod',
       license='Apache-2.0',
       packages=find_packages(),
       package_data={
-          'pulumi-runpod': [
+          'runpodinfra': [
               'py.typed',
               'pulumi-plugin.json',
           ]

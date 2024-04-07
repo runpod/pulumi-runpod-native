@@ -37,40 +37,55 @@ Replace the version above to any that you want. We advise you to pin a certain v
 
 4. Use this example as a simple building guide for your example project:
 
-```typescript
-    import * as pulumi from "@pulumi/pulumi";
-    import * as runpod from "@runpod-infra/pulumi";
+```go
+package main
 
-    const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
-        name: "testStorage1",
-        size: 20,
-        dataCenterId: "US-NJ",
-    });
-    const myRandomPod = new runpod.Pod("myRandomPod", {
-        cloudType: "ALL",
-        networkVolumeId: testNetworkStorage.networkStorage.apply(networkStorage => networkStorage.id),
-        gpuCount: 1,
-        volumeInGb: 50,
-        containerDiskInGb: 50,
-        minVcpuCount: 2,
-        minMemoryInGb: 15,
-        gpuTypeId: "NVIDIA GeForce RTX 3070",
-        name: "RunPod Pytorch",
-        imageName: "runpod/pytorch",
-        dockerArgs: "",
-        ports: "8888/http",
-        volumeMountPath: "/workspace",
-        env: [{
-            key: "JUPYTER_PASSWORD",
-            value: "rns1hunbsstltcpad22d",
-        }],
-    });
-    export const pod = {
-        value: myRandomPod.pod,
-    };
-    export const networkStorage = {
-        value: testNetworkStorage.networkStorage,
-    };
+import (
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/runpod/pulumi-runpod-native/sdk/go/runpod"
+)
+
+func main() {
+	pulumi.Run(func(ctx *pulumi.Context) error {
+		testNetworkStorage, err := runpod.NewNetworkStorage(ctx, "testNetworkStorage", &runpod.NetworkStorageArgs{
+			Name:         pulumi.String("testStorage1"),
+			Size:         pulumi.Int(20),
+			DataCenterId: pulumi.String("US-NJ"),
+		})
+		if err != nil {
+			return err
+		}
+
+		myRandomPod, err := runpod.NewPod(ctx, "myRandomPod", &runpod.PodArgs{
+			CloudType:         pulumi.String("ALL"),
+			NetworkVolumeId:   testNetworkStorage.NetworkStorage.Id(),
+			GpuCount:          pulumi.Int(1),
+			VolumeInGb:        pulumi.Int(50),
+			ContainerDiskInGb: pulumi.Int(50),
+			MinVcpuCount:      pulumi.Int(2),
+			MinMemoryInGb:     pulumi.Int(15),
+			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 3070"),
+			Name:              pulumi.String("RunPod Pytorch"),
+			ImageName:         pulumi.String("runpod/pytorch"),
+			DockerArgs:        pulumi.String(""),
+			Ports:             pulumi.String("8888/http"),
+			VolumeMountPath:   pulumi.String("/workspace"),
+			Env: runpod.PodEnvArray{
+				&runpod.PodEnvArgs{
+					Key:   pulumi.String("JUPYTER_PASSWORD"),
+					Value: pulumi.String("rns1hunbsstltcpad22d"),
+				},
+			},
+		})
+		if err != nil {
+			return err
+		}
+
+		ctx.Export("pod", myRandomPod)
+		ctx.Export("networkStorage", testNetworkStorage)
+		return nil
+	})
+}
 ```
 
 5. PULUMI UP
@@ -89,4 +104,4 @@ If you want to remove your resources, you can use the command below:
 
 If you have any issues, please feel free to create an issue or reach out to us directly at support@runpod.io.
 
-> **Note:** For examples in Go and Python, please visit the documentation inside the docs directory or click [here](https://github.com/runpod/pulumi-runpod-native/tree/main/docs).
+> **Note:** For examples in TypeScript and Python, please visit the documentation inside the docs directory or click [here](https://github.com/runpod/pulumi-runpod-native/tree/main/docs).

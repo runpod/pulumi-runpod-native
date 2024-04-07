@@ -39,16 +39,16 @@ yarn add @runpod-infra/pulumi
 
 ### Python
 
-To use from Python, follow the following steps:
-
-```bash
-pip install pulumi-runpod
-```
-
-Also make sure to be inside the python virtual environment created when you run the ```pulumi up``` command:
+Please activate the virtual environment created when you ran the ```pulumi new``` command:
 
 ```bash
     source venv/bin/activate
+```
+
+Then install the official pulumi package from our pip repository:
+
+```bash
+pip install runpodinfra
 ```
 
 ## Configuration

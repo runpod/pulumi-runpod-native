@@ -10,7 +10,7 @@
             }
         }
     },
-    "version": "v1.2.4",
+    "version": "v1.2.6",
     "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
     "displayName": "Runpod",
     "homepage": "https://runpod.io",
@@ -42,7 +42,7 @@
             "packageName": "@runpod-infra/pulumi"
         },
         "python": {
-            "packageName": "pulumi-runpod",
+            "packageName": "runpodinfra",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
