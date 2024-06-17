@@ -5,7 +5,6 @@
 	},
 	"dependencies": {
 		"typescript": "^4.0.0",
-		"@pulumi/pulumi": "^3.0.0",
-		"@runpod-infra/pulumi": "0.9.30+dirty"
+		"@pulumi/pulumi": "^3.0.0"
 	}
 }

@@ -82,3 +82,28 @@ export interface SavingsPlanInput {
     upfrontCost: number;
 }
 
+export interface Template {
+    advancedStart: boolean;
+    boundEndpointId: string;
+    category: string;
+    containerDiskInGb: number;
+    containerRegistryAuthId: string;
+    dockerArgs: string;
+    earned: number;
+    env?: outputs.PodEnv[];
+    id: string;
+    imageName: string;
+    isPublic: boolean;
+    isRunpod: boolean;
+    isServerless: boolean;
+    name: string;
+    ports: string;
+    readme: string;
+    runtimeInMin: number;
+    startJupyter: boolean;
+    startScript: string;
+    startSsh: boolean;
+    volumeInGb: number;
+    volumeMountPath: string;
+}
+
