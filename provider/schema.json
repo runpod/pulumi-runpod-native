@@ -18,10 +18,8 @@
         "runpod",
         "gpus",
         "ml",
-        "ai",
-        "category/cloud"
+        "ai"
     ],
-    "version": "v1.2.7",
     "language": {
         "csharp": {
             "packageReferences": {
@@ -337,6 +335,126 @@
                 "gpuTypeId",
                 "imageName"
             ]
+        },
+        "runpod:index:Template": {
+            "inputProperties": {
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:PodEnv"
+                    },
+                    "type": "array"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "isServerless": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:PodEnv"
+                    },
+                    "type": "array"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "isServerless": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "template": {
+                    "$ref": "#/types/runpod:index:Template"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "imageName",
+                "name",
+                "dockerArgs",
+                "readme",
+                "isPublic",
+                "isServerless",
+                "ports",
+                "startJupyter",
+                "startSsh",
+                "volumeInGb",
+                "volumeMountPath",
+                "template"
+            ],
+            "requiredInputs": [
+                "imageName",
+                "name",
+                "dockerArgs",
+                "readme",
+                "isPublic",
+                "isServerless",
+                "ports",
+                "startJupyter",
+                "startSsh",
+                "volumeInGb",
+                "volumeMountPath"
+            ]
         }
     },
     "types": {
@@ -614,6 +732,47 @@
             "required": [
                 "planLength",
                 "upfrontCost"
+            ],
+            "type": "object"
+        },
+        "runpod:index:Template": {
+            "properties": {
+                "advancedStart": {
+                    "type": "string"
+                },
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "advancedStart",
+                "containerDiskInGb",
+                "id",
+                "imageName",
+                "name",
+                "dockerArgs",
+                "readme"
             ],
             "type": "object"
         }

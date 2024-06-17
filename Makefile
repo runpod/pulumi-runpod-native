@@ -34,7 +34,7 @@ codegen::
 
 generate:
 	@echo "Generating Go client from Swagger definition..."
-	@go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+	@go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@v2.1.0
 	@go generate ./${PROVIDER_PATH}/provider.go
 
 provider_debug::
@@ -132,7 +132,7 @@ lint::
 	done
 
 # install_dotnet_sdk
-install:: install_nodejs_sdk
+install:: install_nodejs_sdk 
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
 GO_TEST 	 := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
