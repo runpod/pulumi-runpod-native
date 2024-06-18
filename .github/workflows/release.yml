@@ -52,7 +52,7 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set PreRelease Version
-        run: echo "GORELEASER_CURRENT_TAG=v${{ github.ref }}" >> $GITHUB_ENV
+        run: echo "GORELEASER_CURRENT_TAG=v${{ github.ref_name }}" >> $GITHUB_ENV
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
         with:
@@ -96,11 +96,11 @@ jobs:
           registry-url: ${{env.NPM_REGISTRY_URL}}
       - name: build
         run: |
-          make build
+          VERSION=${{ github.ref_name }} make build
       - name: Generate SDK
-        run: make ${{ matrix.language }}_sdk
+        run: VERSION=${{ github.ref_name }} make ${{ matrix.language }}_sdk
         env:
-          PULUMI_PYTHON_VERSION: ${{ github.ref }}
+          PULUMI_PYTHON_VERSION: ${{ github.ref_name }}
       - name: Check worktree clean
         run: |
           git update-index -q --refresh
