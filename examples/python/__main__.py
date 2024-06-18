@@ -1,10 +1,11 @@
 import pulumi
-import runpodinfra as runpod
+# import runpodinfra as runpod
+import sdk.python.runpodinfra as runpod
 
 test_network_storage = runpod.NetworkStorage("testNetworkStorage",
     name="testStorage1",
-    size=20,
-    data_center_id="US-NJ")
+    size=5,
+    data_center_id="EU-RO-1")
 my_random_pod = runpod.Pod("myRandomPod",
     cloud_type="ALL",
     network_volume_id=test_network_storage.network_storage.id,
@@ -13,7 +14,7 @@ my_random_pod = runpod.Pod("myRandomPod",
     container_disk_in_gb=50,
     min_vcpu_count=2,
     min_memory_in_gb=15,
-    gpu_type_id="NVIDIA GeForce RTX 3070",
+    gpu_type_id="NVIDIA GeForce RTX 4090",
     name="RunPod Pytorch",
     image_name="runpod/pytorch",
     docker_args="",

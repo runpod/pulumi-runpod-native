@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
@@ -80,12 +81,6 @@ func (*NetworkStorage) Create(ctx p.Context, name string, input NetworkStorageAr
 				name
 				size
 				dataCenterId
-				dataCenter {
-					id
-					name
-					location
-					storageSupport
-				}	
 			}
 		}`,
 		Variables: gqlVariable,
@@ -93,11 +88,12 @@ func (*NetworkStorage) Create(ctx p.Context, name string, input NetworkStorageAr
 
 	jsonValue, err := json.Marshal(gqlInput)
 	if err != nil {
+		log.Print("error: ", err)
 		return name, state, err
 	}
 
 	config := infer.GetConfig[Config](ctx)
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -125,14 +121,16 @@ func (*NetworkStorage) Create(ctx p.Context, name string, input NetworkStorageAr
 		return name, state, err
 	}
 
+	log.Print("output: ", output, gqlInput, string(data))
+
 	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
+		err = fmt.Errorf("API errored: %s", output.Errors[0].Message)
 		return name, state, err
 	}
 
 	ns := output.Data.CreateNetworkVolume
 	if ns.Id == "" {
-		err = fmt.Errorf("graphql nw is nil: %s", string(data))
+		err = fmt.Errorf("API errored: %s", string(data))
 		return name, state, err
 	}
 
@@ -182,7 +180,7 @@ func (*NetworkStorage) Update(ctx p.Context, id string, olds NetworkStorageState
 		return state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -265,7 +263,7 @@ func (*NetworkStorage) Delete(ctx p.Context, id string, props NetworkStorageStat
 		return err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {

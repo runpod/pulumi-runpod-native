@@ -235,7 +235,7 @@ func (*Pod) Create(ctx p.Context, name string, input PodArgs, preview bool) (str
 		return name, state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -328,7 +328,7 @@ func (*Pod) Update(ctx p.Context, id string, olds PodState, news PodArgs, previe
 		return state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -429,7 +429,7 @@ func (*Pod) Delete(ctx p.Context, id string, props PodState) error {
 		return err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {

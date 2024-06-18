@@ -133,7 +133,7 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 		return name, state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 
@@ -241,7 +241,7 @@ func (*Template) Update(ctx p.Context, id string, olds TemplateState, news Templ
 		return state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -356,7 +356,7 @@ func (*Template) Delete(ctx p.Context, id string, props TemplateState) error {
 		return err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {

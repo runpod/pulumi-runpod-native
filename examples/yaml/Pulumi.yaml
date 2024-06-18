@@ -13,30 +13,49 @@ resources:
     type: runpod:NetworkStorage
     properties:
       name: "testStorage1"
-      size: 20
-      dataCenterId: "US-NJ"
+      size: 5
+      dataCenterId: "EU-RO-1"
 
-  myRandomPod:
-    type: runpod:Pod
-    properties:
-      cloudType: ALL
-      networkVolumeId: ${testNetworkStorage.networkStorage.id}
-      gpuCount: 1
-      volumeInGb: 50
-      containerDiskInGb: 50
-      minVcpuCount: 2
-      minMemoryInGb: 15
-      gpuTypeId: "NVIDIA GeForce RTX 3070"
-      name: "RunPod Pytorch"
-      imageName: "runpod/pytorch"
-      dockerArgs: ""
-      ports: "8888/http"
-      volumeMountPath: "/workspace"
-      env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+  # myRandomPod:
+  #   type: runpod:Pod
+  #   properties:
+  #     cloudType: ALL
+  #     networkVolumeId: ${testNetworkStorage.networkStorage.id}
+  #     gpuCount: 1
+  #     volumeInGb: 50
+  #     containerDiskInGb: 50
+  #     minVcpuCount: 2
+  #     minMemoryInGb: 15
+  #     gpuTypeId: "NVIDIA GeForce RTX 4090"
+  #     name: "RunPod Pytorch"
+  #     imageName: "runpod/pytorch"
+  #     dockerArgs: ""
+  #     ports: "8888/http"
+  #     volumeMountPath: "/workspace"
+  #     env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+
+  # myRandomTemplate:
+  #   type: runpod:Template
+  #   properties:
+  #     containerDiskInGb: 20
+  #     containerRegistryAuthId: ""
+  #     dockerArgs: "python3 -m http.server 8080"
+  #     env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+  #     imageName: "nginx:latest"
+  #     isPublic: false
+  #     isServerless: false
+  #     name: "RunPod Nginx"
+  #     ports: "8080/http"
+  #     readme: "Test template"
+  #     startJupyter: false
+  #     startSsh: false
+  #     volumeInGb: 10
+  #     volumeMountPath: "/workspace"
+  #     category: "NVIDIA"
 
 outputs:
-  pod:
-    value: ${myRandomPod.pod}
+  # pod:
+  #   value: ${myRandomPod.pod}
   networkStorage:
     value: ${testNetworkStorage.networkStorage}
 
