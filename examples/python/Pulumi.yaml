@@ -1,5 +1,6 @@
 name: provider-runpod-native
 runtime: python
+virtualenv: /Users/pierre_at_runpod/Desktop/repo/pulumi-runpod-native/examples/python/newenv
 plugins:
   providers:
     - name: runpod

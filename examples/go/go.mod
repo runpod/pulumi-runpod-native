@@ -4,7 +4,7 @@ go 1.21.3
 
 require (
 	github.com/pulumi/pulumi/sdk/v3 v3.112.0
-	github.com/runpod/pulumi-runpod-native/sdk v1.2.7
+	github.com/runpod/pulumi-runpod-native/sdk v1.2.8-0.20240618163023-ef1f453b22ba
 )
 
 require (

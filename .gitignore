@@ -16,3 +16,7 @@ examples/nodejs/** */
 examples/go/** */
 examples/python/** */
 examples/** */
+*.pyc
+
+newenv/** */
+examples/python/newenv/**

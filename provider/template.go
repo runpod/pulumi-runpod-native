@@ -83,6 +83,10 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 	}
 	config := infer.GetConfig[Config](ctx)
 
+	if input.ImageName == "" || input.Readme == "" || input.Name == "" {
+		return name, state, fmt.Errorf("imageName, readme and name are required")
+	}
+
 	gqlVariable := structs.Map(input)
 
 	gqlInput := GqlInput{
@@ -189,6 +193,10 @@ func (*Template) Update(ctx p.Context, id string, olds TemplateState, news Templ
 		return state, nil
 	}
 	config := infer.GetConfig[Config](ctx)
+
+	if news.ImageName == "" || news.Readme == "" || news.Name == "" {
+		return state, fmt.Errorf("imageName, readme and name are required")
+	}
 
 	gqlVariable := structs.Map(news)
 	gqlVariable["id"] = olds.Template.Id
