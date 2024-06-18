@@ -22,8 +22,8 @@ const myTemplate = new runpod.Template("testTemplate", {
 });
 const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
     name: "testStorage1",
-    size: 20,
-    dataCenterId: "US-NJ",
+    size: 5,
+    dataCenterId: "EU-RO-1",
 });
 const myRandomPod = new runpod.Pod("myRandomPod", {
     cloudType: "ALL",
@@ -33,7 +33,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
     containerDiskInGb: 50,
     minVcpuCount: 2,
     minMemoryInGb: 15,
-    gpuTypeId: "NVIDIA GeForce RTX 3070",
+    gpuTypeId: "NVIDIA GeForce RTX 4090",
     name: "RunPod Pytorch",
     imageName: "runpod/pytorch",
     dockerArgs: "",
