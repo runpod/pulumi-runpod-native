@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - v*.*.*
-      - v*.*.*-rc
-      - "!v*.*.*-**"
+      - v*.*.*      # Match v1.2.3
+      - v*.*.*-rc   # Match v1.2.3-rc
+      - "!v*.*.*-*[^rc]"  # Exclude tags that end with something other than 'rc'
 env:
   PROVIDER: "runpod"
   # THIS GITHUB_TOKEN IS A REQUIREMENT TO BE ABLE TO WRITE TO GH RELEASES
