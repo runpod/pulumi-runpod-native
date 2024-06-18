@@ -132,7 +132,7 @@ lint::
 	done
 
 # install_dotnet_sdk
-install:: install_nodejs_sdk 
+install:: install_nodejs_sdk
 	cp $(WORKING_DIR)/bin/${PROVIDER} ${GOPATH}/bin
 
 GO_TEST 	 := go test -v -count=1 -cover -timeout 2h -parallel ${TESTPARALLELISM}
