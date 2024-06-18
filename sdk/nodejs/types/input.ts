@@ -14,3 +14,4 @@ export interface SavingsPlanInputArgs {
     planLength: pulumi.Input<string>;
     upfrontCost: pulumi.Input<number>;
 }
+

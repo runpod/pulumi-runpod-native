@@ -18,6 +18,7 @@ __all__ = [
     'PodEnv',
     'PodRegistry',
     'SavingsPlanInput',
+    'Template',
 ]
 
 @pulumi.output_type
@@ -605,5 +606,210 @@ class SavingsPlanInput(dict):
     @pulumi.getter(name="upfrontCost")
     def upfront_cost(self) -> float:
         return pulumi.get(self, "upfront_cost")
+
+
+@pulumi.output_type
+class Template(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "advancedStart":
+            suggest = "advanced_start"
+        elif key == "boundEndpointId":
+            suggest = "bound_endpoint_id"
+        elif key == "containerDiskInGb":
+            suggest = "container_disk_in_gb"
+        elif key == "containerRegistryAuthId":
+            suggest = "container_registry_auth_id"
+        elif key == "dockerArgs":
+            suggest = "docker_args"
+        elif key == "imageName":
+            suggest = "image_name"
+        elif key == "isPublic":
+            suggest = "is_public"
+        elif key == "isRunpod":
+            suggest = "is_runpod"
+        elif key == "isServerless":
+            suggest = "is_serverless"
+        elif key == "runtimeInMin":
+            suggest = "runtime_in_min"
+        elif key == "startJupyter":
+            suggest = "start_jupyter"
+        elif key == "startScript":
+            suggest = "start_script"
+        elif key == "startSsh":
+            suggest = "start_ssh"
+        elif key == "volumeInGb":
+            suggest = "volume_in_gb"
+        elif key == "volumeMountPath":
+            suggest = "volume_mount_path"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in Template. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        Template.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        Template.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 advanced_start: bool,
+                 bound_endpoint_id: str,
+                 category: str,
+                 container_disk_in_gb: int,
+                 container_registry_auth_id: str,
+                 docker_args: str,
+                 earned: float,
+                 id: str,
+                 image_name: str,
+                 is_public: bool,
+                 is_runpod: bool,
+                 is_serverless: bool,
+                 name: str,
+                 ports: str,
+                 readme: str,
+                 runtime_in_min: int,
+                 start_jupyter: bool,
+                 start_script: str,
+                 start_ssh: bool,
+                 volume_in_gb: int,
+                 volume_mount_path: str,
+                 env: Optional[Sequence['outputs.PodEnv']] = None):
+        pulumi.set(__self__, "advanced_start", advanced_start)
+        pulumi.set(__self__, "bound_endpoint_id", bound_endpoint_id)
+        pulumi.set(__self__, "category", category)
+        pulumi.set(__self__, "container_disk_in_gb", container_disk_in_gb)
+        pulumi.set(__self__, "container_registry_auth_id", container_registry_auth_id)
+        pulumi.set(__self__, "docker_args", docker_args)
+        pulumi.set(__self__, "earned", earned)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "image_name", image_name)
+        pulumi.set(__self__, "is_public", is_public)
+        pulumi.set(__self__, "is_runpod", is_runpod)
+        pulumi.set(__self__, "is_serverless", is_serverless)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "ports", ports)
+        pulumi.set(__self__, "readme", readme)
+        pulumi.set(__self__, "runtime_in_min", runtime_in_min)
+        pulumi.set(__self__, "start_jupyter", start_jupyter)
+        pulumi.set(__self__, "start_script", start_script)
+        pulumi.set(__self__, "start_ssh", start_ssh)
+        pulumi.set(__self__, "volume_in_gb", volume_in_gb)
+        pulumi.set(__self__, "volume_mount_path", volume_mount_path)
+        if env is not None:
+            pulumi.set(__self__, "env", env)
+
+    @property
+    @pulumi.getter(name="advancedStart")
+    def advanced_start(self) -> bool:
+        return pulumi.get(self, "advanced_start")
+
+    @property
+    @pulumi.getter(name="boundEndpointId")
+    def bound_endpoint_id(self) -> str:
+        return pulumi.get(self, "bound_endpoint_id")
+
+    @property
+    @pulumi.getter
+    def category(self) -> str:
+        return pulumi.get(self, "category")
+
+    @property
+    @pulumi.getter(name="containerDiskInGb")
+    def container_disk_in_gb(self) -> int:
+        return pulumi.get(self, "container_disk_in_gb")
+
+    @property
+    @pulumi.getter(name="containerRegistryAuthId")
+    def container_registry_auth_id(self) -> str:
+        return pulumi.get(self, "container_registry_auth_id")
+
+    @property
+    @pulumi.getter(name="dockerArgs")
+    def docker_args(self) -> str:
+        return pulumi.get(self, "docker_args")
+
+    @property
+    @pulumi.getter
+    def earned(self) -> float:
+        return pulumi.get(self, "earned")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="imageName")
+    def image_name(self) -> str:
+        return pulumi.get(self, "image_name")
+
+    @property
+    @pulumi.getter(name="isPublic")
+    def is_public(self) -> bool:
+        return pulumi.get(self, "is_public")
+
+    @property
+    @pulumi.getter(name="isRunpod")
+    def is_runpod(self) -> bool:
+        return pulumi.get(self, "is_runpod")
+
+    @property
+    @pulumi.getter(name="isServerless")
+    def is_serverless(self) -> bool:
+        return pulumi.get(self, "is_serverless")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter
+    def ports(self) -> str:
+        return pulumi.get(self, "ports")
+
+    @property
+    @pulumi.getter
+    def readme(self) -> str:
+        return pulumi.get(self, "readme")
+
+    @property
+    @pulumi.getter(name="runtimeInMin")
+    def runtime_in_min(self) -> int:
+        return pulumi.get(self, "runtime_in_min")
+
+    @property
+    @pulumi.getter(name="startJupyter")
+    def start_jupyter(self) -> bool:
+        return pulumi.get(self, "start_jupyter")
+
+    @property
+    @pulumi.getter(name="startScript")
+    def start_script(self) -> str:
+        return pulumi.get(self, "start_script")
+
+    @property
+    @pulumi.getter(name="startSsh")
+    def start_ssh(self) -> bool:
+        return pulumi.get(self, "start_ssh")
+
+    @property
+    @pulumi.getter(name="volumeInGb")
+    def volume_in_gb(self) -> int:
+        return pulumi.get(self, "volume_in_gb")
+
+    @property
+    @pulumi.getter(name="volumeMountPath")
+    def volume_mount_path(self) -> str:
+        return pulumi.get(self, "volume_mount_path")
+
+    @property
+    @pulumi.getter
+    def env(self) -> Optional[Sequence['outputs.PodEnv']]:
+        return pulumi.get(self, "env")
 
 

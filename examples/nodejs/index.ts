@@ -1,6 +1,25 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as runpod from "@runpod-infra/pulumi";
 
+const myTemplate = new runpod.Template("testTemplate", {
+    containerDiskInGb: 5,
+    dockerArgs: "python handler.py",
+    env: [
+      {
+        key: "key1",
+        value: "value1",
+      },
+      {
+        key: "key2",
+        value: "value2",
+      },
+    ],
+    imageName: "runpod/serverless-hello-world:latest",
+    isServerless: true,
+    name: "Generated Serverless Template",
+    readme: "## Hello, World!",
+    volumeInGb: 0,
+});
 const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
     name: "testStorage1",
     size: 20,
@@ -25,6 +44,9 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
         value: "rns1hunbsstltcpad22d",
     }],
 });
+export const template = {
+    value: myTemplate.template,
+};
 export const pod = {
     value: myRandomPod.pod,
 };

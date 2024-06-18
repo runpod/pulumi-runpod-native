@@ -626,6 +626,133 @@ func (o SavingsPlanInputPtrOutput) UpfrontCost() pulumi.Float64PtrOutput {
 	}).(pulumi.Float64PtrOutput)
 }
 
+type TemplateType struct {
+	AdvancedStart           bool     `pulumi:"advancedStart"`
+	BoundEndpointId         string   `pulumi:"boundEndpointId"`
+	Category                string   `pulumi:"category"`
+	ContainerDiskInGb       int      `pulumi:"containerDiskInGb"`
+	ContainerRegistryAuthId string   `pulumi:"containerRegistryAuthId"`
+	DockerArgs              string   `pulumi:"dockerArgs"`
+	Earned                  float64  `pulumi:"earned"`
+	Env                     []PodEnv `pulumi:"env"`
+	Id                      string   `pulumi:"id"`
+	ImageName               string   `pulumi:"imageName"`
+	IsPublic                bool     `pulumi:"isPublic"`
+	IsRunpod                bool     `pulumi:"isRunpod"`
+	IsServerless            bool     `pulumi:"isServerless"`
+	Name                    string   `pulumi:"name"`
+	Ports                   string   `pulumi:"ports"`
+	Readme                  string   `pulumi:"readme"`
+	RuntimeInMin            int      `pulumi:"runtimeInMin"`
+	StartJupyter            bool     `pulumi:"startJupyter"`
+	StartScript             string   `pulumi:"startScript"`
+	StartSsh                bool     `pulumi:"startSsh"`
+	VolumeInGb              int      `pulumi:"volumeInGb"`
+	VolumeMountPath         string   `pulumi:"volumeMountPath"`
+}
+
+type TemplateTypeOutput struct{ *pulumi.OutputState }
+
+func (TemplateTypeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*TemplateType)(nil)).Elem()
+}
+
+func (o TemplateTypeOutput) ToTemplateTypeOutput() TemplateTypeOutput {
+	return o
+}
+
+func (o TemplateTypeOutput) ToTemplateTypeOutputWithContext(ctx context.Context) TemplateTypeOutput {
+	return o
+}
+
+func (o TemplateTypeOutput) AdvancedStart() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.AdvancedStart }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) BoundEndpointId() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.BoundEndpointId }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Category() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Category }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) ContainerDiskInGb() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.ContainerDiskInGb }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) ContainerRegistryAuthId() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.ContainerRegistryAuthId }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) DockerArgs() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.DockerArgs }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Earned() pulumi.Float64Output {
+	return o.ApplyT(func(v TemplateType) float64 { return v.Earned }).(pulumi.Float64Output)
+}
+
+func (o TemplateTypeOutput) Env() PodEnvArrayOutput {
+	return o.ApplyT(func(v TemplateType) []PodEnv { return v.Env }).(PodEnvArrayOutput)
+}
+
+func (o TemplateTypeOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Id }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) ImageName() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.ImageName }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) IsPublic() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.IsPublic }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) IsRunpod() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.IsRunpod }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) IsServerless() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.IsServerless }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Name }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Ports() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Ports }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Readme() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Readme }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) RuntimeInMin() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.RuntimeInMin }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) StartJupyter() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.StartJupyter }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) StartScript() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.StartScript }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) StartSsh() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.StartSsh }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) VolumeInGb() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.VolumeInGb }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) VolumeMountPath() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.VolumeMountPath }).(pulumi.StringOutput)
+}
+
 func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*PodEnvInput)(nil)).Elem(), PodEnvArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PodEnvArrayInput)(nil)).Elem(), PodEnvArray{})
@@ -641,4 +768,5 @@ func init() {
 	pulumi.RegisterOutputType(PodRegistryOutput{})
 	pulumi.RegisterOutputType(SavingsPlanInputOutput{})
 	pulumi.RegisterOutputType(SavingsPlanInputPtrOutput{})
+	pulumi.RegisterOutputType(TemplateTypeOutput{})
 }

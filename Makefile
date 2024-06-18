@@ -34,7 +34,7 @@ codegen::
 
 generate:
 	@echo "Generating Go client from Swagger definition..."
-	@go install github.com/deepmap/oapi-codegen/v2/cmd/oapi-codegen@latest
+	@go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 	@go generate ./${PROVIDER_PATH}/provider.go
 
 provider_debug::
