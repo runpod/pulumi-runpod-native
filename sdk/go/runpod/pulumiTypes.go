@@ -50,6 +50,106 @@ func (o DataCenterOutput) StorageSupport() pulumi.BoolOutput {
 	return o.ApplyT(func(v DataCenter) bool { return v.StorageSupport }).(pulumi.BoolOutput)
 }
 
+type EnvironmentVariableInput struct {
+	Key   string `pulumi:"key"`
+	Value string `pulumi:"value"`
+}
+
+// EnvironmentVariableInputInput is an input type that accepts EnvironmentVariableInputArgs and EnvironmentVariableInputOutput values.
+// You can construct a concrete instance of `EnvironmentVariableInputInput` via:
+//
+//	EnvironmentVariableInputArgs{...}
+type EnvironmentVariableInputInput interface {
+	pulumi.Input
+
+	ToEnvironmentVariableInputOutput() EnvironmentVariableInputOutput
+	ToEnvironmentVariableInputOutputWithContext(context.Context) EnvironmentVariableInputOutput
+}
+
+type EnvironmentVariableInputArgs struct {
+	Key   pulumi.StringInput `pulumi:"key"`
+	Value pulumi.StringInput `pulumi:"value"`
+}
+
+func (EnvironmentVariableInputArgs) ElementType() reflect.Type {
+	return reflect.TypeOf((*EnvironmentVariableInput)(nil)).Elem()
+}
+
+func (i EnvironmentVariableInputArgs) ToEnvironmentVariableInputOutput() EnvironmentVariableInputOutput {
+	return i.ToEnvironmentVariableInputOutputWithContext(context.Background())
+}
+
+func (i EnvironmentVariableInputArgs) ToEnvironmentVariableInputOutputWithContext(ctx context.Context) EnvironmentVariableInputOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(EnvironmentVariableInputOutput)
+}
+
+// EnvironmentVariableInputArrayInput is an input type that accepts EnvironmentVariableInputArray and EnvironmentVariableInputArrayOutput values.
+// You can construct a concrete instance of `EnvironmentVariableInputArrayInput` via:
+//
+//	EnvironmentVariableInputArray{ EnvironmentVariableInputArgs{...} }
+type EnvironmentVariableInputArrayInput interface {
+	pulumi.Input
+
+	ToEnvironmentVariableInputArrayOutput() EnvironmentVariableInputArrayOutput
+	ToEnvironmentVariableInputArrayOutputWithContext(context.Context) EnvironmentVariableInputArrayOutput
+}
+
+type EnvironmentVariableInputArray []EnvironmentVariableInputInput
+
+func (EnvironmentVariableInputArray) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]EnvironmentVariableInput)(nil)).Elem()
+}
+
+func (i EnvironmentVariableInputArray) ToEnvironmentVariableInputArrayOutput() EnvironmentVariableInputArrayOutput {
+	return i.ToEnvironmentVariableInputArrayOutputWithContext(context.Background())
+}
+
+func (i EnvironmentVariableInputArray) ToEnvironmentVariableInputArrayOutputWithContext(ctx context.Context) EnvironmentVariableInputArrayOutput {
+	return pulumi.ToOutputWithContext(ctx, i).(EnvironmentVariableInputArrayOutput)
+}
+
+type EnvironmentVariableInputOutput struct{ *pulumi.OutputState }
+
+func (EnvironmentVariableInputOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*EnvironmentVariableInput)(nil)).Elem()
+}
+
+func (o EnvironmentVariableInputOutput) ToEnvironmentVariableInputOutput() EnvironmentVariableInputOutput {
+	return o
+}
+
+func (o EnvironmentVariableInputOutput) ToEnvironmentVariableInputOutputWithContext(ctx context.Context) EnvironmentVariableInputOutput {
+	return o
+}
+
+func (o EnvironmentVariableInputOutput) Key() pulumi.StringOutput {
+	return o.ApplyT(func(v EnvironmentVariableInput) string { return v.Key }).(pulumi.StringOutput)
+}
+
+func (o EnvironmentVariableInputOutput) Value() pulumi.StringOutput {
+	return o.ApplyT(func(v EnvironmentVariableInput) string { return v.Value }).(pulumi.StringOutput)
+}
+
+type EnvironmentVariableInputArrayOutput struct{ *pulumi.OutputState }
+
+func (EnvironmentVariableInputArrayOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*[]EnvironmentVariableInput)(nil)).Elem()
+}
+
+func (o EnvironmentVariableInputArrayOutput) ToEnvironmentVariableInputArrayOutput() EnvironmentVariableInputArrayOutput {
+	return o
+}
+
+func (o EnvironmentVariableInputArrayOutput) ToEnvironmentVariableInputArrayOutputWithContext(ctx context.Context) EnvironmentVariableInputArrayOutput {
+	return o
+}
+
+func (o EnvironmentVariableInputArrayOutput) Index(i pulumi.IntInput) EnvironmentVariableInputOutput {
+	return pulumi.All(o, i).ApplyT(func(vs []interface{}) EnvironmentVariableInput {
+		return vs[0].([]EnvironmentVariableInput)[vs[1].(int)]
+	}).(EnvironmentVariableInputOutput)
+}
+
 type Gpu struct {
 	Id    string `pulumi:"id"`
 	PodId string `pulumi:"podId"`
@@ -626,12 +726,143 @@ func (o SavingsPlanInputPtrOutput) UpfrontCost() pulumi.Float64PtrOutput {
 	}).(pulumi.Float64PtrOutput)
 }
 
+type TemplateType struct {
+	AdvancedStart           bool                       `pulumi:"advancedStart"`
+	BoundEndpointID         string                     `pulumi:"boundEndpointID"`
+	Category                string                     `pulumi:"category"`
+	Config                  map[string]interface{}     `pulumi:"config"`
+	ContainerDiskInGb       int                        `pulumi:"containerDiskInGb"`
+	ContainerRegistryAuthId string                     `pulumi:"containerRegistryAuthId"`
+	DockerArgs              string                     `pulumi:"dockerArgs"`
+	Earned                  float64                    `pulumi:"earned"`
+	Env                     []EnvironmentVariableInput `pulumi:"env"`
+	Id                      string                     `pulumi:"id"`
+	ImageName               string                     `pulumi:"imageName"`
+	IsPublic                bool                       `pulumi:"isPublic"`
+	IsServerless            bool                       `pulumi:"isServerless"`
+	Name                    string                     `pulumi:"name"`
+	Ports                   string                     `pulumi:"ports"`
+	Readme                  string                     `pulumi:"readme"`
+	RuntimeInMinutes        int                        `pulumi:"runtimeInMinutes"`
+	StartJupyter            bool                       `pulumi:"startJupyter"`
+	StartScript             string                     `pulumi:"startScript"`
+	StartSsh                bool                       `pulumi:"startSsh"`
+	VolumeInGb              int                        `pulumi:"volumeInGb"`
+	VolumeMountPath         string                     `pulumi:"volumeMountPath"`
+}
+
+type TemplateTypeOutput struct{ *pulumi.OutputState }
+
+func (TemplateTypeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*TemplateType)(nil)).Elem()
+}
+
+func (o TemplateTypeOutput) ToTemplateTypeOutput() TemplateTypeOutput {
+	return o
+}
+
+func (o TemplateTypeOutput) ToTemplateTypeOutputWithContext(ctx context.Context) TemplateTypeOutput {
+	return o
+}
+
+func (o TemplateTypeOutput) AdvancedStart() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.AdvancedStart }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) BoundEndpointID() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.BoundEndpointID }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Category() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Category }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Config() pulumi.MapOutput {
+	return o.ApplyT(func(v TemplateType) map[string]interface{} { return v.Config }).(pulumi.MapOutput)
+}
+
+func (o TemplateTypeOutput) ContainerDiskInGb() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.ContainerDiskInGb }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) ContainerRegistryAuthId() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.ContainerRegistryAuthId }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) DockerArgs() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.DockerArgs }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Earned() pulumi.Float64Output {
+	return o.ApplyT(func(v TemplateType) float64 { return v.Earned }).(pulumi.Float64Output)
+}
+
+func (o TemplateTypeOutput) Env() EnvironmentVariableInputArrayOutput {
+	return o.ApplyT(func(v TemplateType) []EnvironmentVariableInput { return v.Env }).(EnvironmentVariableInputArrayOutput)
+}
+
+func (o TemplateTypeOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Id }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) ImageName() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.ImageName }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) IsPublic() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.IsPublic }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) IsServerless() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.IsServerless }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Name }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Ports() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Ports }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) Readme() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.Readme }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) RuntimeInMinutes() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.RuntimeInMinutes }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) StartJupyter() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.StartJupyter }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) StartScript() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.StartScript }).(pulumi.StringOutput)
+}
+
+func (o TemplateTypeOutput) StartSsh() pulumi.BoolOutput {
+	return o.ApplyT(func(v TemplateType) bool { return v.StartSsh }).(pulumi.BoolOutput)
+}
+
+func (o TemplateTypeOutput) VolumeInGb() pulumi.IntOutput {
+	return o.ApplyT(func(v TemplateType) int { return v.VolumeInGb }).(pulumi.IntOutput)
+}
+
+func (o TemplateTypeOutput) VolumeMountPath() pulumi.StringOutput {
+	return o.ApplyT(func(v TemplateType) string { return v.VolumeMountPath }).(pulumi.StringOutput)
+}
+
 func init() {
+	pulumi.RegisterInputType(reflect.TypeOf((*EnvironmentVariableInputInput)(nil)).Elem(), EnvironmentVariableInputArgs{})
+	pulumi.RegisterInputType(reflect.TypeOf((*EnvironmentVariableInputArrayInput)(nil)).Elem(), EnvironmentVariableInputArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PodEnvInput)(nil)).Elem(), PodEnvArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*PodEnvArrayInput)(nil)).Elem(), PodEnvArray{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SavingsPlanInputInput)(nil)).Elem(), SavingsPlanInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SavingsPlanInputPtrInput)(nil)).Elem(), SavingsPlanInputArgs{})
 	pulumi.RegisterOutputType(DataCenterOutput{})
+	pulumi.RegisterOutputType(EnvironmentVariableInputOutput{})
+	pulumi.RegisterOutputType(EnvironmentVariableInputArrayOutput{})
 	pulumi.RegisterOutputType(GpuOutput{})
 	pulumi.RegisterOutputType(GpuArrayOutput{})
 	pulumi.RegisterOutputType(NetworkStorageTypeOutput{})
@@ -641,4 +872,5 @@ func init() {
 	pulumi.RegisterOutputType(PodRegistryOutput{})
 	pulumi.RegisterOutputType(SavingsPlanInputOutput{})
 	pulumi.RegisterOutputType(SavingsPlanInputPtrOutput{})
+	pulumi.RegisterOutputType(TemplateTypeOutput{})
 }

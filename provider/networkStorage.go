@@ -97,7 +97,7 @@ func (*NetworkStorage) Create(ctx p.Context, name string, input NetworkStorageAr
 	}
 
 	config := infer.GetConfig[Config](ctx)
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -182,7 +182,7 @@ func (*NetworkStorage) Update(ctx p.Context, id string, olds NetworkStorageState
 		return state, err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {
@@ -265,7 +265,7 @@ func (*NetworkStorage) Delete(ctx p.Context, id string, props NetworkStorageStat
 		return err
 	}
 
-	url := "https://api.runpod.io/graphql?api_key=" + config.Token
+	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	if err != nil {

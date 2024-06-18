@@ -19,6 +19,7 @@
         "networkStorage.ts",
         "pod.ts",
         "provider.ts",
+        "template.ts",
         "types/index.ts",
         "types/input.ts",
         "types/output.ts",

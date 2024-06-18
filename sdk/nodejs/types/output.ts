@@ -12,6 +12,11 @@ export interface DataCenter {
     storageSupport: boolean;
 }
 
+export interface EnvironmentVariableInput {
+    key: string;
+    value: string;
+}
+
 export interface Gpu {
     id: string;
     podId: string;
@@ -80,5 +85,30 @@ export interface PodRegistry {
 export interface SavingsPlanInput {
     planLength: string;
     upfrontCost: number;
+}
+
+export interface Template {
+    advancedStart: boolean;
+    boundEndpointID: string;
+    category: string;
+    config: {[key: string]: any};
+    containerDiskInGb: number;
+    containerRegistryAuthId: string;
+    dockerArgs: string;
+    earned: number;
+    env: outputs.EnvironmentVariableInput[];
+    id: string;
+    imageName: string;
+    isPublic: boolean;
+    isServerless: boolean;
+    name: string;
+    ports: string;
+    readme: string;
+    runtimeInMinutes: number;
+    startJupyter: boolean;
+    startScript: string;
+    startSsh: boolean;
+    volumeInGb: number;
+    volumeMountPath: string;
 }
 

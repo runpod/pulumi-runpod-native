@@ -18,10 +18,8 @@
         "runpod",
         "gpus",
         "ml",
-        "ai",
-        "category/cloud"
+        "ai"
     ],
-    "version": "v1.2.7",
     "language": {
         "csharp": {
             "packageReferences": {
@@ -337,6 +335,158 @@
                 "gpuTypeId",
                 "imageName"
             ]
+        },
+        "runpod:index:Template": {
+            "inputProperties": {
+                "advancedStart": {
+                    "type": "boolean"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "config": {
+                    "additionalProperties": {
+                        "$ref": "pulumi.json#/Any"
+                    },
+                    "type": "object"
+                },
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "containerRegistryAuthId": {
+                    "type": "string"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:EnvironmentVariableInput"
+                    },
+                    "type": "array"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "isServerless": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startScript": {
+                    "type": "string"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "advancedStart": {
+                    "type": "boolean"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "config": {
+                    "additionalProperties": {
+                        "$ref": "pulumi.json#/Any"
+                    },
+                    "type": "object"
+                },
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "containerRegistryAuthId": {
+                    "type": "string"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:EnvironmentVariableInput"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "isServerless": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startScript": {
+                    "type": "string"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "template": {
+                    "$ref": "#/types/runpod:index:Template"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "containerDiskInGb",
+                "env",
+                "imageName",
+                "name",
+                "volumeInGb",
+                "volumeMountPath",
+                "category",
+                "template"
+            ],
+            "requiredInputs": [
+                "containerDiskInGb",
+                "env",
+                "imageName",
+                "name",
+                "volumeInGb",
+                "volumeMountPath",
+                "category"
+            ]
         }
     },
     "types": {
@@ -360,6 +510,21 @@
                 "name",
                 "location",
                 "storageSupport"
+            ],
+            "type": "object"
+        },
+        "runpod:index:EnvironmentVariableInput": {
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "key",
+                "value"
             ],
             "type": "object"
         },
@@ -614,6 +779,107 @@
             "required": [
                 "planLength",
                 "upfrontCost"
+            ],
+            "type": "object"
+        },
+        "runpod:index:Template": {
+            "properties": {
+                "advancedStart": {
+                    "type": "boolean"
+                },
+                "boundEndpointID": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "config": {
+                    "additionalProperties": {
+                        "$ref": "pulumi.json#/Any"
+                    },
+                    "type": "object"
+                },
+                "containerDiskInGb": {
+                    "type": "integer"
+                },
+                "containerRegistryAuthId": {
+                    "type": "string"
+                },
+                "dockerArgs": {
+                    "type": "string"
+                },
+                "earned": {
+                    "type": "number"
+                },
+                "env": {
+                    "items": {
+                        "$ref": "#/types/runpod:index:EnvironmentVariableInput"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imageName": {
+                    "type": "string"
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "isServerless": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ports": {
+                    "type": "string"
+                },
+                "readme": {
+                    "type": "string"
+                },
+                "runtimeInMinutes": {
+                    "type": "integer"
+                },
+                "startJupyter": {
+                    "type": "boolean"
+                },
+                "startScript": {
+                    "type": "string"
+                },
+                "startSsh": {
+                    "type": "boolean"
+                },
+                "volumeInGb": {
+                    "type": "integer"
+                },
+                "volumeMountPath": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "advancedStart",
+                "containerDiskInGb",
+                "containerRegistryAuthId",
+                "dockerArgs",
+                "earned",
+                "env",
+                "id",
+                "imageName",
+                "isPublic",
+                "isServerless",
+                "boundEndpointID",
+                "name",
+                "ports",
+                "readme",
+                "runtimeInMinutes",
+                "startJupyter",
+                "startScript",
+                "startSsh",
+                "volumeInGb",
+                "volumeMountPath",
+                "config",
+                "category"
             ],
             "type": "object"
         }

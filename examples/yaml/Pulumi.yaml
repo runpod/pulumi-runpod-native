@@ -9,35 +9,52 @@ plugins:
 #   runpod:token: "runpod api token"
 
 resources:
-  testNetworkStorage:
-    type: runpod:NetworkStorage
-    properties:
-      name: "testStorage1"
-      size: 20
-      dataCenterId: "US-NJ"
+  # testNetworkStorage:
+  #   type: runpod:NetworkStorage
+  #   properties:
+  #     name: "testStorage1"
+  #     size: 20
+  #     dataCenterId: "US-NJ"
 
-  myRandomPod:
-    type: runpod:Pod
+  # myRandomPod:
+  #   type: runpod:Pod
+  #   properties:
+  #     cloudType: ALL
+  #     networkVolumeId: ${testNetworkStorage.networkStorage.id}
+  #     gpuCount: 1
+  #     volumeInGb: 50
+  #     containerDiskInGb: 50
+  #     minVcpuCount: 2
+  #     minMemoryInGb: 15
+  #     gpuTypeId: "NVIDIA GeForce RTX 3070"
+  #     name: "RunPod Pytorch"
+  #     imageName: "runpod/pytorch"
+  #     dockerArgs: ""
+  #     ports: "8888/http"
+  #     volumeMountPath: "/workspace"
+  #     env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+
+  myRandomTemplate:
+    type: runpod:Template
     properties:
-      cloudType: ALL
-      networkVolumeId: ${testNetworkStorage.networkStorage.id}
-      gpuCount: 1
-      volumeInGb: 50
-      containerDiskInGb: 50
-      minVcpuCount: 2
-      minMemoryInGb: 15
-      gpuTypeId: "NVIDIA GeForce RTX 3070"
-      name: "RunPod Pytorch"
-      imageName: "runpod/pytorch"
+      advancedStart: false
       dockerArgs: ""
-      ports: "8888/http"
-      volumeMountPath: "/workspace"
+      readme: ""
+      containerDiskInGb: 50
       env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+      imageName: nginx:latest
+      name: new-ne-ne-template
+      ports: "80/http"
+      volumeInGb: 20
+      volumeMountPath: "/workspace"
+      config: { key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }
+      category: NVIDIA
 
 outputs:
-  pod:
-    value: ${myRandomPod.pod}
-  networkStorage:
-    value: ${testNetworkStorage.networkStorage}
-
+  # pod:
+  #   value: ${myRandomPod.pod}
+  # networkStorage:
+  #   value: ${testNetworkStorage.networkStorage}
+  template:
+    value: ${myRandomTemplate.template.id}
 

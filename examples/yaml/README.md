@@ -4,6 +4,12 @@ Test Pulumi program written in YAML for testing this provider locally.
 
 Edit this yaml program to test features of your provider locally. You can run this program using the following command:
 
+To create RunPod resources, you first have to set RunPod token using this command:
+
+```bash
+    pulumi config set --secret runpod:token
+```
+
 ```bash
 pulumi login
 pulumi stack init local

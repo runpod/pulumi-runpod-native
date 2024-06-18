@@ -5,6 +5,11 @@ import * as pulumi from "@pulumi/pulumi";
 import * as inputs from "../types/input";
 import * as outputs from "../types/output";
 
+export interface EnvironmentVariableInputArgs {
+    key: pulumi.Input<string>;
+    value: pulumi.Input<string>;
+}
+
 export interface PodEnvArgs {
     key: pulumi.Input<string>;
     value: pulumi.Input<string>;
@@ -14,3 +19,4 @@ export interface SavingsPlanInputArgs {
     planLength: pulumi.Input<string>;
     upfrontCost: pulumi.Input<number>;
 }
+
