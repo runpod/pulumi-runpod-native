@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - v*.*.*      # Match v1.2.3
-      - v*.*.*-rc   # Match v1.2.3-rc
       - "!v*.*.*-*[^rc]"  # Exclude tags that end with something other than 'rc'
 env:
   PROVIDER: "runpod"

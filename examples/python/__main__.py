@@ -1,6 +1,5 @@
 import pulumi
-# import runpodinfra as runpod
-import sdk.python.runpodinfra as runpod
+import runpodinfra as runpod
 
 test_network_storage = runpod.NetworkStorage("testNetworkStorage",
     name="testStorage1",
