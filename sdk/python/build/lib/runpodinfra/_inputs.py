@@ -11,7 +11,6 @@ from . import _utilities
 
 __all__ = [
     'PodEnvArgs',
-    'SavingsPlanInputArgs',
 ]
 
 @pulumi.input_type
@@ -39,32 +38,5 @@ class PodEnvArgs:
     @value.setter
     def value(self, value: pulumi.Input[str]):
         pulumi.set(self, "value", value)
-
-
-@pulumi.input_type
-class SavingsPlanInputArgs:
-    def __init__(__self__, *,
-                 plan_length: pulumi.Input[str],
-                 upfront_cost: pulumi.Input[float]):
-        pulumi.set(__self__, "plan_length", plan_length)
-        pulumi.set(__self__, "upfront_cost", upfront_cost)
-
-    @property
-    @pulumi.getter(name="planLength")
-    def plan_length(self) -> pulumi.Input[str]:
-        return pulumi.get(self, "plan_length")
-
-    @plan_length.setter
-    def plan_length(self, value: pulumi.Input[str]):
-        pulumi.set(self, "plan_length", value)
-
-    @property
-    @pulumi.getter(name="upfrontCost")
-    def upfront_cost(self) -> pulumi.Input[float]:
-        return pulumi.get(self, "upfront_cost")
-
-    @upfront_cost.setter
-    def upfront_cost(self, value: pulumi.Input[float]):
-        pulumi.set(self, "upfront_cost", value)
 
 

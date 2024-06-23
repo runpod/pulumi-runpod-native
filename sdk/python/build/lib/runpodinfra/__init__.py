@@ -5,8 +5,7 @@
 from . import _utilities
 import typing
 # Export this package's modules as members:
-from .network_storage import *
-from .pod import *
+from .endpoint import *
 from .provider import *
 from .template import *
 from ._inputs import *
@@ -27,8 +26,7 @@ _utilities.register(
   "mod": "index",
   "fqn": "runpodinfra",
   "classes": {
-   "runpod:index:NetworkStorage": "NetworkStorage",
-   "runpod:index:Pod": "Pod",
+   "runpod:index:Endpoint": "Endpoint",
    "runpod:index:Template": "Template"
   }
  }

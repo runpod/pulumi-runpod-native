@@ -5,15 +5,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
 // Export members:
-export { NetworkStorageArgs } from "./networkStorage";
-export type NetworkStorage = import("./networkStorage").NetworkStorage;
-export const NetworkStorage: typeof import("./networkStorage").NetworkStorage = null as any;
-utilities.lazyLoad(exports, ["NetworkStorage"], () => require("./networkStorage"));
-
-export { PodArgs } from "./pod";
-export type Pod = import("./pod").Pod;
-export const Pod: typeof import("./pod").Pod = null as any;
-utilities.lazyLoad(exports, ["Pod"], () => require("./pod"));
+export { EndpointArgs } from "./endpoint";
+export type Endpoint = import("./endpoint").Endpoint;
+export const Endpoint: typeof import("./endpoint").Endpoint = null as any;
+utilities.lazyLoad(exports, ["Endpoint"], () => require("./endpoint"));
 
 export { ProviderArgs } from "./provider";
 export type Provider = import("./provider").Provider;
@@ -39,10 +34,8 @@ const _module = {
     version: utilities.getVersion(),
     construct: (name: string, type: string, urn: string): pulumi.Resource => {
         switch (type) {
-            case "runpod:index:NetworkStorage":
-                return new NetworkStorage(name, <any>undefined, { urn })
-            case "runpod:index:Pod":
-                return new Pod(name, <any>undefined, { urn })
+            case "runpod:index:Endpoint":
+                return new Endpoint(name, <any>undefined, { urn })
             case "runpod:index:Template":
                 return new Template(name, <any>undefined, { urn })
             default:
