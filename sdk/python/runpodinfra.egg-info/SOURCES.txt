@@ -3,9 +3,8 @@ setup.py
 runpodinfra/__init__.py
 runpodinfra/_inputs.py
 runpodinfra/_utilities.py
-runpodinfra/network_storage.py
+runpodinfra/endpoint.py
 runpodinfra/outputs.py
-runpodinfra/pod.py
 runpodinfra/provider.py
 runpodinfra/pulumi-plugin.json
 runpodinfra/py.typed

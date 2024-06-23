@@ -9,6 +9,7 @@ from subprocess import check_call
 
 
 VERSION = "v1.9.96"
+
 def readme():
     try:
         with open('README.md', encoding='utf-8') as f:

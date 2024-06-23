@@ -10,8 +10,3 @@ export interface PodEnvArgs {
     value: pulumi.Input<string>;
 }
 
-export interface SavingsPlanInputArgs {
-    planLength: pulumi.Input<string>;
-    upfrontCost: pulumi.Input<number>;
-}
-
