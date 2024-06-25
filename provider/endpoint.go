@@ -48,15 +48,15 @@ type Endpoint struct {
 
 type EndpointArgs struct {
 	Name            string `pulumi:"name" structs:"name,omitempty"`
-	TemplateId      string `pulumi:"templateId" structs:"templateId,omitempty"`
-	GpuIds          string `pulumi:"gpuIds" structs:"gpuIds,omitempty"`
+	TemplateId      string `pulumi:"templateId" structs:"templateId"`
+	GpuIds          string `pulumi:"gpuIds" structs:"gpuIds"`
 	IdleTimeout     int    `pulumi:"idleTimeout,optional" structs:"idleTimeout,omitempty"`
 	Locations       string `pulumi:"locations,optional" structs:"locations,omitempty"`
 	NetworkVolumeId string `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
 	ScalerType      string `pulumi:"scalerType,optional" structs:"scalerType,omitempty"`
 	ScalerValue     int    `pulumi:"scalerValue,optional" structs:"scalerValue,omitempty"`
-	WorkersMax      int    `pulumi:"workersMax,optional" structs:"workersMax,omitempty"`
-	WorkersMin      int    `pulumi:"workersMin,optional" structs:"workersMin,omitempty"`
+	WorkersMax      int    `pulumi:"workersMax,optional" structs:"workersMax"`
+	WorkersMin      int    `pulumi:"workersMin,optional" structs:"workersMin"`
 }
 
 func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview bool) (string, EndpointState, error) {
@@ -71,23 +71,20 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 	}
 
 	gqlVariable := structs.Map(input)
-	// "AMPERE_16"
-	// # append -fb to your endpoint's name to enable FlashBoot
 
-	println(gqlVariable)
 	gqlInput := GqlInput{
 		Query: `
 		mutation SaveEndpoint (
-	    gpuIds: String!
-	    templateId: String!
-	    name: String!
-	    idleTimeout: Int 
-	    locations: String
-	    networkVolumeId: String
-	    scalerType: String
-	    scalerValue: Int
-	    workersMax: Int
-	    workersMin: Int 
+	    $gpuIds: String!
+	    $templateId: String!
+	    $name: String!
+	    $idleTimeout: Int 
+	    $locations: String
+	    $networkVolumeId: String
+	    $scalerType: String
+	    $scalerValue: Int
+	    $workersMax: Int
+	    $workersMin: Int 
 		) {
 		saveEndpoint(input: {
 	    gpuIds: $gpuIds,
@@ -164,221 +161,241 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 	return name, state, nil
 }
 
-// func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news EndpointArgs, preview bool) (EndpointState, error) {
-// 	state := EndpointState{EndpointArgs: news}
-// 	if preview {
-// 		return state, nil
-// 	}
-// 	config := infer.GetConfig[Config](ctx)
+func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news EndpointArgs, preview bool) (EndpointState, error) {
+	state := EndpointState{EndpointArgs: news}
+	if preview {
+		return state, nil
+	}
+	config := infer.GetConfig[Config](ctx)
 
-// 	if news.ImageName == "" || news.Readme == "" || news.Name == "" {
-// 		return state, fmt.Errorf("imageName, readme and name are required")
-// 	}
+	if news.Name == "" || news.TemplateId == "" || news.GpuIds == "" {
+		return state, fmt.Errorf("templateId, gpuIds and name are required")
+	}
 
-// 	gqlVariable := structs.Map(news)
-// 	gqlVariable["id"] = olds.Endpoint.Id
-// 	gqlInput := GqlInput{
-// 		Query: `
-// 		mutation SaveEndpoint (
-// 			$id: String!
-// 			$containerDiskInGb: Int!
-// 			$containerRegistryAuthId: String
-// 			$dockerArgs: String!
-// 			$env: [EnvironmentVariableInput!]!
-// 			$imageName: String!
-// 			$isPublic: Boolean
-// 			$isServerless: Boolean
-// 			$name: String!
-// 			$ports: String
-// 			$readme: String
-// 			$startJupyter: Boolean
-// 			$startSsh: Boolean
-// 			$volumeInGb: Int!
-// 			$volumeMountPath: String
-// 		) {
-// 		saveEndpoint(input: {
-// 			id: $id,
-// 			containerDiskInGb: $containerDiskInGb,
-// 			containerRegistryAuthId: $containerRegistryAuthId,
-// 			dockerArgs: $dockerArgs,
-// 			env: $env,
-// 			imageName: $imageName,
-// 			isPublic: $isPublic,
-// 			isServerless: $isServerless,
-// 			name: $name,
-// 			ports: $ports,
-// 			readme: $readme,
-// 			startJupyter: $startJupyter,
-// 			startSsh: $startSsh,
-// 			volumeInGb: $volumeInGb,
-// 			volumeMountPath: $volumeMountPath
-// 		}) {
-// 			id
-// 			imageName
-// 			name
-// 		}
-// 	}`,
-// 		Variables: gqlVariable,
-// 	}
+	gqlVariable := structs.Map(news)
+	gqlVariable["id"] = olds.Endpoint.Id
 
-// 	jsonValue, err := json.Marshal(gqlInput)
-// 	if err != nil {
-// 		return state, err
-// 	}
+	gqlInput := GqlInput{
+		Query: `
+	mutation SaveEndpoint (
+	    $id: String!
+	    $gpuIds: String!
+	    $templateId: String!
+	    $name: String!
+	    $idleTimeout: Int 
+	    $locations: String
+	    $networkVolumeId: String
+	    $scalerType: String
+	    $scalerValue: Int
+	    $workersMax: Int
+	    $workersMin: Int 
+		) {
+		saveEndpoint(input: {
+	    id: $id,
+	    gpuIds: $gpuIds,
+	    templateId: $templateId,
+	    name: $name,
+	    idleTimeout: $idleTimeout,
+	    locations: $locations,
+	    networkVolumeId: $networkVolumeId,
+	    scalerType: $scalerType,
+	    scalerValue: $scalerValue,
+	    workersMax: $workersMax,
+	    workersMin: $workersMin 
+		}) {
+			id
+			name
+		}
+	}`,
+		Variables: gqlVariable,
+	}
 
-// 	url := URL + config.Token
+	jsonValue, err := json.Marshal(gqlInput)
+	if err != nil {
+		return state, err
+	}
 
-// 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-// 	if err != nil {
-// 		return state, err
-// 	}
+	url := URL + config.Token
 
-// 	req.Header.Add("Content-Type", "application/json")
-// 	client := &http.Client{Timeout: time.Second * 20}
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+	if err != nil {
+		return state, err
+	}
 
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		return state, err
-// 	}
+	req.Header.Add("Content-Type", "application/json")
+	client := &http.Client{Timeout: time.Second * 20}
 
-// 	defer resp.Body.Close()
+	resp, err := client.Do(req)
+	if err != nil {
+		return state, err
+	}
 
-// 	data, err := io.ReadAll(resp.Body)
-// 	if err != nil {
-// 		return state, err
-// 	}
+	defer resp.Body.Close()
 
-// 	output := &OutputDeployEndpoint{}
-// 	err = json.Unmarshal(data, output)
-// 	if err != nil {
-// 		return state, err
-// 	}
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return state, err
+	}
 
-// 	if len(output.Errors) > 0 {
-// 		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-// 		return state, err
-// 	}
+	output := &OutputDeployEndpoint{}
+	err = json.Unmarshal(data, output)
+	if err != nil {
+		return state, err
+	}
 
-// 	endpoint := output.Data.SaveEndpoint
-// 	if endpoint.Id == "" {
-// 		err = fmt.Errorf("graphql endpoint is nil: %s", string(data))
-// 		return state, err
-// 	}
+	if len(output.Errors) > 0 {
+		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
+		return state, err
+	}
 
-// 	state.Endpoint = endpoint
+	endpoint := output.Data.SaveEndpoint
+	if endpoint.Id == "" {
+		err = fmt.Errorf("graphql endpoint is nil: %s", string(data))
+		return state, err
+	}
 
-// 	return state, nil
-// }
+	state.Endpoint = endpoint
 
-// func (*Endpoint) Diff(ctx p.Context, id string, olds EndpointState, news EndpointArgs) (p.DiffResponse, error) {
+	return state, nil
+}
 
-// 	diff := map[string]p.PropertyDiff{}
+func (*Endpoint) Diff(ctx p.Context, id string, olds EndpointState, news EndpointArgs) (p.DiffResponse, error) {
 
-// 	if !reflect.DeepEqual(news.Env, olds.Env) {
-// 		diff["env"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.ImageName != olds.ImageName {
-// 		diff["imageName"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.Ports != olds.Ports {
-// 		diff["ports"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.ContainerDiskInGb != olds.ContainerDiskInGb {
-// 		diff["containerDiskInGb"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.VolumeInGb != olds.VolumeInGb {
-// 		diff["volumeInGb"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.VolumeMountPath != olds.VolumeMountPath {
-// 		diff["volumeMountPath"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.ContainerRegistryAuthId != olds.ContainerRegistryAuthId {
-// 		diff["containerRegistryAuthId"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.DockerArgs != olds.DockerArgs {
-// 		diff["dockerArgs"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.IsPublic != olds.IsPublic {
-// 		diff["isPublic"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.IsServerless != olds.IsServerless {
-// 		diff["isServerless"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.Name != olds.Name {
-// 		diff["name"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.Readme != olds.Readme {
-// 		diff["readme"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.StartJupyter != olds.StartJupyter {
-// 		diff["startJupyter"] = p.PropertyDiff{Kind: p.Update}
-// 	}
-// 	if news.StartSsh != olds.StartSsh {
-// 		diff["startSsh"] = p.PropertyDiff{Kind: p.Update}
-// 	}
+	diff := map[string]p.PropertyDiff{}
 
-// 	return p.DiffResponse{
-// 		DeleteBeforeReplace: true,
-// 		HasChanges:          len(diff) > 0,
-// 		DetailedDiff:        diff,
-// 	}, nil
-// }
+	if news.Name != olds.Name {
+		diff["name"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.GpuIds != olds.GpuIds {
+		diff["gpuIds"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.IdleTimeout != olds.IdleTimeout {
+		diff["idleTimeout"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.Locations != olds.Locations {
+		diff["locations"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.NetworkVolumeId != olds.NetworkVolumeId {
+		diff["networkVolumeId"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.ScalerType != olds.ScalerType {
+		diff["scalerType"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.ScalerValue != olds.ScalerValue {
+		diff["scalerValue"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.WorkersMax != olds.WorkersMax {
+		diff["workersMax"] = p.PropertyDiff{Kind: p.Update}
+	}
+	if news.WorkersMin != olds.WorkersMin {
+		diff["workersMin"] = p.PropertyDiff{Kind: p.Update}
+	}
+	// Template ID is not updatable
+	// if news.TemplateId != olds.TemplateId {
+	// 	diff["templateId"] = p.PropertyDiff{Kind: p.Update}
+	// }
 
-// func (*Endpoint) Delete(ctx p.Context, id string, props EndpointState) error {
-// 	config := infer.GetConfig[Config](ctx)
-// 	gqlVariable := map[string]interface{}{"id": props.Endpoint.Id}
+	return p.DiffResponse{
+		DeleteBeforeReplace: true,
+		HasChanges:          len(diff) > 0,
+		DetailedDiff:        diff,
+	}, nil
+}
 
-// 	gqlInput := GqlInput{
-// 		Query: `
-// 		mutation DeleteEndpoint ($id: String!) {
-// 			deleteTemplate(id: $tid)
-// 		}`,
-// 		Variables: gqlVariable,
-// 	}
+func (*Endpoint) Delete(ctx p.Context, id string, props EndpointState) error {
+	endpointArgs := EndpointArgs{
+		TemplateId: props.TemplateId,
+		Name:       props.Name,
+		GpuIds:     props.GpuIds,
+		WorkersMax: 0,
+		WorkersMin: 0,
+	}
 
-// 	jsonValue, err := json.Marshal(gqlInput)
-// 	if err != nil {
-// 		return err
-// 	}
+	_, err := props.Endpoint.Update(ctx, props.Endpoint.Id, props, endpointArgs, false)
 
-// 	url := URL + config.Token
+	if err != nil {
+		return err
+	}
 
-// 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-// 	if err != nil {
-// 		return err
-// 	}
+	attempts := 0
+	for attempts < 10 {
+		err = deleteEndpoint(ctx, props.Endpoint.Id)
 
-// 	req.Header.Add("Content-Type", "application/json")
-// 	client := &http.Client{Timeout: time.Second * 20}
+		if err == nil {
+			break
+		}
 
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		return err
-// 	}
+		time.Sleep(2 * time.Second)
 
-// 	defer resp.Body.Close()
+		attempts++
+	}
 
-// 	data, err := io.ReadAll(resp.Body)
-// 	if err != nil {
-// 		return err
-// 	}
+	if err != nil {
+		println("delete endpoint failed", err)
+		return err
+	}
 
-// 	var output struct {
-// 		Errors []struct {
-// 			Message string
-// 		}
-// 	}
+	return nil
+}
 
-// 	err = json.Unmarshal(data, &output)
-// 	if err != nil {
-// 		return err
-// 	}
+func deleteEndpoint(ctx p.Context, id string) error {
+	config := infer.GetConfig[Config](ctx)
+	gqlVariable := map[string]interface{}{"id": id}
 
-// 	if len(output.Errors) > 0 {
-// 		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-// 		return err
-// 	}
+	gqlInput := GqlInput{
+		Query: `
+		mutation DeleteEndpoint ($id: String!) {
+			deleteEndpoint(id: $id)
+		}`,
+		Variables: gqlVariable,
+	}
 
-// 	return nil
+	jsonValue, err := json.Marshal(gqlInput)
+	if err != nil {
+		return err
+	}
 
+	url := URL + config.Token
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	client := &http.Client{Timeout: time.Second * 20}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	var output struct {
+		Errors []struct {
+			Message string
+		}
+	}
+
+	err = json.Unmarshal(data, &output)
+	if err != nil {
+		return err
+	}
+
+	if len(output.Errors) > 0 {
+		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
+		return err
+	}
+
+	return nil
+}
+
+// func (*Endpoint) WireDependencies(f infer.FieldSelector, args *EndpointArgs, state *EndpointState) {
+// 	f.OutputField(&state.TemplateId).DependsOn(f.InputField(&args.TemplateId))
 // }

@@ -1,34 +1,33 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as runpod from "@runpod-infra/pulumi";
 
-const myTemplate = new runpod.Template("testTemplate", {
-  containerDiskInGb: 5,
-  dockerArgs: "python handler.py",
-  env: [
-    {
-      key: "key1",
-      value: "value1",
-    },
-    {
-      key: "key2",
-      value: "value2",
-    },
-  ],
-  imageName: "runpod/serverless-hello-world:latest",
-  isServerless: true,
-  name: "Testing Pulumi V1",
-  readme: "## Hello, World!",
-  volumeInGb: 0,
-});
+// const myTemplate = new runpod.Template("testTemplate", {
+//   containerDiskInGb: 5,
+//   dockerArgs: "python handler.py",
+//   env: [
+//     {
+//       key: "key1",
+//       value: "value1",
+//     },
+//     {
+//       key: "key2",
+//       value: "value2",
+//     },
+//   ],
+//   imageName: "runpod/serverless-hello-world:latest",
+//   isServerless: true,
+//   name: "Testing Pulumi V1",
+//   readme: "## Hello, World!",
+//   volumeInGb: 0,
+// });
 
 const myEndpoint = new runpod.Endpoint("testEndpoint", {
-  //   gpuIds: "AMPERE_16",
-  name: "Pulumi Endpoint Test V1",
-  templateId: myTemplate.template.id, // .apply((template) => template.id),
+  gpuIds: "AMPERE_16",
+  name: "Pulumi Endpoint Test V2 -fb",
+  templateId: "sda89dh4i9", // myTemplate.template.id, // .apply((template) => template.id),
   workersMax: 2,
   workersMin: 1,
-  gpuIds: "ADA_24,AMPERE_24,AMPERE_16",
-  idleTimeout: 5,
+  idleTimeout: 6,
   //   locations: null,
   //   networkVolumeId: null,
   scalerType: "QUEUE_DELAY",
@@ -58,9 +57,9 @@ const myEndpoint = new runpod.Endpoint("testEndpoint", {
 //         value: "rns1hunbsstltcpad22d",
 //     }],
 // });
-export const template = {
-  value: myTemplate.template,
-};
+// export const template = {
+//   value: myTemplate.template,
+// };
 export const endpoint = {
   value: myEndpoint.endpoint,
 };

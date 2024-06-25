@@ -10,6 +10,16 @@ export type Endpoint = import("./endpoint").Endpoint;
 export const Endpoint: typeof import("./endpoint").Endpoint = null as any;
 utilities.lazyLoad(exports, ["Endpoint"], () => require("./endpoint"));
 
+export { NetworkStorageArgs } from "./networkStorage";
+export type NetworkStorage = import("./networkStorage").NetworkStorage;
+export const NetworkStorage: typeof import("./networkStorage").NetworkStorage = null as any;
+utilities.lazyLoad(exports, ["NetworkStorage"], () => require("./networkStorage"));
+
+export { PodArgs } from "./pod";
+export type Pod = import("./pod").Pod;
+export const Pod: typeof import("./pod").Pod = null as any;
+utilities.lazyLoad(exports, ["Pod"], () => require("./pod"));
+
 export { ProviderArgs } from "./provider";
 export type Provider = import("./provider").Provider;
 export const Provider: typeof import("./provider").Provider = null as any;
@@ -36,6 +46,10 @@ const _module = {
         switch (type) {
             case "runpod:index:Endpoint":
                 return new Endpoint(name, <any>undefined, { urn })
+            case "runpod:index:NetworkStorage":
+                return new NetworkStorage(name, <any>undefined, { urn })
+            case "runpod:index:Pod":
+                return new Pod(name, <any>undefined, { urn })
             case "runpod:index:Template":
                 return new Template(name, <any>undefined, { urn })
             default:
