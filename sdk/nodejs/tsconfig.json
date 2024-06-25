@@ -17,6 +17,8 @@
         "config/vars.ts",
         "endpoint.ts",
         "index.ts",
+        "networkStorage.ts",
+        "pod.ts",
         "provider.ts",
         "template.ts",
         "types/index.ts",

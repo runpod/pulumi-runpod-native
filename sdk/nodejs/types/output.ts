@@ -5,6 +5,13 @@ import * as pulumi from "@pulumi/pulumi";
 import * as inputs from "../types/input";
 import * as outputs from "../types/output";
 
+export interface DataCenter {
+    id: string;
+    location: string;
+    name: string;
+    storageSupport: boolean;
+}
+
 export interface Endpoint {
     gpuIds: string;
     id: string;
@@ -19,9 +26,74 @@ export interface Endpoint {
     workersMin: number;
 }
 
+export interface Gpu {
+    id: string;
+    podId: string;
+}
+
+export interface NetworkStorage {
+    dataCenter: outputs.DataCenter;
+    dataCenterId: string;
+    id: string;
+    name: string;
+    size: number;
+}
+
+export interface Pod {
+    adjustedCostPerHr: number;
+    aiApiId: string;
+    apiKey: string;
+    consumerUserId: string;
+    containerDiskInGb: number;
+    containerRegistryAuthId: string;
+    costMultiplier: number;
+    costPerHr: number;
+    createdAt: string;
+    desiredStatus: string;
+    dockerArgs: string;
+    dockerId: string;
+    env?: string[];
+    gpuCount: number;
+    gpuPowerLimitPercent: number;
+    gpus?: outputs.Gpu[];
+    id: string;
+    imageName: string;
+    lastStartedAt: string;
+    lastStatusChange: string;
+    locked: boolean;
+    machineId: string;
+    memoryInGb: number;
+    name: string;
+    podType: string;
+    port: number;
+    ports: string;
+    registry: outputs.PodRegistry;
+    templateId: string;
+    uptimeSeconds: number;
+    vcpuCount: number;
+    version: number;
+    volumeEncrypted: boolean;
+    volumeInGb: number;
+    volumeKey: string;
+    volumeMountPath: string;
+}
+
 export interface PodEnv {
     key: string;
     value: string;
+}
+
+export interface PodRegistry {
+    auth: string;
+    pass: string;
+    url: string;
+    user: string;
+    username: string;
+}
+
+export interface SavingsPlanInput {
+    planLength: string;
+    upfrontCost: number;
 }
 
 export interface Template {

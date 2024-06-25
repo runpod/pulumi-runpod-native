@@ -37,9 +37,9 @@ func Provider() p.Provider {
 	// In this case, a single custom resource.
 	return infer.Provider(infer.Options{
 		Resources: []infer.InferredResource{
-			// infer.Resource[*NetworkStorage, NetworkStorageArgs, NetworkStorageState](),
+			infer.Resource[*NetworkStorage, NetworkStorageArgs, NetworkStorageState](),
 			infer.Resource[*Template, TemplateArgs, TemplateState](),
-			// infer.Resource[*Pod, PodArgs, PodState](),
+			infer.Resource[*Pod, PodArgs, PodState](),
 			infer.Resource[*Endpoint, EndpointArgs, EndpointState](),
 		},
 		Config: infer.Config[*Config](),
