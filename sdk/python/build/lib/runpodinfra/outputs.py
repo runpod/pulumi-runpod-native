@@ -12,6 +12,7 @@ from . import outputs
 
 __all__ = [
     'DataCenter',
+    'Endpoint',
     'Gpu',
     'NetworkStorage',
     'Pod',
@@ -69,6 +70,119 @@ class DataCenter(dict):
     @pulumi.getter(name="storageSupport")
     def storage_support(self) -> bool:
         return pulumi.get(self, "storage_support")
+
+
+@pulumi.output_type
+class Endpoint(dict):
+    @staticmethod
+    def __key_warning(key: str):
+        suggest = None
+        if key == "gpuIds":
+            suggest = "gpu_ids"
+        elif key == "idleTimeout":
+            suggest = "idle_timeout"
+        elif key == "networkVolumeId":
+            suggest = "network_volume_id"
+        elif key == "scalerType":
+            suggest = "scaler_type"
+        elif key == "scalerValue":
+            suggest = "scaler_value"
+        elif key == "templateId":
+            suggest = "template_id"
+        elif key == "workersMax":
+            suggest = "workers_max"
+        elif key == "workersMin":
+            suggest = "workers_min"
+
+        if suggest:
+            pulumi.log.warn(f"Key '{key}' not found in Endpoint. Access the value via the '{suggest}' property getter instead.")
+
+    def __getitem__(self, key: str) -> Any:
+        Endpoint.__key_warning(key)
+        return super().__getitem__(key)
+
+    def get(self, key: str, default = None) -> Any:
+        Endpoint.__key_warning(key)
+        return super().get(key, default)
+
+    def __init__(__self__, *,
+                 gpu_ids: str,
+                 id: str,
+                 idle_timeout: int,
+                 locations: str,
+                 name: str,
+                 network_volume_id: str,
+                 scaler_type: str,
+                 scaler_value: int,
+                 template_id: str,
+                 workers_max: int,
+                 workers_min: int):
+        pulumi.set(__self__, "gpu_ids", gpu_ids)
+        pulumi.set(__self__, "id", id)
+        pulumi.set(__self__, "idle_timeout", idle_timeout)
+        pulumi.set(__self__, "locations", locations)
+        pulumi.set(__self__, "name", name)
+        pulumi.set(__self__, "network_volume_id", network_volume_id)
+        pulumi.set(__self__, "scaler_type", scaler_type)
+        pulumi.set(__self__, "scaler_value", scaler_value)
+        pulumi.set(__self__, "template_id", template_id)
+        pulumi.set(__self__, "workers_max", workers_max)
+        pulumi.set(__self__, "workers_min", workers_min)
+
+    @property
+    @pulumi.getter(name="gpuIds")
+    def gpu_ids(self) -> str:
+        return pulumi.get(self, "gpu_ids")
+
+    @property
+    @pulumi.getter
+    def id(self) -> str:
+        return pulumi.get(self, "id")
+
+    @property
+    @pulumi.getter(name="idleTimeout")
+    def idle_timeout(self) -> int:
+        return pulumi.get(self, "idle_timeout")
+
+    @property
+    @pulumi.getter
+    def locations(self) -> str:
+        return pulumi.get(self, "locations")
+
+    @property
+    @pulumi.getter
+    def name(self) -> str:
+        return pulumi.get(self, "name")
+
+    @property
+    @pulumi.getter(name="networkVolumeId")
+    def network_volume_id(self) -> str:
+        return pulumi.get(self, "network_volume_id")
+
+    @property
+    @pulumi.getter(name="scalerType")
+    def scaler_type(self) -> str:
+        return pulumi.get(self, "scaler_type")
+
+    @property
+    @pulumi.getter(name="scalerValue")
+    def scaler_value(self) -> int:
+        return pulumi.get(self, "scaler_value")
+
+    @property
+    @pulumi.getter(name="templateId")
+    def template_id(self) -> str:
+        return pulumi.get(self, "template_id")
+
+    @property
+    @pulumi.getter(name="workersMax")
+    def workers_max(self) -> int:
+        return pulumi.get(self, "workers_max")
+
+    @property
+    @pulumi.getter(name="workersMin")
+    def workers_min(self) -> int:
+        return pulumi.get(self, "workers_min")
 
 
 @pulumi.output_type

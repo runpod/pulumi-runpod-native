@@ -38,8 +38,9 @@ func Provider() p.Provider {
 	return infer.Provider(infer.Options{
 		Resources: []infer.InferredResource{
 			infer.Resource[*NetworkStorage, NetworkStorageArgs, NetworkStorageState](),
-			infer.Resource[*Pod, PodArgs, PodState](),
 			infer.Resource[*Template, TemplateArgs, TemplateState](),
+			infer.Resource[*Pod, PodArgs, PodState](),
+			infer.Resource[*Endpoint, EndpointArgs, EndpointState](),
 		},
 		Config: infer.Config[*Config](),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{

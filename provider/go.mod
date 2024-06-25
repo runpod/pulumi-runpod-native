@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/structs v1.1.0
-	github.com/pulumi/pulumi-go-provider v0.14.0
+	github.com/pulumi/pulumi-go-provider v0.16.0
 	github.com/pulumi/pulumi-go-provider/integration v0.10.0
 	github.com/pulumi/pulumi/sdk/v3 v3.111.1
 )
@@ -96,7 +96,7 @@ require (
 	golang.org/x/tools v0.15.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d // indirect
 	google.golang.org/grpc v1.57.1 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/frand v1.4.2 // indirect

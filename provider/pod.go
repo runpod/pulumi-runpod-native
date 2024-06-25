@@ -68,35 +68,35 @@ type PodArgs struct {
 	CloudType         PodCloudType `pulumi:"cloudType,optional" structs:"cloudType,omitempty"`
 	ContainerDiskInGb int          `pulumi:"containerDiskInGb,optional" structs:"containerDiskInGb,omitempty"`
 	// ContainerRegistryAuthId string       `pulumi:"containerRegistryAuthId" structs:"containerRegistryAuthId"`
-	CountryCode     string           `pulumi:"countryCode,optional" structs:"countryCode,omitempty"`
-	CudaVersion     string           `pulumi:"cudaVersion,optional" structs:"cudaVersion,omitempty"`
-	DataCenterId    string           `pulumi:"dataCenterId,optional" structs:"dataCenterId,omitempty"`
-	DeployCost      float64          `pulumi:"deployCost,optional" structs:"deployCost,omitempty"`
-	DockerArgs      string           `pulumi:"dockerArgs,optional" structs:"dockerArgs,omitempty"`
-	Env             []PodEnv         `pulumi:"env,optional" structs:"env,omitempty"`
-	GpuCount        int              `pulumi:"gpuCount" structs:"gpuCount,omitempty"`
-	GpuTypeId       string           `pulumi:"gpuTypeId" structs:"gpuTypeId,omitempty"`
-	GpuTypeIdList   []string         `pulumi:"gpuTypeIdList,optional" structs:"gpuTypeIdList,omitempty"`
-	ImageName       string           `pulumi:"imageName" structs:"imageName,omitempty"`
-	MinDisk         int              `pulumi:"minDisk,optional" structs:"minDisk,omitempty"`
-	MinDownload     int              `pulumi:"minDownload,optional" structs:"minDownload,omitempty"`
-	MinMemoryInGb   int              `pulumi:"minMemoryInGb,optional" structs:"minMemoryInGb,omitempty"`
-	MinVcpuCount    int              `pulumi:"minVcpuCount,optional" structs:"minVcpuCount,omitempty"`
-	MinUpload       int              `pulumi:"minUpload,optional" structs:"minUpload,omitempty"`
-	Name            string           `pulumi:"name,optional" structs:"name,omitempty"`
-	NetworkVolumeId string           `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
-	Port            int              `pulumi:"port,optional" structs:"port,omitempty"`
-	Ports           string           `pulumi:"ports,optional" structs:"ports,omitempty"`
-	SavingsPlan     SavingsPlanInput `pulumi:"savingsPlan,optional" structs:"savingsPlan,omitempty"`
-	StartJupyter    bool             `pulumi:"startJupyter,optional" structs:"startJupyter,omitempty"`
-	StartSsh        bool             `pulumi:"startSsh,optional" structs:"startSsh,omitempty"`
-	StopAfter       string           `pulumi:"stopAfter,optional" structs:"stopAfter,omitempty"`
-	SupportPublicIp bool             `pulumi:"supportPublicIp,optional" structs:"supportPublicIp,omitempty"`
-	TemplateId      string           `pulumi:"templateId,optional" structs:"templateId,omitempty"`
-	TerminateAfter  string           `pulumi:"terminateAfter,optional" structs:"terminateAfter,omitempty"`
-	VolumeInGb      int              `pulumi:"volumeInGb,optional" structs:"volumeInGb,omitempty"`
-	VolumeKey       string           `pulumi:"volumeKey,optional" structs:"volumeKey,omitempty"`
-	VolumeMountPath string           `pulumi:"volumeMountPath,optional" structs:"volumeMountPath,omitempty"`
+	CountryCode     string            `pulumi:"countryCode,optional" structs:"countryCode,omitempty"`
+	CudaVersion     string            `pulumi:"cudaVersion,optional" structs:"cudaVersion,omitempty"`
+	DataCenterId    string            `pulumi:"dataCenterId,optional" structs:"dataCenterId,omitempty"`
+	DeployCost      float64           `pulumi:"deployCost,optional" structs:"deployCost,omitempty"`
+	DockerArgs      string            `pulumi:"dockerArgs,optional" structs:"dockerArgs,omitempty"`
+	Env             []PodEnv          `pulumi:"env,optional" structs:"env,omitempty"`
+	GpuCount        int               `pulumi:"gpuCount" structs:"gpuCount,omitempty"`
+	GpuTypeId       string            `pulumi:"gpuTypeId" structs:"gpuTypeId,omitempty"`
+	GpuTypeIdList   []string          `pulumi:"gpuTypeIdList,optional" structs:"gpuTypeIdList,omitempty"`
+	ImageName       string            `pulumi:"imageName" structs:"imageName,omitempty"`
+	MinDisk         int               `pulumi:"minDisk,optional" structs:"minDisk,omitempty"`
+	MinDownload     int               `pulumi:"minDownload,optional" structs:"minDownload,omitempty"`
+	MinMemoryInGb   int               `pulumi:"minMemoryInGb,optional" structs:"minMemoryInGb,omitempty"`
+	MinVcpuCount    int               `pulumi:"minVcpuCount,optional" structs:"minVcpuCount,omitempty"`
+	MinUpload       int               `pulumi:"minUpload,optional" structs:"minUpload,omitempty"`
+	Name            string            `pulumi:"name,optional" structs:"name,omitempty"`
+	NetworkVolumeId string            `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
+	Port            int               `pulumi:"port,optional" structs:"port,omitempty"`
+	Ports           string            `pulumi:"ports,optional" structs:"ports,omitempty"`
+	SavingsPlan     *SavingsPlanInput `pulumi:"savingsPlan,optional" structs:"savingsPlan,omitempty"`
+	StartJupyter    bool              `pulumi:"startJupyter,optional" structs:"startJupyter,omitempty"`
+	StartSsh        bool              `pulumi:"startSsh,optional" structs:"startSsh,omitempty"`
+	StopAfter       string            `pulumi:"stopAfter,optional" structs:"stopAfter,omitempty"`
+	SupportPublicIp bool              `pulumi:"supportPublicIp,optional" structs:"supportPublicIp,omitempty"`
+	TemplateId      string            `pulumi:"templateId,optional" structs:"templateId,omitempty"`
+	TerminateAfter  string            `pulumi:"terminateAfter,optional" structs:"terminateAfter,omitempty"`
+	VolumeInGb      int               `pulumi:"volumeInGb,optional" structs:"volumeInGb,omitempty"`
+	VolumeKey       string            `pulumi:"volumeKey,optional" structs:"volumeKey,omitempty"`
+	VolumeMountPath string            `pulumi:"volumeMountPath,optional" structs:"volumeMountPath,omitempty"`
 }
 
 type PodEnv struct {

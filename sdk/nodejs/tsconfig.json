@@ -15,6 +15,7 @@
     "files": [
         "config/index.ts",
         "config/vars.ts",
+        "endpoint.ts",
         "index.ts",
         "networkStorage.ts",
         "pod.ts",

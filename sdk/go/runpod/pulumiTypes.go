@@ -50,6 +50,78 @@ func (o DataCenterOutput) StorageSupport() pulumi.BoolOutput {
 	return o.ApplyT(func(v DataCenter) bool { return v.StorageSupport }).(pulumi.BoolOutput)
 }
 
+type EndpointType struct {
+	GpuIds          string `pulumi:"gpuIds"`
+	Id              string `pulumi:"id"`
+	IdleTimeout     int    `pulumi:"idleTimeout"`
+	Locations       string `pulumi:"locations"`
+	Name            string `pulumi:"name"`
+	NetworkVolumeId string `pulumi:"networkVolumeId"`
+	ScalerType      string `pulumi:"scalerType"`
+	ScalerValue     int    `pulumi:"scalerValue"`
+	TemplateId      string `pulumi:"templateId"`
+	WorkersMax      int    `pulumi:"workersMax"`
+	WorkersMin      int    `pulumi:"workersMin"`
+}
+
+type EndpointTypeOutput struct{ *pulumi.OutputState }
+
+func (EndpointTypeOutput) ElementType() reflect.Type {
+	return reflect.TypeOf((*EndpointType)(nil)).Elem()
+}
+
+func (o EndpointTypeOutput) ToEndpointTypeOutput() EndpointTypeOutput {
+	return o
+}
+
+func (o EndpointTypeOutput) ToEndpointTypeOutputWithContext(ctx context.Context) EndpointTypeOutput {
+	return o
+}
+
+func (o EndpointTypeOutput) GpuIds() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.GpuIds }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) Id() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.Id }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) IdleTimeout() pulumi.IntOutput {
+	return o.ApplyT(func(v EndpointType) int { return v.IdleTimeout }).(pulumi.IntOutput)
+}
+
+func (o EndpointTypeOutput) Locations() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.Locations }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) Name() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.Name }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) NetworkVolumeId() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.NetworkVolumeId }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) ScalerType() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.ScalerType }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) ScalerValue() pulumi.IntOutput {
+	return o.ApplyT(func(v EndpointType) int { return v.ScalerValue }).(pulumi.IntOutput)
+}
+
+func (o EndpointTypeOutput) TemplateId() pulumi.StringOutput {
+	return o.ApplyT(func(v EndpointType) string { return v.TemplateId }).(pulumi.StringOutput)
+}
+
+func (o EndpointTypeOutput) WorkersMax() pulumi.IntOutput {
+	return o.ApplyT(func(v EndpointType) int { return v.WorkersMax }).(pulumi.IntOutput)
+}
+
+func (o EndpointTypeOutput) WorkersMin() pulumi.IntOutput {
+	return o.ApplyT(func(v EndpointType) int { return v.WorkersMin }).(pulumi.IntOutput)
+}
+
 type Gpu struct {
 	Id    string `pulumi:"id"`
 	PodId string `pulumi:"podId"`
@@ -759,6 +831,7 @@ func init() {
 	pulumi.RegisterInputType(reflect.TypeOf((*SavingsPlanInputInput)(nil)).Elem(), SavingsPlanInputArgs{})
 	pulumi.RegisterInputType(reflect.TypeOf((*SavingsPlanInputPtrInput)(nil)).Elem(), SavingsPlanInputArgs{})
 	pulumi.RegisterOutputType(DataCenterOutput{})
+	pulumi.RegisterOutputType(EndpointTypeOutput{})
 	pulumi.RegisterOutputType(GpuOutput{})
 	pulumi.RegisterOutputType(GpuArrayOutput{})
 	pulumi.RegisterOutputType(NetworkStorageTypeOutput{})

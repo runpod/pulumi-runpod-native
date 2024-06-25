@@ -1,0 +1,222 @@
+{
+    "version": 3,
+    "deployment": {
+        "manifest": {
+            "time": "2024-06-25T14:19:49.233512+01:00",
+            "magic": "903b0fc199aa93536ce5f75e472bc9aed798eaf192e1d7b983c92c33a044182d",
+            "version": "v3.115.2"
+        },
+        "secrets_providers": {
+            "type": "service",
+            "state": {
+                "url": "https://api.pulumi.com",
+                "owner": "stuburger",
+                "project": "provider-runpod-native",
+                "stack": "runpod-test"
+            }
+        },
+        "resources": [
+            {
+                "urn": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:pulumi:Stack::provider-runpod-native-runpod-test",
+                "custom": false,
+                "type": "pulumi:pulumi:Stack",
+                "outputs": {
+                    "networkStorage": {
+                        "value": {
+                            "dataCenter": {
+                                "id": "",
+                                "location": "",
+                                "name": "",
+                                "storageSupport": false
+                            },
+                            "dataCenterId": "US-OR-1",
+                            "id": "p4h6lbgmqj",
+                            "name": "testStorage1",
+                            "size": 10
+                        }
+                    },
+                    "template": {
+                        "value": {
+                            "advancedStart": false,
+                            "boundEndpointId": "",
+                            "category": "",
+                            "containerDiskInGb": 0,
+                            "containerRegistryAuthId": "",
+                            "dockerArgs": "",
+                            "earned": 0,
+                            "id": "zdn3i07xm4",
+                            "imageName": "runpod/serverless-hello-world:latest",
+                            "isPublic": false,
+                            "isRunpod": false,
+                            "isServerless": false,
+                            "name": "Testing Pulumi V1",
+                            "ports": "",
+                            "readme": "",
+                            "runtimeInMin": 0,
+                            "startJupyter": false,
+                            "startScript": "",
+                            "startSsh": false,
+                            "volumeInGb": 0,
+                            "volumeMountPath": ""
+                        }
+                    }
+                },
+                "created": "2024-06-25T13:17:45.374462Z",
+                "modified": "2024-06-25T13:17:45.374462Z",
+                "sourcePosition": "project:///node_modules/@pulumi/runtime/stack.ts#36,23"
+            },
+            {
+                "urn": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:providers:runpod::default_1_3_0_alpha_1719315612_f6d13d69_dirty_github_/api.github.com/runpod/pulumi-runpod-native",
+                "custom": true,
+                "id": "4f923a9c-36a8-4fc1-9a27-721642386dd5",
+                "type": "pulumi:providers:runpod",
+                "inputs": {
+                    "token": {
+                        "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                        "ciphertext": "AAABAA/HKSgk1tEBb1R1ylty+hxQLvyZh++IE3dg1IqDOqApAZ3PdY4SbNi0g/p14A9W7TUgKFaOwSyp+X+OAUD2G9z7B00odas="
+                    }
+                },
+                "outputs": {
+                    "token": {
+                        "4dabf18193072939515e22adb298388d": "1b47061264138c4ac30d75fd1eb44270",
+                        "ciphertext": "AAABAJhkO8YVMWsQQ5BSnORZL1z9JV1gXfIzc7yWMefdA7VFAeeilcOhYtSIH/n/9lgUK+IpNuEPz0x2982rn6gCSWM9cs0Ugz0="
+                    }
+                },
+                "created": "2024-06-25T13:17:46.957433Z",
+                "modified": "2024-06-25T13:17:46.957433Z"
+            },
+            {
+                "urn": "urn:pulumi:runpod-test::provider-runpod-native::runpod:index:Template::testTemplate",
+                "custom": true,
+                "id": "testTemplate",
+                "type": "runpod:index:Template",
+                "inputs": {
+                    "containerDiskInGb": 5,
+                    "containerRegistryAuthId": "",
+                    "dockerArgs": "python handler.py",
+                    "env": [
+                        {
+                            "key": "key1",
+                            "value": "value1"
+                        },
+                        {
+                            "key": "key2",
+                            "value": "value2"
+                        }
+                    ],
+                    "imageName": "runpod/serverless-hello-world:latest",
+                    "isPublic": false,
+                    "isServerless": true,
+                    "name": "Testing Pulumi V1",
+                    "ports": "",
+                    "readme": "## Hello, World!",
+                    "startJupyter": false,
+                    "startSsh": false,
+                    "volumeInGb": 0,
+                    "volumeMountPath": ""
+                },
+                "outputs": {
+                    "containerDiskInGb": 5,
+                    "containerRegistryAuthId": "",
+                    "dockerArgs": "python handler.py",
+                    "env": [
+                        {
+                            "key": "key1",
+                            "value": "value1"
+                        },
+                        {
+                            "key": "key2",
+                            "value": "value2"
+                        }
+                    ],
+                    "imageName": "runpod/serverless-hello-world:latest",
+                    "isPublic": false,
+                    "isServerless": true,
+                    "name": "Testing Pulumi V1",
+                    "ports": "",
+                    "readme": "## Hello, World!",
+                    "startJupyter": false,
+                    "startSsh": false,
+                    "template": {
+                        "advancedStart": false,
+                        "boundEndpointId": "",
+                        "category": "",
+                        "containerDiskInGb": 0,
+                        "containerRegistryAuthId": "",
+                        "dockerArgs": "",
+                        "earned": 0,
+                        "id": "zdn3i07xm4",
+                        "imageName": "runpod/serverless-hello-world:latest",
+                        "isPublic": false,
+                        "isRunpod": false,
+                        "isServerless": false,
+                        "name": "Testing Pulumi V1",
+                        "ports": "",
+                        "readme": "",
+                        "runtimeInMin": 0,
+                        "startJupyter": false,
+                        "startScript": "",
+                        "startSsh": false,
+                        "volumeInGb": 0,
+                        "volumeMountPath": ""
+                    },
+                    "volumeInGb": 0,
+                    "volumeMountPath": ""
+                },
+                "parent": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:pulumi:Stack::provider-runpod-native-runpod-test",
+                "provider": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:providers:runpod::default_1_3_0_alpha_1719315612_f6d13d69_dirty_github_/api.github.com/runpod/pulumi-runpod-native::4f923a9c-36a8-4fc1-9a27-721642386dd5",
+                "propertyDependencies": {
+                    "containerDiskInGb": [],
+                    "dockerArgs": [],
+                    "env": [],
+                    "imageName": [],
+                    "isServerless": [],
+                    "name": [],
+                    "readme": [],
+                    "volumeInGb": []
+                },
+                "created": "2024-06-25T13:17:47.916914Z",
+                "modified": "2024-06-25T13:17:47.916914Z",
+                "sourcePosition": "project:///index.ts#5,20"
+            },
+            {
+                "urn": "urn:pulumi:runpod-test::provider-runpod-native::runpod:index:NetworkStorage::testNetworkStorage",
+                "custom": true,
+                "id": "testNetworkStorage",
+                "type": "runpod:index:NetworkStorage",
+                "inputs": {
+                    "dataCenterId": "US-OR-1",
+                    "name": "testStorage1",
+                    "size": 10
+                },
+                "outputs": {
+                    "dataCenterId": "US-OR-1",
+                    "name": "testStorage1",
+                    "networkStorage": {
+                        "dataCenter": {
+                            "id": "",
+                            "location": "",
+                            "name": "",
+                            "storageSupport": false
+                        },
+                        "dataCenterId": "US-OR-1",
+                        "id": "p4h6lbgmqj",
+                        "name": "testStorage1",
+                        "size": 10
+                    },
+                    "size": 10
+                },
+                "parent": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:pulumi:Stack::provider-runpod-native-runpod-test",
+                "provider": "urn:pulumi:runpod-test::provider-runpod-native::pulumi:providers:runpod::default_1_3_0_alpha_1719315612_f6d13d69_dirty_github_/api.github.com/runpod/pulumi-runpod-native::4f923a9c-36a8-4fc1-9a27-721642386dd5",
+                "propertyDependencies": {
+                    "dataCenterId": [],
+                    "name": [],
+                    "size": []
+                },
+                "created": "2024-06-25T13:19:48.97406Z",
+                "modified": "2024-06-25T13:19:48.97406Z",
+                "sourcePosition": "project:///index.ts#27,28"
+            }
+        ]
+    }
+}

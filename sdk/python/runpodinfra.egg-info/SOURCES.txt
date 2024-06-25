@@ -3,6 +3,7 @@ setup.py
 runpodinfra/__init__.py
 runpodinfra/_inputs.py
 runpodinfra/_utilities.py
+runpodinfra/endpoint.py
 runpodinfra/network_storage.py
 runpodinfra/outputs.py
 runpodinfra/pod.py
