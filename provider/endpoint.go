@@ -263,6 +263,10 @@ func (*Endpoint) Diff(ctx p.Context, id string, olds EndpointState, news Endpoin
 
 	diff := map[string]p.PropertyDiff{}
 
+	if news.TemplateId != olds.TemplateId {
+		// Template ID is not updatable
+		diff["templateId"] = p.PropertyDiff{Kind: p.UpdateReplace}
+	}
 	if news.Name != olds.Name {
 		diff["name"] = p.PropertyDiff{Kind: p.Update}
 	}
@@ -290,13 +294,9 @@ func (*Endpoint) Diff(ctx p.Context, id string, olds EndpointState, news Endpoin
 	if news.WorkersMin != olds.WorkersMin {
 		diff["workersMin"] = p.PropertyDiff{Kind: p.Update}
 	}
-	// Template ID is not updatable
-	// if news.TemplateId != olds.TemplateId {
-	// 	diff["templateId"] = p.PropertyDiff{Kind: p.Update}
-	// }
 
 	return p.DiffResponse{
-		DeleteBeforeReplace: true,
+		DeleteBeforeReplace: false,
 		HasChanges:          len(diff) > 0,
 		DetailedDiff:        diff,
 	}, nil
