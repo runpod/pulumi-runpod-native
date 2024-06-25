@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/http/httputil"
 	"time"
 
 	"github.com/fatih/structs"
@@ -114,10 +113,6 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-
-	b, _ := httputil.DumpRequest(req, true)
-
-	fmt.Println(string(b))
 
 	if err != nil {
 		return name, state, err
@@ -318,7 +313,7 @@ func (*Endpoint) Delete(ctx p.Context, id string, props EndpointState) error {
 	}
 
 	attempts := 0
-	for attempts < 10 {
+	for attempts < 3 {
 		err = deleteEndpoint(ctx, props.Endpoint.Id)
 
 		if err == nil {
@@ -331,7 +326,6 @@ func (*Endpoint) Delete(ctx p.Context, id string, props EndpointState) error {
 	}
 
 	if err != nil {
-		println("delete endpoint failed", err)
 		return err
 	}
 

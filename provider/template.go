@@ -10,8 +10,6 @@ import (
 	"reflect"
 	"time"
 
-	"log"
-
 	"github.com/fatih/structs"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
@@ -172,8 +170,6 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 	if err != nil {
 		return name, state, err
 	}
-
-	log.Print("output: ", output, gqlInput, string(data))
 
 	if len(output.Errors) > 0 {
 		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
