@@ -14,11 +14,6 @@ import (
 	"github.com/pulumi/pulumi-go-provider/infer"
 )
 
-type EndpointState struct {
-	EndpointArgs
-	Endpoint Endpoint `pulumi:"endpoint"`
-}
-
 type OutputDeployEndpoint struct {
 	Errors []struct {
 		Message   string
@@ -33,8 +28,8 @@ type OutputDeployEndpoint struct {
 }
 
 type Endpoint struct {
-	Name            string `pulumi:"name"`
 	Id              string `pulumi:"id"`
+	Name            string `pulumi:"name"`
 	GpuIds          string `pulumi:"gpuIds"`
 	IdleTimeout     int    `pulumi:"idleTimeout"`
 	Locations       string `pulumi:"locations"`
@@ -47,16 +42,21 @@ type Endpoint struct {
 }
 
 type EndpointArgs struct {
-	Name            string `pulumi:"name" structs:"name,omitempty"`
-	TemplateId      string `pulumi:"templateId" structs:"templateId"`
-	GpuIds          string `pulumi:"gpuIds" structs:"gpuIds"`
-	IdleTimeout     int    `pulumi:"idleTimeout,optional" structs:"idleTimeout,omitempty"`
-	Locations       string `pulumi:"locations,optional" structs:"locations,omitempty"`
-	NetworkVolumeId string `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
-	ScalerType      string `pulumi:"scalerType,optional" structs:"scalerType,omitempty"`
-	ScalerValue     int    `pulumi:"scalerValue,optional" structs:"scalerValue,omitempty"`
-	WorkersMax      int    `pulumi:"workersMax,optional" structs:"workersMax"`
-	WorkersMin      int    `pulumi:"workersMin,optional" structs:"workersMin"`
+	Name            string  `pulumi:"name" structs:"name,omitempty"`
+	TemplateId      *string `pulumi:"templateId,optional" structs:"templateId,omitempty"`
+	GpuIds          string  `pulumi:"gpuIds" structs:"gpuIds"`
+	IdleTimeout     int     `pulumi:"idleTimeout,optional" structs:"idleTimeout,omitempty"`
+	Locations       string  `pulumi:"locations,optional" structs:"locations,omitempty"`
+	NetworkVolumeId string  `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
+	ScalerType      string  `pulumi:"scalerType,optional" structs:"scalerType,omitempty"`
+	ScalerValue     int     `pulumi:"scalerValue,optional" structs:"scalerValue,omitempty"`
+	WorkersMax      int     `pulumi:"workersMax,optional" structs:"workersMax"`
+	WorkersMin      int     `pulumi:"workersMin,optional" structs:"workersMin"`
+}
+
+type EndpointState struct {
+	EndpointArgs
+	Endpoint Endpoint `pulumi:"endpoint"`
 }
 
 func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview bool) (string, EndpointState, error) {
@@ -66,7 +66,7 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if input.Name == "" || input.GpuIds == "" || input.TemplateId == "" {
+	if input.Name == "" || input.GpuIds == "" || input.TemplateId == nil {
 		return name, state, fmt.Errorf("TemplateId, gpuIds and name are required")
 	}
 
@@ -168,7 +168,7 @@ func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news Endpo
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if news.Name == "" || news.TemplateId == "" || news.GpuIds == "" {
+	if news.Name == "" || news.GpuIds == "" || news.TemplateId == nil {
 		return state, fmt.Errorf("templateId, gpuIds and name are required")
 	}
 
