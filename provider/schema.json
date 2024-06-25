@@ -144,13 +144,11 @@
             },
             "required": [
                 "name",
-                "templateId",
                 "gpuIds",
                 "endpoint"
             ],
             "requiredInputs": [
                 "name",
-                "templateId",
                 "gpuIds"
             ]
         },
@@ -594,8 +592,8 @@
                 }
             },
             "required": [
-                "name",
                 "id",
+                "name",
                 "gpuIds",
                 "idleTimeout",
                 "locations",

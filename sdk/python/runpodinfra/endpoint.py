@@ -17,12 +17,12 @@ class EndpointArgs:
     def __init__(__self__, *,
                  gpu_ids: pulumi.Input[str],
                  name: pulumi.Input[str],
-                 template_id: pulumi.Input[str],
                  idle_timeout: Optional[pulumi.Input[int]] = None,
                  locations: Optional[pulumi.Input[str]] = None,
                  network_volume_id: Optional[pulumi.Input[str]] = None,
                  scaler_type: Optional[pulumi.Input[str]] = None,
                  scaler_value: Optional[pulumi.Input[int]] = None,
+                 template_id: Optional[pulumi.Input[str]] = None,
                  workers_max: Optional[pulumi.Input[int]] = None,
                  workers_min: Optional[pulumi.Input[int]] = None):
         """
@@ -30,7 +30,6 @@ class EndpointArgs:
         """
         pulumi.set(__self__, "gpu_ids", gpu_ids)
         pulumi.set(__self__, "name", name)
-        pulumi.set(__self__, "template_id", template_id)
         if idle_timeout is not None:
             pulumi.set(__self__, "idle_timeout", idle_timeout)
         if locations is not None:
@@ -41,6 +40,8 @@ class EndpointArgs:
             pulumi.set(__self__, "scaler_type", scaler_type)
         if scaler_value is not None:
             pulumi.set(__self__, "scaler_value", scaler_value)
+        if template_id is not None:
+            pulumi.set(__self__, "template_id", template_id)
         if workers_max is not None:
             pulumi.set(__self__, "workers_max", workers_max)
         if workers_min is not None:
@@ -63,15 +64,6 @@ class EndpointArgs:
     @name.setter
     def name(self, value: pulumi.Input[str]):
         pulumi.set(self, "name", value)
-
-    @property
-    @pulumi.getter(name="templateId")
-    def template_id(self) -> pulumi.Input[str]:
-        return pulumi.get(self, "template_id")
-
-    @template_id.setter
-    def template_id(self, value: pulumi.Input[str]):
-        pulumi.set(self, "template_id", value)
 
     @property
     @pulumi.getter(name="idleTimeout")
@@ -117,6 +109,15 @@ class EndpointArgs:
     @scaler_value.setter
     def scaler_value(self, value: Optional[pulumi.Input[int]]):
         pulumi.set(self, "scaler_value", value)
+
+    @property
+    @pulumi.getter(name="templateId")
+    def template_id(self) -> Optional[pulumi.Input[str]]:
+        return pulumi.get(self, "template_id")
+
+    @template_id.setter
+    def template_id(self, value: Optional[pulumi.Input[str]]):
+        pulumi.set(self, "template_id", value)
 
     @property
     @pulumi.getter(name="workersMax")
@@ -211,8 +212,6 @@ class Endpoint(pulumi.CustomResource):
             __props__.__dict__["network_volume_id"] = network_volume_id
             __props__.__dict__["scaler_type"] = scaler_type
             __props__.__dict__["scaler_value"] = scaler_value
-            if template_id is None and not opts.urn:
-                raise TypeError("Missing required property 'template_id'")
             __props__.__dict__["template_id"] = template_id
             __props__.__dict__["workers_max"] = workers_max
             __props__.__dict__["workers_min"] = workers_min
@@ -294,7 +293,7 @@ class Endpoint(pulumi.CustomResource):
 
     @property
     @pulumi.getter(name="templateId")
-    def template_id(self) -> pulumi.Output[str]:
+    def template_id(self) -> pulumi.Output[Optional[str]]:
         return pulumi.get(self, "template_id")
 
     @property

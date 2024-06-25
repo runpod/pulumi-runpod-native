@@ -41,7 +41,7 @@ export class Endpoint extends pulumi.CustomResource {
     public readonly networkVolumeId!: pulumi.Output<string | undefined>;
     public readonly scalerType!: pulumi.Output<string | undefined>;
     public readonly scalerValue!: pulumi.Output<number | undefined>;
-    public readonly templateId!: pulumi.Output<string>;
+    public readonly templateId!: pulumi.Output<string | undefined>;
     public readonly workersMax!: pulumi.Output<number | undefined>;
     public readonly workersMin!: pulumi.Output<number | undefined>;
 
@@ -61,9 +61,6 @@ export class Endpoint extends pulumi.CustomResource {
             }
             if ((!args || args.name === undefined) && !opts.urn) {
                 throw new Error("Missing required property 'name'");
-            }
-            if ((!args || args.templateId === undefined) && !opts.urn) {
-                throw new Error("Missing required property 'templateId'");
             }
             resourceInputs["gpuIds"] = args ? args.gpuIds : undefined;
             resourceInputs["idleTimeout"] = args ? args.idleTimeout : undefined;
@@ -105,7 +102,7 @@ export interface EndpointArgs {
     networkVolumeId?: pulumi.Input<string>;
     scalerType?: pulumi.Input<string>;
     scalerValue?: pulumi.Input<number>;
-    templateId: pulumi.Input<string>;
+    templateId?: pulumi.Input<string>;
     workersMax?: pulumi.Input<number>;
     workersMin?: pulumi.Input<number>;
 }

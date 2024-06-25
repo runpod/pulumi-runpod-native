@@ -23,7 +23,7 @@ type Endpoint struct {
 	NetworkVolumeId pulumi.StringPtrOutput `pulumi:"networkVolumeId"`
 	ScalerType      pulumi.StringPtrOutput `pulumi:"scalerType"`
 	ScalerValue     pulumi.IntPtrOutput    `pulumi:"scalerValue"`
-	TemplateId      pulumi.StringOutput    `pulumi:"templateId"`
+	TemplateId      pulumi.StringPtrOutput `pulumi:"templateId"`
 	WorkersMax      pulumi.IntPtrOutput    `pulumi:"workersMax"`
 	WorkersMin      pulumi.IntPtrOutput    `pulumi:"workersMin"`
 }
@@ -40,9 +40,6 @@ func NewEndpoint(ctx *pulumi.Context,
 	}
 	if args.Name == nil {
 		return nil, errors.New("invalid value for required argument 'Name'")
-	}
-	if args.TemplateId == nil {
-		return nil, errors.New("invalid value for required argument 'TemplateId'")
 	}
 	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource Endpoint
@@ -84,7 +81,7 @@ type endpointArgs struct {
 	NetworkVolumeId *string `pulumi:"networkVolumeId"`
 	ScalerType      *string `pulumi:"scalerType"`
 	ScalerValue     *int    `pulumi:"scalerValue"`
-	TemplateId      string  `pulumi:"templateId"`
+	TemplateId      *string `pulumi:"templateId"`
 	WorkersMax      *int    `pulumi:"workersMax"`
 	WorkersMin      *int    `pulumi:"workersMin"`
 }
@@ -98,7 +95,7 @@ type EndpointArgs struct {
 	NetworkVolumeId pulumi.StringPtrInput
 	ScalerType      pulumi.StringPtrInput
 	ScalerValue     pulumi.IntPtrInput
-	TemplateId      pulumi.StringInput
+	TemplateId      pulumi.StringPtrInput
 	WorkersMax      pulumi.IntPtrInput
 	WorkersMin      pulumi.IntPtrInput
 }
@@ -222,8 +219,8 @@ func (o EndpointOutput) ScalerValue() pulumi.IntPtrOutput {
 	return o.ApplyT(func(v *Endpoint) pulumi.IntPtrOutput { return v.ScalerValue }).(pulumi.IntPtrOutput)
 }
 
-func (o EndpointOutput) TemplateId() pulumi.StringOutput {
-	return o.ApplyT(func(v *Endpoint) pulumi.StringOutput { return v.TemplateId }).(pulumi.StringOutput)
+func (o EndpointOutput) TemplateId() pulumi.StringPtrOutput {
+	return o.ApplyT(func(v *Endpoint) pulumi.StringPtrOutput { return v.TemplateId }).(pulumi.StringPtrOutput)
 }
 
 func (o EndpointOutput) WorkersMax() pulumi.IntPtrOutput {
