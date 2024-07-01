@@ -171,3 +171,6 @@ install_go_sdk::
 install_nodejs_sdk::
 	-yarn unlink --cwd $(WORKING_DIR)/sdk/nodejs/bin
 	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
+
+run-ci-locally:
+	act -P catthehacker/ubuntu:full-latest -e tag.json --secret-file .secrets --container-architecture linux/amd64 -W .github/workflows/release.yml
