@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: runpodinfra
-Version: 1.8.95
+Version: 1.8.96
 Summary: The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.
 Home-page: https://runpod.io
 License: Apache-2.0
