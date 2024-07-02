@@ -140,8 +140,6 @@ devcontainer::
 build:: provider python_sdk go_sdk nodejs_sdk
 	$(SED_REMOVE_PYI_LINE)
 	rm -rf sdk/python/build/lib/runpodinfra/config/__init__.pyi
-	pip install -r requirements.txt
-	python3 helper.py
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
