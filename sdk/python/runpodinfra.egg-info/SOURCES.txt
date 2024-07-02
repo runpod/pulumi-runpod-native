@@ -17,4 +17,5 @@ runpodinfra.egg-info/not-zip-safe
 runpodinfra.egg-info/requires.txt
 runpodinfra.egg-info/top_level.txt
 runpodinfra/config/__init__.py
+runpodinfra/config/__init__.pyi
 runpodinfra/config/vars.py
