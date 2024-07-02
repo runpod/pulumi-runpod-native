@@ -143,7 +143,7 @@ build:: provider python_sdk go_sdk nodejs_sdk
 build-and-push:
 	VERSION=$(VERSION) $(MAKE) build
 	git commit -am "Bump version to $(VERSION)"
-	git push
+	git push --force
 	git tag $(VERSION)
 	git push origin $(VERSION)
 
