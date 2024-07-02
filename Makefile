@@ -71,9 +71,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
     SED_CMD = sed -i -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i -e '/^import os$$/d' setup.py
+	SED_REMOVE_PYI_LINE = sed -i -e '/runpodinfra\/config\/__init__.pyi/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else ifeq ($(UNAME_S), Darwin)
     SED_CMD = sed -i '' -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i '' '/^import os$$/d' setup.py
+	SED_REMOVE_PYI_LINE = sed -i '' '/^runpodinfra\/config\/__init__.pyi/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else
     $(error Unsupported OS: $(UNAME_S))
 endif
