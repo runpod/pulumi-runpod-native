@@ -88,7 +88,6 @@ python_sdk::
 	cd ${PACKDIR}/python/ && \
 		$(SED_CMD) && \
 		$(SED_CMD_REMOVE_OS) && \
-		echo ${which python3} && \
 		python3 -m pip install setuptools==70.2.0 && \
 		python3 -m pip list && \
 		python3 setup.py clean --all 2>/dev/null && \
