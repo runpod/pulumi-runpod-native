@@ -84,11 +84,11 @@ python_sdk:: PYPI_VERSION := ${VERSION}
 python_sdk::
 	rm -rf sdk/python
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language python $(SCHEMA_FILE)
+	pip install -r requirements.txt
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
 		$(SED_CMD) && \
 		$(SED_CMD_REMOVE_OS) && \
-		python3 -m pip install setuptools==70.2.0 && \
 		python3 -m pip list && \
 		python3 setup.py clean --all 2>/dev/null && \
 		python3 setup.py build sdist
