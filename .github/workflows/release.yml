@@ -107,6 +107,7 @@ jobs:
         env:
           PULUMI_PYTHON_VERSION: ${{ github.ref_name }}
       - name: Set up Git
+        if : ${{ endsWith(matrix.language, 'python') }}
         run: |
           git fetch
           git config --global user.name "github-actions[bot]"
@@ -117,6 +118,10 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Git Stash
+        if : ${{ !endsWith(matrix.language, 'python') }}
+        run: |
+          git stash
       - name: Check worktree clean
         run: |
           git update-index -q --refresh
@@ -138,7 +143,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install tree
           tree ${{github.workspace}}/sdk/python
-          chown -R $USER:$USER ${{github.workspace}}/sdk/python
+          sudo chown -R $USER:$USER ${{github.workspace}}/sdk/python
+          sudo chown -R $USER:$USER ${{github.workspace}}/sdk/python/dist
       - if: ${{ matrix.language == 'python' && env.PUBLISH_PYPI == 'true' }}
         name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
