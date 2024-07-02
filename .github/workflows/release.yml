@@ -152,6 +152,7 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN_TEST }}
           packages-dir: ${{github.workspace}}/sdk/python/bin/dist
+          verbose: true
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         name: Publish package to NPM
         uses: JS-DevTools/npm-publish@v3
