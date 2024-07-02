@@ -69,6 +69,7 @@ jobs:
           - 1.22.x
   publish_sdk:
     name: Publish SDKs
+    needs: publish_binary
     runs-on: ubuntu-latest
     steps:
       - name: print
