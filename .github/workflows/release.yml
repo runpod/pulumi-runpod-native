@@ -151,7 +151,8 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN_TEST }}
-          packages-dir: ${{github.workspace}}/sdk/python/bin/dist
+          # packages-dir: ${{github.workspace}}/sdk/python/bin/dist
+          packages-dir: /home/runner/work/pulumi-runpod-native/pulumi-runpod-native/sdk/python/bin/dist
           verbose: true
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         name: Publish package to NPM
