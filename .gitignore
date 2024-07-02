@@ -23,3 +23,5 @@ examples/python/newenv/**
 .secrets
 *.tar.gz
 sdk/python/build/lib/runpodinfra/config/__init__.pyi
+sdk/python/build/lib/runpodinfra/config/__init__.pyi
+plmi/*

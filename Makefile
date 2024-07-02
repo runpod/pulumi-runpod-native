@@ -71,11 +71,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
     SED_CMD = sed -i -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i -e '/^import os$$/d' setup.py
-	SED_REMOVE_PYI_LINE = sed -i -e '/runpodinfra\/config\/__init__.pyi/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
+	SED_REMOVE_PYI_LINE = sed -i -e '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else ifeq ($(UNAME_S), Darwin)
     SED_CMD = sed -i '' -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i '' '/^import os$$/d' setup.py
-	SED_REMOVE_PYI_LINE = sed -i '' '/^runpodinfra\/config\/__init__.pyi/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
+	SED_REMOVE_PYI_LINE = sed -i "" '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else
     $(error Unsupported OS: $(UNAME_S))
 endif
@@ -86,9 +86,9 @@ python_sdk::
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language python $(SCHEMA_FILE)
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
-		echo $(shell ls sdk/python/) && \
 		$(SED_CMD) && \
 		$(SED_CMD_REMOVE_OS) && \
+		echo ${which python3} && \
 		python3 -m pip install setuptools && \
 		python3 setup.py clean --all 2>/dev/null && \
 		python3 setup.py build sdist
@@ -137,7 +137,11 @@ devcontainer::
 
 .PHONY: build
 
-build:: provider go_sdk python_sdk nodejs_sdk
+build:: provider python_sdk go_sdk nodejs_sdk
+	$(SED_REMOVE_PYI_LINE)
+	rm -rf sdk/python/build/lib/runpodinfra/config/__init__.pyi
+	pip install -r requirements.txt
+	python3 helper.py
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build

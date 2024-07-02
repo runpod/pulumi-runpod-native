@@ -156,4 +156,4 @@ jobs:
         nodeversion:
           - 18.x
         pythonversion:
-          - "3.12"
+          - "3.10"
