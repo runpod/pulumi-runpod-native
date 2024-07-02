@@ -138,7 +138,6 @@ devcontainer::
 .PHONY: build
 
 build:: provider python_sdk go_sdk nodejs_sdk
-	rm -rf sdk/python/build/lib/runpodinfra/config/__init__.pyi
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
