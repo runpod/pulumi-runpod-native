@@ -116,6 +116,7 @@ jobs:
           git add .
           git commit -m "Release: ${{ github.ref_name }}"
           git push
+          cat .github/workflows/release.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Git Stash
@@ -142,16 +143,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install tree
+          sudo pip install twine
           tree ${{github.workspace}}/sdk/python
           sudo chown -R $USER:$USER ${{github.workspace}}/sdk/python
           sudo chown -R $USER:$USER ${{github.workspace}}/sdk/python/dist
+          twine check ${{github.workspace}}/sdk/python/dist/*
       - if: ${{ matrix.language == 'python' && env.PUBLISH_PYPI == 'true' }}
         name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN_TEST }}
-          packages-dir: /home/runner/work/pulumi-runpod-native/pulumi-runpod-native/sdk/bin/dist
+          packages-dir: /home/runner/work/pulumi-runpod-native/pulumi-runpod-native/sdk/python/dist
           verbose: true
       - if: ${{ matrix.language == 'nodejs' && env.PUBLISH_NPM == 'true' }}
         name: Publish package to NPM
@@ -168,8 +171,6 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        # dotnetversion:
-        #   - 3.1.301
         goversion:
           - 1.22.x
         language:
