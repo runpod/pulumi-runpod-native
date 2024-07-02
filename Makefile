@@ -173,4 +173,4 @@ install_nodejs_sdk::
 	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
 
 run-ci-locally:
-	act -P catthehacker/ubuntu:full-latest -e tag.json --secret-file .secrets --container-architecture linux/amd64 -W .github/workflows/release.yml -v
+	act -P catthehacker/ubuntu:full-latest -e tag.json --secret-file .secrets --container-architecture linux/amd64 -W .github/workflows/release.yml
