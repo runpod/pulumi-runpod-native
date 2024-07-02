@@ -9,7 +9,6 @@ pip==24.1.1
 protobuf==4.25.3
 pulumi==3.120.0
 PyYAML==6.0.1
-runpodinfra==1.7.2rc1
 semver==2.13.0
 setuptools==70.2.0
 six==1.16.0
