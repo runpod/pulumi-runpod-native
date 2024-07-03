@@ -27,22 +27,10 @@ const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
   dataCenterId: "US-OR-1",
 });
 
-const myEndpoint = new runpod.Endpoint("testEndpoint", {
-  gpuIds: "AMPERE_16",
-  name: "Pulumi Endpoint Test V2 -fb",
-  templateId: myTemplate.template.id,
-  workersMax: 2,
-  workersMin: 1,
-  idleTimeout: 6,
-  locations: "US-OR-1",
-  networkVolumeId: testNetworkStorage.networkStorage.id,
-  scalerType: "QUEUE_DELAY",
-  scalerValue: 4,
-});
-
 const myRandomPod = new runpod.Pod("myRandomPod", {
   cloudType: "ALL",
   networkVolumeId: testNetworkStorage.networkStorage.apply(
+    // @ts-ignore
     (networkStorage) => networkStorage.id
   ),
   gpuCount: 1,
@@ -52,7 +40,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   minMemoryInGb: 15,
   gpuTypeId: "NVIDIA GeForce RTX 4090",
   name: "RunPod Pytorch",
-  imageName: "runpod/pytorch",
+  imageName: "runpod/pytorch:latest",
   dockerArgs: "",
   ports: "8888/http",
   volumeMountPath: "/workspace",
@@ -64,12 +52,28 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   ],
 });
 
+const myRandomEndpoint = new runpod.Endpoint("myRandomEndpoint", {
+  gpuIds: "AMPERE_16,AMPERE_24,-NVIDIA L4",
+  idleTimeout: 100,
+  locations: "CA-MTL-2,CA-MTL-3,EU-RO-1,US-CA-1,US-GA-1,US-KS-2,US-OR-1,CA-MTL-1,US-TX-3,EUR-IS-1,EUR-IS-2,SEA-SG-1",
+  name: "myRandomEndpoint",
+  networkVolumeId: testNetworkStorage.networkStorage.apply(
+    // @ts-ignore
+    (networkStorage) => networkStorage.id
+  ),
+  scalerType: 'REQUEST_COUNT',
+  scalerValue: 2,
+  templateId: myTemplate.template.apply(t => t.id),
+  workersMax: 2,
+  workersMin: 1,
+})
+
 export const template = {
   value: myTemplate.template,
 };
 
 export const endpoint = {
-  value: myEndpoint.endpoint,
+  value: myRandomEndpoint.endpoint,
 };
 
 export const pod = {

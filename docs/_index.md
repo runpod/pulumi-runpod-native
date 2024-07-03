@@ -54,22 +54,10 @@ const testNetworkStorage = new runpod.NetworkStorage("testNetworkStorage", {
   dataCenterId: "US-OR-1",
 });
 
-const myEndpoint = new runpod.Endpoint("testEndpoint", {
-  gpuIds: "AMPERE_16",
-  name: "Pulumi Endpoint Test V2 -fb",
-  templateId: myTemplate.template.id,
-  workersMax: 2,
-  workersMin: 1,
-  idleTimeout: 6,
-  locations: "US-OR-1",
-  networkVolumeId: testNetworkStorage.networkStorage.id,
-  scalerType: "QUEUE_DELAY",
-  scalerValue: 4,
-});
-
 const myRandomPod = new runpod.Pod("myRandomPod", {
   cloudType: "ALL",
   networkVolumeId: testNetworkStorage.networkStorage.apply(
+    // @ts-ignore
     (networkStorage) => networkStorage.id
   ),
   gpuCount: 1,
@@ -79,24 +67,46 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   minMemoryInGb: 15,
   gpuTypeId: "NVIDIA GeForce RTX 4090",
   name: "RunPod Pytorch",
-  imageName: "runpod/pytorch",
+  imageName: "runpod/pytorch:latest",
   dockerArgs: "",
   ports: "8888/http",
   volumeMountPath: "/workspace",
-  env: [{
+  env: [
+    {
       key: "JUPYTER_PASSWORD",
       value: "rns1hunbsstltcpad22d",
-    }],
+    },
+  ],
 });
+
+const myRandomEndpoint = new runpod.Endpoint("myRandomEndpoint", {
+  gpuIds: "AMPERE_16,AMPERE_24,-NVIDIA L4",
+  idleTimeout: 100,
+  locations: "CA-MTL-2,CA-MTL-3,EU-RO-1,US-CA-1,US-GA-1,US-KS-2,US-OR-1,CA-MTL-1,US-TX-3,EUR-IS-1,EUR-IS-2,SEA-SG-1",
+  name: "myRandomEndpoint",
+  networkVolumeId: testNetworkStorage.networkStorage.apply(
+    // @ts-ignore
+    (networkStorage) => networkStorage.id
+  ),
+  scalerType: 'REQUEST_COUNT',
+  scalerValue: 2,
+  templateId: myTemplate.template.apply(t => t.id),
+  workersMax: 2,
+  workersMin: 1,
+})
+
 export const template = {
   value: myTemplate.template,
 };
+
 export const endpoint = {
-  value: myEndpoint.endpoint,
+  value: myRandomEndpoint.endpoint,
 };
+
 export const pod = {
   value: myRandomPod.pod,
 };
+
 export const networkStorage = {
   value: testNetworkStorage.networkStorage,
 };
@@ -216,12 +226,19 @@ def fetch_id(a):
     else:
         return a
 
+def fetch_template_id(a):
+    if type(a) == runpod.outputs.Template:
+        return a.id
+    else:
+        return a
+
 try:
-    test_network_storage = runpod.NetworkStorage(
-            "testNetworkStorage", name="testStorage1", size=10, data_center_id="US-OR-1"
-        )
-    my_random_pod = runpod.Pod(
-        "myRandomPod",
+    test_network_storage = runpod.NetworkStorage("testNetworkStorage",
+        name="testStorage1",
+        size=5,
+        data_center_id="EU-RO-1")
+
+    my_random_pod = runpod.Pod("myRandomPod",
         cloud_type="ALL",
         network_volume_id=test_network_storage.network_storage.apply(lambda x : fetch_id(x)),
         gpu_count=1,
@@ -235,73 +252,53 @@ try:
         docker_args="",
         ports="8888/http",
         volume_mount_path="/workspace",
-        env=[
-            runpod.PodEnvArgs(
-                key="JUPYTER_PASSWORD",
-                value="rns1hunbsstltcpad22d",
-            ).__dict__,
-        ],
-    )
-    my_template = runpod.Template(
-        "myTemplate",
-        container_disk_in_gb=5,
+        env=[runpod.PodEnvArgs(
+            key="JUPYTER_PASSWORD",
+            value="rns1hunbsstltcpad22d",
+        )])
+
+    my_random_template = runpod.Template("myRandomTemplate",
+        container_disk_in_gb = 5,
+        container_registry_auth_id = "",
         docker_args="python handler.py",
-        env=[
-            runpod.PodEnvArgs(
-                key="key1",
-                value="value1",
-            ).__dict__,
-            runpod.PodEnvArgs(
-                key="key2",
-                value="value2",
-            ).__dict__,
-        ],
+        env=[{"key": "hi", "value": "hello"}],
         image_name="runpod/serverless-hello-world:latest",
+        is_public=False,
         is_serverless=True,
-        name="Testing Pulumi V1",
-        readme="## Hello, World!",
-        volume_in_gb=0,
+        name="Generated Serverless Template",
+        ports="1293/http",
+        readme="Some readme", # pass some value to this. Won't work otherwise
+        start_jupyter=False,
+        start_ssh=False,
+        volume_in_gb=20,
+        volume_mount_path="/workspace",
     )
 
-    my_endpoint = runpod.Endpoint(
-        "myEndpoint",
-        gpu_ids="AMPERE_16",
-        name="Pulumi Endpoint Test V2 -fb",
-        template_id=my_template.template.id,
+    my_random_endpoint = runpod.Endpoint("myRandomEndpoint",
+        gpu_ids="AMPERE_16,AMPERE_24,-NVIDIA L4",
+        idle_timeout=100,
+        locations="CA-MTL-2,CA-MTL-3,EU-RO-1,US-CA-1,US-GA-1,US-KS-2,US-OR-1,CA-MTL-1,US-TX-3,EUR-IS-1,EUR-IS-2,SEA-SG-1",
+        name="myRandomEndpoint",
+        network_volume_id=test_network_storage.network_storage.apply(lambda x : fetch_id(x)),
+        scaler_type='REQUEST_COUNT',
+        scaler_value=2,
+        template_id=my_random_template.template.apply(lambda x : fetch_template_id(x)),
         workers_max=2,
         workers_min=1,
-        idle_timeout=6,
-        locations="US-OR-1",
-        network_volume_id=test_network_storage.network_storage.apply(lambda x: fetch_id(x)),
-        scaler_type="QUEUE_DELAY",
-        scaler_value=4,
     )
 
-    print(my_random_pod)
-    pulumi.export(
-        "pod",
-        {
-            "value": my_random_pod.pod,
-        },
-    )
-    pulumi.export(
-        "networkStorage",
-        {
-            "value": test_network_storage.network_storage,
-        },
-    )
-    pulumi.export(
-        "template",
-        {
-            "value": my_template.template,
-        },
-    )
-    pulumi.export(
-        "endpoint",
-        {
-            "value": my_endpoint.endpoint,
-        },
-    )
+    pulumi.export("pod", {
+        "value": my_random_pod.pod,
+    })
+    pulumi.export("networkStorage", {
+        "value": test_network_storage.network_storage,
+    })
+    pulumi.export("testTemplate", {
+        "value": my_random_template.template,
+    })
+    pulumi.export("testEndpoint", {
+        "value": my_random_endpoint.endpoint,
+    })
 except Exception as e:
     logger.exception(e)
 ```
@@ -311,13 +308,20 @@ except Exception as e:
 {{% choosable language yaml %}}
 
 ```yaml
+name: provider-runpod-native
+runtime: yaml
+plugins:
+  providers:
+    - name: runpod
+      path: ../../bin
+
 resources:
   testNetworkStorage:
     type: runpod:NetworkStorage
     properties:
-      name: "testStorage1"
-      size: 20
-      dataCenterId: "US-NJ"
+      name: testStorage1
+      size: 5
+      dataCenterId: EU-RO-1
 
   myRandomPod:
     type: runpod:Pod
@@ -325,11 +329,11 @@ resources:
       cloudType: ALL
       networkVolumeId: ${testNetworkStorage.networkStorage.id}
       gpuCount: 1
-      volumeInGb: 50
+      volumeInGb: 60
       containerDiskInGb: 50
       minVcpuCount: 2
       minMemoryInGb: 15
-      gpuTypeId: "NVIDIA GeForce RTX 3070"
+      gpuTypeId: "NVIDIA GeForce RTX 4090"
       name: "RunPod Pytorch"
       imageName: "runpod/pytorch"
       dockerArgs: ""
@@ -339,41 +343,47 @@ resources:
         - key: "JUPYTER_PASSWORD"
           value: "rns1hunbsstltcpad22d"
 
-  myTemplate:
+  myRandomTemplate:
     type: runpod:Template
     properties:
-      containerDiskInGb: 5
-      dockerArgs: "python handler.py"
-      env:
-        - key: "key1"
-          value: "value1"
-        - key: "key2"
-          value: "value2"
-      imageName: "runpod/serverless-hello-world:latest"
+      containerDiskInGb: 20
+      containerRegistryAuthId: ""
+      dockerArgs: "python3 -m http.server 8080"
+      env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+      imageName: "nginx:latest"
+      isPublic: false
       isServerless: true
-      name: "Testing Pulumi V1"
-      readme: "## Hello, World!"
-      volumeInGb: 0
+      name: "RunPod Nginx"
+      ports: "8080/http"
+      readme: "Test template"
+      startJupyter: false
+      startSsh: false
+      volumeInGb: 10
+      volumeMountPath: "/workspace"
 
-  myEndpoint:
+  myRandomEndpoint:
     type: runpod:Endpoint
     properties:
-      gpuIds: "AMPERE_16"
-      name: "Pulumi Endpoint Test V2 -fb"
-      templateId: ${myTemplate.template.id}
+      gpuIds: "AMPERE_16,AMPERE_24,-NVIDIA L4"
+      idleTimeout: 100
+      locations: "CA-MTL-2,CA-MTL-3,EU-RO-1,US-CA-1,US-GA-1,US-KS-2,US-OR-1,CA-MTL-1,US-TX-3,EUR-IS-1,EUR-IS-2,SEA-SG-1"
+      name: "myRandomEndpoint"
+      networkVolumeId: ${testNetworkStorage.networkStorage.id}
+      scalerType: "REQUEST_COUNT"
+      scalerValue: 2
+      templateId: ${myRandomTemplate.template.id}
       workersMax: 2
       workersMin: 1
-      idleTimeout: 6
-      locations: "US-OR-1"
-      networkVolumeId: ${testNetworkStorage.networkStorage.id}
-      scalerType: "QUEUE_DELAY"
-      scalerValue: 4
 
 outputs:
-  pod: ${myRandomPod.pod}
-  networkStorage: ${testNetworkStorage.networkStorage}
-  template: ${myTemplate.template}
-  endpoint: ${myEndpoint.endpoint}
+  pod:
+    value: ${myRandomPod.pod}
+  networkStorage:
+    value: ${testNetworkStorage.networkStorage}
+  template:
+    value: ${myRandomTemplate.template}
+  endpoint:
+    value: ${myRandomEndpoint.endpoint}
 ```
 
 {{% /choosable %}}

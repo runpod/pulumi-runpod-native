@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/fatih/structs"
@@ -254,12 +255,15 @@ func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news Endpo
 	return state, nil
 }
 
+func compareTemplateId(a, b string) bool {
+	return strings.EqualFold(a, b)
+}
+
 func (*Endpoint) Diff(ctx p.Context, id string, olds EndpointState, news EndpointArgs) (p.DiffResponse, error) {
 
 	diff := map[string]p.PropertyDiff{}
 
-	if news.TemplateId != olds.TemplateId {
-		// Template ID is not updatable
+	if !compareTemplateId(*olds.TemplateId, *news.TemplateId) {
 		diff["templateId"] = p.PropertyDiff{Kind: p.UpdateReplace}
 	}
 	if news.Name != olds.Name {

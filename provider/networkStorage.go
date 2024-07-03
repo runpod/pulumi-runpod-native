@@ -121,9 +121,7 @@ func (*NetworkStorage) Create(ctx p.Context, name string, input NetworkStorageAr
 		return name, state, err
 	}
 
-	log.Print("output: ", output, gqlInput, string(data))
-
-	if len(output.Errors) > 0 {
+	if len(output.Errors) > 0 && len(output.Errors[0].Message) > 0 {
 		err = fmt.Errorf("API errored: %s", output.Errors[0].Message)
 		return name, state, err
 	}
