@@ -71,9 +71,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
     SED_CMD = sed -i -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i -e '/^import os$$/d' setup.py
+	SED_REMOVE_PYI_LINE = sed -i -e '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else ifeq ($(UNAME_S), Darwin)
     SED_CMD = sed -i '' -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i '' '/^import os$$/d' setup.py
+	SED_REMOVE_PYI_LINE = sed -i "" '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
 else
     $(error Unsupported OS: $(UNAME_S))
 endif
@@ -82,12 +84,12 @@ python_sdk:: PYPI_VERSION := ${VERSION}
 python_sdk::
 	rm -rf sdk/python
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language python $(SCHEMA_FILE)
+	pip install -r requirements.txt
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
-		echo $(shell ls sdk/python/) && \
 		$(SED_CMD) && \
 		$(SED_CMD_REMOVE_OS) && \
-		python3 -m pip install setuptools && \
+		python3 -m pip list && \
 		python3 setup.py clean --all 2>/dev/null && \
 		python3 setup.py build sdist
 
@@ -135,7 +137,16 @@ devcontainer::
 
 .PHONY: build
 
-build:: provider go_sdk python_sdk nodejs_sdk
+build:: provider python_sdk go_sdk nodejs_sdk
+	rm -rf sdk/python/build/lib/runpodinfra/config/__init__.pyi
+
+build-and-push:
+	VERSION=$(VERSION) $(MAKE) build
+	git add .
+	git commit -am "Bump version to $(VERSION)"
+	git push --force
+	git tag $(VERSION)
+	git push origin $(VERSION)
 
 # Required for the codegen action that runs in pulumi/pulumi
 only_build:: build
@@ -171,3 +182,6 @@ install_go_sdk::
 install_nodejs_sdk::
 	-yarn unlink --cwd $(WORKING_DIR)/sdk/nodejs/bin
 	yarn link --cwd $(WORKING_DIR)/sdk/nodejs/bin
+
+run-ci-locally:
+	act -P catthehacker/ubuntu:full-latest -e tag.json --secret-file .secrets --container-architecture linux/amd64 -W .github/workflows/release.yml
