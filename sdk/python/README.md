@@ -7,6 +7,26 @@ layout: package
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
 The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
+## Pulumi guide
+Create an empty directory and navigate inside
+
+```bash
+mkdir -p empty
+cd empty
+```
+
+Create a new pulumi stack:
+```
+    pulumi new
+```
+
+A dropdown box will appear. Please select a minimal project from in there. For example, if you prefer using Go, you would select the following:
+```bash
+    go                             A minimal Go Pulumi program
+```
+
+Then populate the entrypoint file (__main__.py/main.go/index.ts) with the your data. Please use the guide below to understand more about what parameters are possible for each resource. For Python, please remember to activate the virtual environment.
+
 ## Config
 
 To begin with, please set your runpod API key to use with Pulumi.
@@ -17,8 +37,7 @@ To begin with, please set your runpod API key to use with Pulumi.
 
 ## Example
 
-This is an example of how to deploy it over Golang. We also serve pulumi over Typescript and Python. For more examples, please navigate to the examples directory
-or the documents inside docs. If you have any problems in doing so, please contact support@runpod.io.
+This is an example of how to deploy it over Golang. We also serve pulumi over Typescript and Python. For more examples, please navigate to the examples directory or the docs/installation-configuration.md file. If you have any problems in doing so, please contact support@runpod.io.
 
 1. Create a new Pulumi Go example:
 ```
@@ -26,7 +45,7 @@ or the documents inside docs. If you have any problems in doing so, please conta
 ```
 Select either the Go template or Runpod's Go template.
 
-2. Set your API keys using the config shown above. 
+2. Set your API keys using the process shown above. 
 
 3. Install the official Go package:
 
@@ -49,22 +68,23 @@ func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		testNetworkStorage, err := runpod.NewNetworkStorage(ctx, "testNetworkStorage", &runpod.NetworkStorageArgs{
 			Name:         pulumi.String("testStorage1"),
-			Size:         pulumi.Int(20),
-			DataCenterId: pulumi.String("US-NJ"),
+			Size:         pulumi.Int(5),
+			DataCenterId: pulumi.String("EU-RO-1"),
 		})
 		if err != nil {
 			return err
 		}
-
 		myRandomPod, err := runpod.NewPod(ctx, "myRandomPod", &runpod.PodArgs{
-			CloudType:         pulumi.String("ALL"),
-			NetworkVolumeId:   testNetworkStorage.NetworkStorage.Id(),
+			CloudType: pulumi.String("ALL"),
+			NetworkVolumeId: testNetworkStorage.NetworkStorage.ApplyT(func(networkStorage runpod.NetworkStorageType) (*string, error) {
+				return &networkStorage.Id, nil
+			}).(pulumi.StringPtrOutput),
 			GpuCount:          pulumi.Int(1),
 			VolumeInGb:        pulumi.Int(50),
 			ContainerDiskInGb: pulumi.Int(50),
 			MinVcpuCount:      pulumi.Int(2),
 			MinMemoryInGb:     pulumi.Int(15),
-			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 3070"),
+			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 4090"),
 			Name:              pulumi.String("RunPod Pytorch"),
 			ImageName:         pulumi.String("runpod/pytorch"),
 			DockerArgs:        pulumi.String(""),
@@ -80,9 +100,47 @@ func main() {
 		if err != nil {
 			return err
 		}
+		myTemplate, err := runpod.NewTemplate(ctx, "myTemplate", &runpod.TemplateArgs{
+			ContainerDiskInGb:       pulumi.Int(5),
+			DockerArgs:              pulumi.String("python3 -m http.server 8080"),
+		    Env: runpod.PodEnvArray{
+				&runpod.PodEnvArgs{
+					Key:   pulumi.String("JUPYTER_PASSWORD"),
+					Value: pulumi.String("rns1hunbsstltcpad22d"),
+				},
+			},
+			ImageName:       pulumi.String("runpod/serverless-hello-world:latest"),
+			IsServerless:    pulumi.Bool(true),
+			Name:            pulumi.String("Testing Pulumi V1"),
+			Readme:          pulumi.String("## Hello, World!"),
+			VolumeInGb:      pulumi.Int(0),
+		})
 
-		ctx.Export("pod", myRandomPod)
-		ctx.Export("networkStorage", testNetworkStorage)
+		if err != nil {
+			return err
+		}
+
+		myEndpoint, err := runpod.NewEndpoint(ctx, "myEndpoint", &runpod.EndpointArgs{
+			GpuIds:         pulumi.String("AMPERE_16"),
+			Name:           pulumi.String("Pulumi Endpoint Test V2 -fb"),
+			TemplateId:     myTemplate.Template.Id(),
+			WorkersMax:     pulumi.Int(2),
+			WorkersMin:     pulumi.Int(1),
+			IdleTimeout:    pulumi.Int(6),
+			Locations:      pulumi.String("EU-RO-1"),
+			NetworkVolumeId: testNetworkStorage.NetworkStorage.Id(),
+			ScalerType:     pulumi.String("QUEUE_DELAY"),
+			ScalerValue:    pulumi.Int(4),
+		})
+
+		if err != nil {
+			return err
+		}
+
+		ctx.Export("pod", myRandomPod.Pod.Id())
+		ctx.Export("networkStorage", testNetworkStorage.NetworkStorage.Id())
+		ctx.Export("template", myTemplate.Template.Id())
+		ctx.Export("endpoint", myEndpoint.Endpoint.Id())
 		return nil
 	})
 }
