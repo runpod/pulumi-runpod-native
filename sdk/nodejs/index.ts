@@ -5,6 +5,11 @@ import * as pulumi from "@pulumi/pulumi";
 import * as utilities from "./utilities";
 
 // Export members:
+export { EndpointArgs } from "./endpoint";
+export type Endpoint = import("./endpoint").Endpoint;
+export const Endpoint: typeof import("./endpoint").Endpoint = null as any;
+utilities.lazyLoad(exports, ["Endpoint"], () => require("./endpoint"));
+
 export { NetworkStorageArgs } from "./networkStorage";
 export type NetworkStorage = import("./networkStorage").NetworkStorage;
 export const NetworkStorage: typeof import("./networkStorage").NetworkStorage = null as any;
@@ -39,6 +44,8 @@ const _module = {
     version: utilities.getVersion(),
     construct: (name: string, type: string, urn: string): pulumi.Resource => {
         switch (type) {
+            case "runpod:index:Endpoint":
+                return new Endpoint(name, <any>undefined, { urn })
             case "runpod:index:NetworkStorage":
                 return new NetworkStorage(name, <any>undefined, { urn })
             case "runpod:index:Pod":

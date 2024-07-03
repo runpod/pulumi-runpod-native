@@ -12,6 +12,20 @@ export interface DataCenter {
     storageSupport: boolean;
 }
 
+export interface Endpoint {
+    gpuIds: string;
+    id: string;
+    idleTimeout: number;
+    locations: string;
+    name: string;
+    networkVolumeId: string;
+    scalerType: string;
+    scalerValue: number;
+    templateId: string;
+    workersMax: number;
+    workersMin: number;
+}
+
 export interface Gpu {
     id: string;
     podId: string;

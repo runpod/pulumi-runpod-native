@@ -141,10 +141,7 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 
-	b, _ := httputil.DumpRequest(req, true)
-
-	fmt.Println(string(b))
-
+	_, err = httputil.DumpRequest(req, true)
 	if err != nil {
 		return name, state, err
 	}
@@ -164,6 +161,8 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 	if err != nil {
 		return name, state, err
 	}
+
+	fmt.Println(string(data))
 
 	output := &OutputDeployTemplate{}
 	err = json.Unmarshal(data, output)

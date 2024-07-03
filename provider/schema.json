@@ -74,6 +74,84 @@
     "publisher": "Runpod",
     "repository": "https://github.com/runpod/pulumi-runpod-native",
     "resources": {
+        "runpod:index:Endpoint": {
+            "inputProperties": {
+                "gpuIds": {
+                    "type": "string"
+                },
+                "idleTimeout": {
+                    "type": "integer"
+                },
+                "locations": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "networkVolumeId": {
+                    "type": "string"
+                },
+                "scalerType": {
+                    "type": "string"
+                },
+                "scalerValue": {
+                    "type": "integer"
+                },
+                "templateId": {
+                    "type": "string"
+                },
+                "workersMax": {
+                    "type": "integer"
+                },
+                "workersMin": {
+                    "type": "integer"
+                }
+            },
+            "properties": {
+                "endpoint": {
+                    "$ref": "#/types/runpod:index:Endpoint"
+                },
+                "gpuIds": {
+                    "type": "string"
+                },
+                "idleTimeout": {
+                    "type": "integer"
+                },
+                "locations": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "networkVolumeId": {
+                    "type": "string"
+                },
+                "scalerType": {
+                    "type": "string"
+                },
+                "scalerValue": {
+                    "type": "integer"
+                },
+                "templateId": {
+                    "type": "string"
+                },
+                "workersMax": {
+                    "type": "integer"
+                },
+                "workersMin": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "name",
+                "gpuIds",
+                "endpoint"
+            ],
+            "requiredInputs": [
+                "name",
+                "gpuIds"
+            ]
+        },
         "runpod:index:NetworkStorage": {
             "inputProperties": {
                 "dataCenterId": {
@@ -474,6 +552,57 @@
                 "name",
                 "location",
                 "storageSupport"
+            ],
+            "type": "object"
+        },
+        "runpod:index:Endpoint": {
+            "properties": {
+                "gpuIds": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "idleTimeout": {
+                    "type": "integer"
+                },
+                "locations": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "networkVolumeId": {
+                    "type": "string"
+                },
+                "scalerType": {
+                    "type": "string"
+                },
+                "scalerValue": {
+                    "type": "integer"
+                },
+                "templateId": {
+                    "type": "string"
+                },
+                "workersMax": {
+                    "type": "integer"
+                },
+                "workersMin": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "gpuIds",
+                "idleTimeout",
+                "locations",
+                "networkVolumeId",
+                "scalerType",
+                "scalerValue",
+                "workersMax",
+                "workersMin",
+                "templateId"
             ],
             "type": "object"
         },

@@ -21,6 +21,8 @@ func (m *module) Version() semver.Version {
 
 func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi.Resource, err error) {
 	switch typ {
+	case "runpod:index:Endpoint":
+		r = &Endpoint{}
 	case "runpod:index:NetworkStorage":
 		r = &NetworkStorage{}
 	case "runpod:index:Pod":
