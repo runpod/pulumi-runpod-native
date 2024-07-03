@@ -45,7 +45,7 @@ Select either the Go template or Runpod's Go template.
 3. Install the official Go package:
 
 ```
-    go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod@v1.1.8
+    go get github.com/runpod/pulumi-runpod-native/sdk/go/runpod@v1.9.98
 ```
 Replace the version above to any that you want. We advise you to pin a certain version as there will be fewer breaking changes.
 

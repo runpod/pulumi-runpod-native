@@ -53,8 +53,8 @@ func main() {
 			},
 			ImageName:       pulumi.String("nginx:latest"),
 			IsPublic:        pulumi.BoolPtr(false),
-			IsServerless:    pulumi.BoolPtr(false),
-			Name:            pulumi.String("RunPod Nginx"),
+			IsServerless:    pulumi.BoolPtr(true),
+			Name:            pulumi.String("RunPod Nginx - Go"),
 			Ports:           pulumi.String("8080/http"),
 			Readme:          pulumi.String("Please set this even if you don't have a readme"),
 			StartJupyter:    pulumi.BoolPtr(false),
@@ -66,9 +66,30 @@ func main() {
 			return err
 		}
 
+		myRandomEndpoint, err := runpod.NewEndpoint(ctx, "myRandomEndpoint", &runpod.EndpointArgs{
+			GpuIds:      pulumi.String("AMPERE_16,AMPERE_24,-NVIDIA L4"),
+			IdleTimeout: pulumi.Int(100),
+			Locations:   pulumi.String("CA-MTL-2,CA-MTL-3,EU-RO-1,US-CA-1,US-GA-1,US-KS-2,US-OR-1,CA-MTL-1,US-TX-3,EUR-IS-1,EUR-IS-2,SEA-SG-1"),
+			Name:        pulumi.String("myRandomEndpoint"),
+			NetworkVolumeId: testNetworkStorage.NetworkStorage.ApplyT(func(networkStorage runpod.NetworkStorageType) (*string, error) {
+				return &networkStorage.Id, nil
+			}).(pulumi.StringPtrOutput),
+			ScalerType:  pulumi.String("REQUEST_COUNT"),
+			ScalerValue: pulumi.Int(2),
+			TemplateId: myRandomTemplate.Template.ApplyT(func(template runpod.TemplateType) (*string, error) {
+				return &template.Id, nil
+			}).(pulumi.StringPtrOutput),
+			WorkersMax: pulumi.IntPtr(2),
+			WorkersMin: pulumi.IntPtr(1),
+		})
+		if err != nil {
+			return err
+		}
+
 		ctx.Export("pod", myRandomPod.Pod.Id())
 		ctx.Export("networkStorage", testNetworkStorage.NetworkStorage.Id())
 		ctx.Export("template", myRandomTemplate.Template.Id())
+		ctx.Export("endpoint", myRandomEndpoint.Endpoint.Id())
 		return nil
 	})
 }
