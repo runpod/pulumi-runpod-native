@@ -28,6 +28,7 @@ type Pod struct {
 	DockerArgs              string      `pulumi:"dockerArgs"`
 	DockerId                string      `pulumi:"dockerId"`
 	Env                     []string    `pulumi:"env,optional"`
+	GlobalNetwork           bool        `pulumi:"globalNetwork,optional"`
 	GpuCount                int         `pulumi:"gpuCount"`
 	GpuPowerLimitPercent    int         `pulumi:"gpuPowerLimitPercent"`
 	Gpus                    []Gpu       `pulumi:"gpus,optional"`
@@ -74,6 +75,7 @@ type PodArgs struct {
 	DeployCost      float64           `pulumi:"deployCost,optional" structs:"deployCost,omitempty"`
 	DockerArgs      string            `pulumi:"dockerArgs,optional" structs:"dockerArgs,omitempty"`
 	Env             []PodEnv          `pulumi:"env,optional" structs:"env,omitempty"`
+	GlobalNetwork   bool              `pulumi:"globalNetwork,optional" structs:"globalNetwork,omitempty"`
 	GpuCount        int               `pulumi:"gpuCount" structs:"gpuCount,omitempty"`
 	GpuTypeId       string            `pulumi:"gpuTypeId" structs:"gpuTypeId,omitempty"`
 	GpuTypeIdList   []string          `pulumi:"gpuTypeIdList,optional" structs:"gpuTypeIdList,omitempty"`
@@ -161,6 +163,7 @@ func (*Pod) Create(ctx p.Context, name string, input PodArgs, preview bool) (str
 			$deployCost: Float
 			$dockerArgs: String
 			$env: [EnvironmentVariableInput]
+			$globalNetwork: Boolean
 			$gpuCount: Int
 			$gpuTypeId: String
 			$gpuTypeIdList: [String]
@@ -195,6 +198,7 @@ func (*Pod) Create(ctx p.Context, name string, input PodArgs, preview bool) (str
 				deployCost: $deployCost,
 				dockerArgs: $dockerArgs,
 				env: $env,
+				globalNetwork: $globalNetwork,
 				gpuCount: $gpuCount,
 				gpuTypeId: $gpuTypeId,
 				gpuTypeIdList: $gpuTypeIdList,
