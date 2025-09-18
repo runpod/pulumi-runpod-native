@@ -1,5 +1,5 @@
 {
-    "name": "@runpod-infra/pulumi",
+    "name": "@runpod/pulumi-runpod",
     "version": "${VERSION}",
     "keywords": [
         "pulumi",
@@ -20,6 +20,9 @@
     "devDependencies": {
         "@types/node": "^14",
         "typescript": "^3.7.0"
+    },
+    "publishConfig": {
+        "access": "public"
     },
     "pulumi": {
         "resource": true,

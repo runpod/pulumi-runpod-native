@@ -1,5 +1,5 @@
 import pulumi
-import runpodinfra as runpod
+import pulumi_runpod as runpod
 from loguru import logger
 import json
 
@@ -30,7 +30,7 @@ try:
         min_vcpu_count=2,
         min_memory_in_gb=15,
         gpu_type_id="NVIDIA GeForce RTX 4090",
-        name="RunPod Pytorch",
+        name="Runpod Pytorch",
         image_name="runpod/pytorch",
         docker_args="",
         ports="8888/http",

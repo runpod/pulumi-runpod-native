@@ -10,9 +10,10 @@
             }
         }
     },
-    "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
+    "description": "The Runpod Pulumi provider provides resources to interact with Runpod's GPU cloud platform.",
     "displayName": "Runpod",
     "homepage": "https://runpod.io",
+    "publisher": "Runpod",
     "keywords": [
         "pulumi",
         "runpod",
@@ -25,7 +26,7 @@
             "packageReferences": {
                 "Pulumi": "3.*"
             },
-            "rootNamespace": "RunpodInfra"
+            "rootNamespace": "Pulumi.Runpod"
         },
         "go": {
             "generateResourceContainerTypes": true,
@@ -38,17 +39,17 @@
             "devDependencies": {
                 "typescript": "^3.7.0"
             },
-            "packageName": "@runpod-infra/pulumi"
+            "packageName": "@runpod/pulumi-runpod"
         },
         "python": {
-            "packageName": "runpodinfra",
+            "packageName": "pulumi_runpod",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
         }
     },
     "license": "Apache-2.0",
-    "logoUrl": "https://avatars.githubusercontent.com/u/95939477?s=200&v=4",
+    "logoUrl": "https://raw.githubusercontent.com/runpod/pulumi-runpod-native/main/docs/logo.png",
     "name": "runpod",
     "pluginDownloadURL": "github://api.github.com/runpod/pulumi-runpod-native",
     "provider": {

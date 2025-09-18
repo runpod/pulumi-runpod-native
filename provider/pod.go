@@ -1,13 +1,10 @@
 package provider
 
 import (
-	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	"reflect"
-	"time"
 
 	"github.com/fatih/structs"
 	p "github.com/pulumi/pulumi-go-provider"
@@ -141,6 +138,156 @@ type OutputUpdatePod struct {
 	Data struct {
 		PodEditJob Pod
 	}
+}
+
+// convertPodArgsToDeployRequest converts PodArgs to DeployPodRequest for GraphQL client
+func convertPodArgsToDeployRequest(input PodArgs) *DeployPodRequest {
+	req := &DeployPodRequest{}
+	
+	if input.AiApiId != "" {
+		req.AiApiId = &input.AiApiId
+	}
+	if input.CloudType != "" {
+		cloudType := CloudTypeEnum(input.CloudType)
+		req.CloudType = &cloudType
+	}
+	if input.ContainerDiskInGb != 0 {
+		containerDisk := int32(input.ContainerDiskInGb)
+		req.ContainerDiskInGb = &containerDisk
+	}
+	if input.CountryCode != "" {
+		req.CountryCode = &input.CountryCode
+	}
+	if input.DeployCost != 0 {
+		req.DeployCost = &input.DeployCost
+	}
+	if input.DockerArgs != "" {
+		req.DockerArgs = &input.DockerArgs
+	}
+	
+	// Convert environment variables
+	if len(input.Env) > 0 {
+		env := make([]*EnvironmentVariableInput, len(input.Env))
+		for i, e := range input.Env {
+			env[i] = &EnvironmentVariableInput{
+				Key:   e.Key,
+				Value: e.Value,
+			}
+		}
+		req.Env = env
+	}
+	
+	if input.GpuCount != 0 {
+		gpuCount := int32(input.GpuCount)
+		req.GpuCount = &gpuCount
+	}
+	if input.GpuTypeId != "" {
+		req.GpuTypeId = &input.GpuTypeId
+	}
+	if len(input.GpuTypeIdList) > 0 {
+		gpuTypes := make([]*string, len(input.GpuTypeIdList))
+		for i, gt := range input.GpuTypeIdList {
+			gpuTypes[i] = &gt
+		}
+		req.GpuTypeIdList = gpuTypes
+	}
+	if input.ImageName != "" {
+		req.ImageName = &input.ImageName
+	}
+	if input.MinDisk != 0 {
+		minDisk := int32(input.MinDisk)
+		req.MinDisk = &minDisk
+	}
+	if input.MinDownload != 0 {
+		minDownload := int32(input.MinDownload)
+		req.MinDownload = &minDownload
+	}
+	if input.MinMemoryInGb != 0 {
+		minMem := int32(input.MinMemoryInGb)
+		req.MinMemoryInGb = &minMem
+	}
+	if input.MinUpload != 0 {
+		minUpload := int32(input.MinUpload)
+		req.MinUpload = &minUpload
+	}
+	if input.MinVcpuCount != 0 {
+		minVcpu := int32(input.MinVcpuCount)
+		req.MinVcpuCount = &minVcpu
+	}
+	if input.Name != "" {
+		req.Name = &input.Name
+	}
+	if input.NetworkVolumeId != "" {
+		req.NetworkVolumeId = &input.NetworkVolumeId
+	}
+	if input.Port != 0 {
+		port := Port(input.Port)
+		req.Port = &port
+	}
+	if input.Ports != "" {
+		req.Ports = &input.Ports
+	}
+	if input.StartJupyter {
+		req.StartJupyter = &input.StartJupyter
+	}
+	if input.StartSsh {
+		req.StartSsh = &input.StartSsh
+	}
+	if input.StopAfter != "" {
+		stopAfter := DateTime(input.StopAfter)
+		req.StopAfter = &stopAfter
+	}
+	if input.SupportPublicIp {
+		req.SupportPublicIp = &input.SupportPublicIp
+	}
+	if input.TemplateId != "" {
+		req.TemplateId = &input.TemplateId
+	}
+	if input.TerminateAfter != "" {
+		terminateAfter := DateTime(input.TerminateAfter)
+		req.TerminateAfter = &terminateAfter
+	}
+	if input.VolumeInGb != 0 {
+		volume := int32(input.VolumeInGb)
+		req.VolumeInGb = &volume
+	}
+	if input.VolumeKey != "" {
+		req.VolumeKey = &input.VolumeKey
+	}
+	if input.VolumeMountPath != "" {
+		req.VolumeMountPath = &input.VolumeMountPath
+	}
+	if input.DataCenterId != "" {
+		req.DataCenterId = &input.DataCenterId
+	}
+	if input.SavingsPlan != nil {
+		req.SavingsPlan = &SavingsPlanInput{
+			PlanId: input.SavingsPlan.PlanId,
+		}
+	}
+	if input.CudaVersion != "" {
+		req.CudaVersion = &input.CudaVersion
+	}
+	
+	return req
+}
+
+// convertGeneratedPodToPod converts the generated GraphQLPod type back to our Pod struct  
+func convertGeneratedPodToPod(genPod *GraphQLPod) Pod {
+	pod := Pod{
+		Id:        genPod.Id,
+		ImageName: genPod.ImageName,
+	}
+	
+	if genPod.MachineId != nil {
+		pod.MachineId = *genPod.MachineId
+	}
+	
+	if genPod.ContainerDiskInGb != nil {
+		pod.ContainerDiskInGb = int(*genPod.ContainerDiskInGb)
+	}
+	
+	return pod
 }
 
 func (*Pod) Create(ctx p.Context, name string, input PodArgs, preview bool) (string, PodState, error) {

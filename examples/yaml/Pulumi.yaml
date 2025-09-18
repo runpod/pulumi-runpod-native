@@ -24,7 +24,7 @@ resources:
       minVcpuCount: 2
       minMemoryInGb: 15
       gpuTypeId: "NVIDIA GeForce RTX 4090"
-      name: "RunPod Pytorch"
+      name: "Runpod Pytorch"
       imageName: "runpod/pytorch"
       dockerArgs: ""
       ports: "8888/http"
@@ -43,7 +43,7 @@ resources:
       imageName: "nginx:latest"
       isPublic: false
       isServerless: true
-      name: "RunPod Nginx"
+      name: "Runpod Nginx"
       ports: "8080/http"
       readme: "Test template"
       startJupyter: false

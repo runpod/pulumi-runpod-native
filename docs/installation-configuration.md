@@ -1,15 +1,15 @@
 ---
-title: RunPod Setup
-meta_desc: Information on how to install the RunPod Provider for Pulumi.
+title: Runpod Setup
+meta_desc: Information on how to install the Runpod Provider for Pulumi.
 layout: package
 ---
 
 ## Installation
 
-The RunPod provider is available as a package in these Pulumi languages:
+The Runpod provider is available as a package in these Pulumi languages:
 
-* JavaScript/TypeScript: [`@runpod-infra/pulumi`](https://www.npmjs.com/package/@runpod-infra/pulumi)
-* Python: [`runpodinfra`](https://pypi.org/project/runpodinfra/)
+* JavaScript/TypeScript: [`@runpod/pulumi-runpod`](https://www.npmjs.com/package/@runpod/pulumi-runpod)
+* Python: [`pulumi-runpod`](https://pypi.org/project/pulumi-runpod/)
 * Go: [`github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod`](https://www.github.com/runpod/pulumi-runpod-native)
 * Pulumi YAML
 
@@ -48,13 +48,13 @@ We advise you to pin to a specific version.
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
 ```bash
-npm install @runpod-infra/pulumi
+npm install @runpod/pulumi-runpod
 ```
 
 or `yarn`:
 
 ```bash
-yarn add @runpod-infra/pulumi
+yarn add @runpod/pulumi-runpod
 ```
 
 ### Python
@@ -68,12 +68,12 @@ Please activate the virtual environment created when you ran the ```pulumi new``
 Then install the official pulumi package from our pip repository:
 
 ```bash
-pip install runpodinfra
+pip install pulumi-runpod
 ```
 
 ## Configuration
 
-To begin with, please set your RunPod API key using Pulumi.
+To begin with, please set your Runpod API key using Pulumi.
 
 ```bash
 pulumi config set runpod:token --secret

@@ -85,7 +85,7 @@ func main() {
 			MinVcpuCount:      pulumi.Int(2),
 			MinMemoryInGb:     pulumi.Int(15),
 			GpuTypeId:         pulumi.String("NVIDIA GeForce RTX 4090"),
-			Name:              pulumi.String("RunPod Pytorch"),
+			Name:              pulumi.String("Runpod Pytorch"),
 			ImageName:         pulumi.String("runpod/pytorch"),
 			DockerArgs:        pulumi.String(""),
 			Ports:             pulumi.String("8888/http"),

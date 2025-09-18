@@ -3,7 +3,7 @@ PROJECT_NAME := Pulumi Runpod Resource Provider
 PACK             := runpod
 PACKDIR          := sdk
 PROJECT          := github.com/runpod/pulumi-runpod-native
-NODE_MODULE_NAME := @runpod-infra/pulumi
+NODE_MODULE_NAME := @runpod/pulumi-runpod
 NUGET_PKG_NAME   := Pulumi.Runpod
 
 PROVIDER        := pulumi-resource-${PACK}
@@ -71,11 +71,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
     SED_CMD = sed -i -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i -e '/^import os$$/d' setup.py
-	SED_REMOVE_PYI_LINE = sed -i -e '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
+	SED_REMOVE_PYI_LINE = sed -i -e '/\.pyi$$/d' sdk/python/pulumi_runpod.egg-info/SOURCES.txt
 else ifeq ($(UNAME_S), Darwin)
     SED_CMD = sed -i '' -e 's/^VERSION = .*/VERSION = "$(PYPI_VERSION)"/g' setup.py
 	SED_CMD_REMOVE_OS = sed -i '' '/^import os$$/d' setup.py
-	SED_REMOVE_PYI_LINE = sed -i "" '/\.pyi$$/d' sdk/python/runpodinfra.egg-info/SOURCES.txt
+	SED_REMOVE_PYI_LINE = sed -i "" '/\.pyi$$/d' sdk/python/pulumi_runpod.egg-info/SOURCES.txt
 else
     $(error Unsupported OS: $(UNAME_S))
 endif
@@ -138,7 +138,7 @@ devcontainer::
 .PHONY: build
 
 build:: provider python_sdk go_sdk nodejs_sdk
-	rm -rf sdk/python/build/lib/runpodinfra/config/__init__.pyi
+	rm -rf sdk/python/build/lib/pulumi_runpod/config/__init__.pyi
 
 build-and-push:
 	VERSION=$(VERSION) $(MAKE) build

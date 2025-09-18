@@ -1,0 +1,174 @@
+# Minimal GraphQL schema with only the types we use
+scalar DateTime
+scalar Port
+
+type Query {
+  # Placeholder query - we only use mutations
+  _empty: String
+}
+
+type Mutation {
+  podFindAndDeployOnDemand(input: PodFindAndDeployOnDemandInput!): Pod
+  podEditJob(input: PodEditJobInput!): Pod
+  podTerminate(input: PodTerminateInput!): Boolean
+  
+  saveTemplate(input: SaveTemplateInput!): Template
+  deleteTemplate(templateName: String!): Boolean
+  
+  saveEndpoint(input: SaveEndpointInput!): Endpoint
+  deleteEndpoint(id: String!): Boolean
+  
+  createNetworkVolume(input: CreateNetworkVolumeInput!): NetworkVolume
+  updateNetworkVolume(input: UpdateNetworkVolumeInput!): NetworkVolume
+  deleteNetworkVolume(input: DeleteNetworkVolumeInput!): Boolean
+}
+
+# Pod types
+type Pod {
+  id: ID!
+  imageName: String!
+  machineId: String
+  containerDiskInGb: Int
+}
+
+input PodFindAndDeployOnDemandInput {
+  aiApiId: String
+  cloudType: CloudTypeEnum
+  containerDiskInGb: Int
+  countryCode: String
+  deployCost: Float
+  dockerArgs: String
+  env: [EnvironmentVariableInput]
+  gpuCount: Int
+  gpuTypeId: String
+  gpuTypeIdList: [String]
+  imageName: String
+  minDisk: Int
+  minDownload: Int
+  minMemoryInGb: Int
+  minUpload: Int
+  minVcpuCount: Int
+  name: String
+  networkVolumeId: String
+  port: Port
+  ports: String
+  startJupyter: Boolean
+  startSsh: Boolean
+  stopAfter: DateTime
+  supportPublicIp: Boolean
+  templateId: String
+  terminateAfter: DateTime
+  volumeInGb: Int
+  volumeKey: String
+  volumeMountPath: String
+  dataCenterId: String
+  savingsPlan: SavingsPlanInput
+  cudaVersion: String
+}
+
+input PodEditJobInput {
+  podId: String!
+  dockerArgs: String
+  imageName: String!
+  env: [EnvironmentVariableInput]
+  port: Port
+  ports: String
+  containerDiskInGb: Int!
+  volumeInGb: Int
+  volumeMountPath: String
+  containerRegistryAuthId: String
+}
+
+input PodTerminateInput {
+  podId: String!
+}
+
+input EnvironmentVariableInput {
+  key: String!
+  value: String!
+}
+
+input SavingsPlanInput {
+  planId: String
+}
+
+enum CloudTypeEnum {
+  ALL
+  SECURE_CLOUD
+  COMMUNITY_CLOUD
+}
+
+# Template types
+type Template {
+  id: ID!
+  imageName: String!
+  name: String!
+}
+
+input SaveTemplateInput {
+  id: String
+  containerDiskInGb: Int!
+  containerRegistryAuthId: String
+  dockerArgs: String!
+  env: [EnvironmentVariableInput!]!
+  imageName: String!
+  isPublic: Boolean
+  isServerless: Boolean
+  name: String!
+  ports: String
+  readme: String
+  startJupyter: Boolean
+  startSsh: Boolean
+  volumeInGb: Int!
+  volumeMountPath: String
+}
+
+# Endpoint types
+type Endpoint {
+  id: ID!
+  name: String!
+}
+
+input SaveEndpointInput {
+  id: String
+  gpuIds: String!
+  templateId: String!
+  name: String!
+  idleTimeout: Int
+  locations: String
+  networkVolumeId: String
+  scalerType: String
+  scalerValue: Int
+  workersMax: Int
+  workersMin: Int
+}
+
+# Network Storage types
+type NetworkVolume {
+  id: ID!
+  name: String!
+  size: Int!
+  dataCenterId: String
+  dataCenter: DataCenter
+}
+
+type DataCenter {
+  id: ID!
+  name: String!
+}
+
+input CreateNetworkVolumeInput {
+  name: String
+  size: Int
+  dataCenterId: String
+}
+
+input UpdateNetworkVolumeInput {
+  id: String!
+  name: String
+  size: Int
+}
+
+input DeleteNetworkVolumeInput {
+  id: String!
+}

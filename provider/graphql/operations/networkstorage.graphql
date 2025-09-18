@@ -1,0 +1,41 @@
+mutation CreateNetworkVolume(
+	$name: String
+	$size: Int
+	$dataCenterId: String
+) {
+	createNetworkVolume(input: {
+		name: $name
+		size: $size
+		dataCenterId: $dataCenterId
+	}) {
+		id
+		name
+		size
+		dataCenterId
+	}
+}
+
+mutation UpdateNetworkVolume(
+	$id: String!
+	$name: String
+	$size: Int
+) {
+	updateNetworkVolume(input: {
+		id: $id
+		name: $name
+		size: $size
+	}) {
+		id
+		name
+		size
+		dataCenterId
+		dataCenter {
+			id
+			name
+		}
+	}
+}
+
+mutation DeleteNetworkVolume($id: String!) {
+	deleteNetworkVolume(input: { id: $id })
+}

@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@runpod-infra/pulumi";
+import * as runpod from "@runpod/pulumi-runpod";
 
 const myTemplate = new runpod.Template("testTemplate", {
   containerDiskInGb: 5,
@@ -39,7 +39,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   minVcpuCount: 2,
   minMemoryInGb: 15,
   gpuTypeId: "NVIDIA GeForce RTX 4090",
-  name: "RunPod Pytorch",
+  name: "Runpod Pytorch",
   imageName: "runpod/pytorch:latest",
   dockerArgs: "",
   ports: "8888/http",

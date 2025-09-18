@@ -1,0 +1,81 @@
+mutation SaveTemplate(
+	$containerDiskInGb: Int!
+	$containerRegistryAuthId: String
+	$dockerArgs: String!
+	$env: [EnvironmentVariableInput!]!
+	$imageName: String!
+	$isPublic: Boolean
+	$isServerless: Boolean
+	$name: String!
+	$ports: String
+	$readme: String
+	$startJupyter: Boolean
+	$startSsh: Boolean
+	$volumeInGb: Int!
+	$volumeMountPath: String
+) {
+	saveTemplate(input: {
+		containerDiskInGb: $containerDiskInGb
+		containerRegistryAuthId: $containerRegistryAuthId
+		dockerArgs: $dockerArgs
+		env: $env
+		imageName: $imageName
+		isPublic: $isPublic
+		isServerless: $isServerless
+		name: $name
+		ports: $ports
+		readme: $readme
+		startJupyter: $startJupyter
+		startSsh: $startSsh
+		volumeInGb: $volumeInGb
+		volumeMountPath: $volumeMountPath
+	}) {
+		id
+		imageName
+		name
+	}
+}
+
+mutation UpdateTemplate(
+	$id: String!
+	$containerDiskInGb: Int!
+	$containerRegistryAuthId: String
+	$dockerArgs: String!
+	$env: [EnvironmentVariableInput!]!
+	$imageName: String!
+	$isPublic: Boolean
+	$isServerless: Boolean
+	$name: String!
+	$ports: String
+	$readme: String
+	$startJupyter: Boolean
+	$startSsh: Boolean
+	$volumeInGb: Int!
+	$volumeMountPath: String
+) {
+	saveTemplate(input: {
+		id: $id
+		containerDiskInGb: $containerDiskInGb
+		containerRegistryAuthId: $containerRegistryAuthId
+		dockerArgs: $dockerArgs
+		env: $env
+		imageName: $imageName
+		isPublic: $isPublic
+		isServerless: $isServerless
+		name: $name
+		ports: $ports
+		readme: $readme
+		startJupyter: $startJupyter
+		startSsh: $startSsh
+		volumeInGb: $volumeInGb
+		volumeMountPath: $volumeMountPath
+	}) {
+		id
+		imageName
+		name
+	}
+}
+
+mutation DeleteTemplate($templateName: String!) {
+	deleteTemplate(templateName: $templateName)
+}

@@ -21,6 +21,8 @@ examples/** */
 newenv/** */
 examples/python/newenv/**
 .secrets
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
+sdk/python/build/lib/pulumi_runpod/config/__init__.pyi
+sdk/python/build/lib/pulumi_runpod/config/__init__.pyi
 plmi/*
+
+.claude/

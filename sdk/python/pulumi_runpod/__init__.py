@@ -15,10 +15,10 @@ from . import outputs
 
 # Make subpackages available:
 if typing.TYPE_CHECKING:
-    import runpodinfra.config as __config
+    import pulumi_runpod.config as __config
     config = __config
 else:
-    config = _utilities.lazy_import('runpodinfra.config')
+    config = _utilities.lazy_import('pulumi_runpod.config')
 
 _utilities.register(
     resource_modules="""

@@ -1,0 +1,26 @@
+# genqlient configuration for Runpod GraphQL client generation
+schema: https://api.runpod.io/graphql
+operations:
+  - graphql/operations/*.graphql
+generated: graphql/generated.go
+package: provider
+context: context.Context
+client_getter: getGraphQLClient
+use_struct_references: true
+
+# Configure specific scalars used by Runpod API
+bindings:
+  DateTime:
+    type: string
+  Port:
+    type: int
+  Float:
+    type: float64
+  
+# Disable introspection since we're using endpoint URL
+introspection: false
+
+# Generate with appropriate options
+options:
+  all_field_names: true
+  all_input_names: true
