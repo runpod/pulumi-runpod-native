@@ -32,7 +32,7 @@ return await Deployment.RunAsync(() =>
             new Runpod.Inputs.PodEnvArgs
             {
                 Key = "JUPYTER_PASSWORD",
-                Value = "rns1hunbsstltcpad22d",
+                Value = "your-secure-password-here",
             },
         },
     });

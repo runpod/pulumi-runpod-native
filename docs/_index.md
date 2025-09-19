@@ -74,7 +74,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   env: [
     {
       key: "JUPYTER_PASSWORD",
-      value: "rns1hunbsstltcpad22d",
+      value: "your-secure-password-here",
     },
   ],
 });
@@ -153,7 +153,7 @@ func main() {
 			Env: runpod.PodEnvArray{
 				&runpod.PodEnvArgs{
 					Key:   pulumi.String("JUPYTER_PASSWORD"),
-					Value: pulumi.String("rns1hunbsstltcpad22d"),
+					Value: pulumi.String("your-secure-password-here"),
 				},
 			},
 		})
@@ -166,7 +166,7 @@ func main() {
 		    Env: runpod.PodEnvArray{
 				&runpod.PodEnvArgs{
 					Key:   pulumi.String("JUPYTER_PASSWORD"),
-					Value: pulumi.String("rns1hunbsstltcpad22d"),
+					Value: pulumi.String("your-secure-password-here"),
 				},
 			},
 			ImageName:       pulumi.String("runpod/serverless-hello-world:latest"),
@@ -254,7 +254,7 @@ try:
         volume_mount_path="/workspace",
         env=[runpod.PodEnvArgs(
             key="JUPYTER_PASSWORD",
-            value="rns1hunbsstltcpad22d",
+            value="your-secure-password-here",
         )])
 
     my_random_template = runpod.Template("myRandomTemplate",
@@ -341,7 +341,7 @@ resources:
       volumeMountPath: "/workspace"
       env:
         - key: "JUPYTER_PASSWORD"
-          value: "rns1hunbsstltcpad22d"
+          value: "your-secure-password-here"
 
   myRandomTemplate:
     type: runpod:Template
@@ -349,7 +349,7 @@ resources:
       containerDiskInGb: 20
       containerRegistryAuthId: ""
       dockerArgs: "python3 -m http.server 8080"
-      env: [{ key: "JUPYTER_PASSWORD", value: "rns1hunbsstltcpad22d" }]
+      env: [{ key: "JUPYTER_PASSWORD", value: "your-secure-password-here" }]
       imageName: "nginx:latest"
       isPublic: false
       isServerless: true

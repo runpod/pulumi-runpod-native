@@ -34,7 +34,7 @@ func main() {
 			Env: runpod.PodEnvArray{
 				&runpod.PodEnvArgs{
 					Key:   pulumi.String("JUPYTER_PASSWORD"),
-					Value: pulumi.String("rns1hunbsstltcpad22d"),
+					Value: pulumi.String("your-secure-password-here"),
 				},
 			},
 		})
@@ -48,7 +48,7 @@ func main() {
 			Env: runpod.PodEnvArray{
 				&runpod.PodEnvArgs{
 					Key:   pulumi.String("JUPYTER_PASSWORD"),
-					Value: pulumi.String("rns1hunbsstltcpad22d"),
+					Value: pulumi.String("your-secure-password-here"),
 				},
 			},
 			ImageName:       pulumi.String("nginx:latest"),

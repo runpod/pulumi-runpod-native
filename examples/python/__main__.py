@@ -37,7 +37,7 @@ try:
         volume_mount_path="/workspace",
         env=[runpod.PodEnvArgs(
             key="JUPYTER_PASSWORD",
-            value="rns1hunbsstltcpad22d",
+            value="your-secure-password-here",
         )])
 
     my_random_template = runpod.Template("myRandomTemplate",

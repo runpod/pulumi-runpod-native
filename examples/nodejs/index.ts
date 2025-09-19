@@ -47,7 +47,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   env: [
     {
       key: "JUPYTER_PASSWORD",
-      value: "rns1hunbsstltcpad22d",
+      value: "your-secure-password-here",
     },
   ],
 });
