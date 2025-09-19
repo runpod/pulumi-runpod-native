@@ -50,6 +50,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Yarn PnP
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
 # Python specific
 build/
 dist/
