@@ -3,7 +3,7 @@ import * as runpod from "@runpod/pulumi-runpod";
 
 const myTemplate = new runpod.Template("testTemplate", {
   containerDiskInGb: 5,
-  dockerArgs: "",  // This now works! Empty string is allowed (field still required)
+  dockerArgs: "python handler.py",
   env: [
     {
       key: "key1",
