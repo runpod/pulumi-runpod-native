@@ -1,9 +1,9 @@
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@runpod-infra/pulumi";
+import * as runpod from "@runpod/pulumi-runpod";
 
 const myTemplate = new runpod.Template("testTemplate", {
   containerDiskInGb: 5,
-  dockerArgs: "python handler.py",
+  dockerArgs: "",  // This now works! Empty string is allowed (field still required)
   env: [
     {
       key: "key1",

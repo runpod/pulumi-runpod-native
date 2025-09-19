@@ -26,7 +26,7 @@ Please make sure that you are inside the Python virtual environment created by P
 
 ```typescript
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@runpod-infra/pulumi";
+import * as runpod from "@runpod/pulumi-runpod";
 
 const myTemplate = new runpod.Template("testTemplate", {
   containerDiskInGb: 5,

@@ -1,26 +1,97 @@
+# Build artifacts
 /vendor/
 **/bin/
 **/obj/
-**/node_modules/
-**/.vs
-**/.idea
-**/.ionide
-.pulumi
-Pulumi.*.yaml
-yarn.lock
-ci-scripts
 /nuget/
 provider/**/schema-embed.json
-examples/dotnet/**
-examples/nodejs/** */
-examples/go/** */
-examples/python/** */
-examples/** */
-*.pyc
 
-newenv/** */
-examples/python/newenv/**
+# Dependencies
+**/node_modules/
+**/venv/
+**/virtualenv/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE files
+**/.vs/
+**/.idea/
+**/.ionide/
+**/.vscode/
+*.swp
+*.swo
+*~
+
+# Pulumi specific
+.pulumi/
+Pulumi.*.yaml
+Pulumi.*.yml
+!Pulumi.yaml
+!Pulumi.yml
+
+# Go specific
+vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+
+# Node.js specific
+yarn.lock
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python specific
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# .NET specific
+*.userprefs
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Secrets and sensitive files
 .secrets
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
-plmi/*
+*.key
+*.pem
+.env
+.env.local
+.env.*.local
+
+# Generated/temporary files
+*.tmp
+*.temp
+*.log
+.DS_Store
+Thumbs.db
+
+# CI/CD
+ci-scripts/

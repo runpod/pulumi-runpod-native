@@ -18,7 +18,9 @@
         "runpod",
         "gpus",
         "ml",
-        "ai"
+        "ai",
+        "category/cloud",
+        "kind/native"
     ],
     "language": {
         "csharp": {
@@ -36,9 +38,10 @@
                 "@pulumi/pulumi": "^3.42.0"
             },
             "devDependencies": {
-                "typescript": "^3.7.0"
+                "@types/node": "^14",
+                "typescript": "^4.0.0"
             },
-            "packageName": "@runpod-infra/pulumi"
+            "packageName": "@runpod/pulumi-runpod"
         },
         "python": {
             "packageName": "runpodinfra",

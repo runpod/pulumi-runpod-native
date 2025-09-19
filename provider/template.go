@@ -62,7 +62,7 @@ type Template struct {
 type TemplateArgs struct {
 	ContainerDiskInGb       int      `pulumi:"containerDiskInGb" structs:"containerDiskInGb,omitempty"`
 	ContainerRegistryAuthId string   `pulumi:"containerRegistryAuthId,optional" structs:"containerRegistryAuthId,omitempty"`
-	DockerArgs              string   `pulumi:"dockerArgs" structs:"dockerArgs,omitempty"`
+	DockerArgs              string   `pulumi:"dockerArgs" structs:"dockerArgs"`
 	Env                     []PodEnv `pulumi:"env" structs:"env,omitempty"`
 	ImageName               string   `pulumi:"imageName" structs:"imageName,omitempty"`
 	IsPublic                bool     `pulumi:"isPublic,optional" structs:"isPublic,omitempty"`
