@@ -7,6 +7,49 @@ layout: package
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
 The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
+## Package Migration Notice
+
+This package has been republished under the official RunPod organization. If you're using the old package, please migrate:
+
+### For JavaScript/TypeScript users:
+```bash
+# Uninstall old package
+npm uninstall @runpod-infra/pulumi
+
+# Install new package
+npm install @runpod/pulumi-runpod
+```
+
+Then update your imports:
+```typescript
+// Old import
+import * as runpod from "@runpod-infra/pulumi";
+
+// New import
+import * as runpod from "@runpod/pulumi-runpod";
+```
+
+### For SST v3 users:
+```bash
+# Add the provider (this adds the npm package)
+sst add @runpod/pulumi-runpod
+
+# Configure in sst.config.ts
+providers: {
+  "@runpod/pulumi-runpod": {
+    // The provider expects "token" not "apiToken"
+    token: process.env.RUNPOD_TOKEN
+  }
+}
+
+# Use in your SST code - import uses the package name
+import { Template } from "@runpod/pulumi-runpod";
+```
+
+**Note:** SST uses the npm package name as the configuration key, while the internal Pulumi provider name is `runpod`.
+
+The API remains exactly the same - only the package name has changed.
+
 ## Pulumi guide
 Create an empty directory and navigate inside
 

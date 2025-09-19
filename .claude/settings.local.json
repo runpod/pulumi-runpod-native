@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "WebFetch(domain:docs.runpod.io)",
+      "Bash(mkdir:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(go mod:*)",
+      "Bash(go:*)",
+      "WebSearch",
+      "Bash(gqlintrospect:*)",
+      "Bash(ls:*)",
+      "Bash(chmod:*)",
+      "Bash(export PATH=$PATH:/Users/zackmckenna/go/bin)",
+      "Bash(gqlclientgen:*)",
+      "Bash(grep:*)",
+      "Bash(curl:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(make:*)",
+      "Bash(export PATH=$PATH:/Users/zackmckenna/.pulumi/bin)",
+      "WebFetch(domain:sst.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

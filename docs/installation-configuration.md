@@ -8,7 +8,7 @@ layout: package
 
 The RunPod provider is available as a package in these Pulumi languages:
 
-* JavaScript/TypeScript: [`@runpod-infra/pulumi`](https://www.npmjs.com/package/@runpod-infra/pulumi)
+* JavaScript/TypeScript: [`@runpod/pulumi-runpod`](https://www.npmjs.com/package/@runpod/pulumi-runpod)
 * Python: [`runpodinfra`](https://pypi.org/project/runpodinfra/)
 * Go: [`github.com/runpod/pulumi-runpod-native/tree/main/sdk/go/runpod`](https://www.github.com/runpod/pulumi-runpod-native)
 * Pulumi YAML
@@ -48,13 +48,13 @@ We advise you to pin to a specific version.
 To use from JavaScript or TypeScript in Node.js, install using either `npm`:
 
 ```bash
-npm install @runpod-infra/pulumi
+npm install @runpod/pulumi-runpod
 ```
 
 or `yarn`:
 
 ```bash
-yarn add @runpod-infra/pulumi
+yarn add @runpod/pulumi-runpod
 ```
 
 ### Python
