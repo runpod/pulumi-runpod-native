@@ -23,7 +23,8 @@
       "WebFetch(domain:sst.dev)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(git checkout:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
