@@ -18,9 +18,7 @@
         "runpod",
         "gpus",
         "ml",
-        "ai",
-        "category/cloud",
-        "kind/native"
+        "ai"
     ],
     "language": {
         "csharp": {
