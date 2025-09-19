@@ -111,7 +111,7 @@ python_sdk::
 # 		--out ${WORKING_DIR}/examples/$*
 
 define pulumi_login
-    export PULUMI_CONFIG_PASSPHRASE=asdfqwerty1234; \
+    export PULUMI_CONFIG_PASSPHRASE=your-secure-passphrase-here; \
     pulumi login --local;
 endef
 
