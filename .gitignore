@@ -102,3 +102,6 @@ Thumbs.db
 
 # CI/CD
 ci-scripts/
+
+# Claude Code
+.claude/
