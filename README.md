@@ -29,25 +29,6 @@ import * as runpod from "@runpod-infra/pulumi";
 import * as runpod from "@runpod/pulumi-runpod";
 ```
 
-### For SST v3 users:
-```bash
-# Add the provider (this adds the npm package)
-sst add @runpod/pulumi-runpod
-
-# Configure in sst.config.ts
-providers: {
-  "@runpod/pulumi-runpod": {
-    // The provider expects "token" not "apiToken"
-    token: process.env.RUNPOD_TOKEN
-  }
-}
-
-# Use in your SST code - import uses the package name
-import { Template } from "@runpod/pulumi-runpod";
-```
-
-**Note:** SST uses the npm package name as the configuration key, while the internal Pulumi provider name is `runpod`.
-
 The API remains exactly the same - only the package name has changed.
 
 ## Pulumi guide
