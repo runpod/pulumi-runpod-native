@@ -1,15 +1,25 @@
 {
-    "name": "@runpod-infra/pulumi",
+    "name": "@runpod/pulumi-runpod",
     "version": "${VERSION}",
+    "description": "The Runpod Pulumi provider provides resources to interact with Runpod's native APIs.",
     "keywords": [
         "pulumi",
         "runpod",
         "gpus",
         "ml",
-        "ai"
+        "ai",
+        "cloud",
+        "infrastructure"
     ],
     "homepage": "https://runpod.io",
-    "repository": "https://github.com/runpod/pulumi-runpod-native",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/runpod/pulumi-runpod-native.git"
+    },
+    "bugs": {
+        "url": "https://github.com/runpod/pulumi-runpod-native/issues"
+    },
+    "author": "Runpod",
     "license": "Apache-2.0",
     "scripts": {
         "build": "tsc"
