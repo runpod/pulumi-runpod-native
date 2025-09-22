@@ -1,10 +1,13 @@
-name: release
+# DEPRECATED: This workflow has been replaced by release-please.yml
+# Keeping for reference, but disabled
+name: release-manual
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - v*.*.*      # Match v1.2.3
-      - "!v*.*.*-*[^rc]"  # Exclude tags that end with something other than 'rc'
+  # Disabled automatic tag triggers - now handled by release-please
+  # push:
+  #   tags:
+  #     - v*.*.*      # Match v1.2.3
+  #     - "!v*.*.*-*[^rc]"  # Exclude tags that end with something other than 'rc'
 env:
   PROVIDER: "runpod"
   # THIS GITHUB_TOKEN IS A REQUIREMENT TO BE ABLE TO WRITE TO GH RELEASES
