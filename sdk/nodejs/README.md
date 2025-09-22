@@ -30,4 +30,4 @@ const myTemplate = new runpod.Template("myTemplate", {
 
 ## Documentation
 
-For detailed documentation, please visit [Runpod Documentation](https://runpod.io).
+For detailed documentation, please visit [Runpod Documentation](https://docs.runpod.io/overview).
