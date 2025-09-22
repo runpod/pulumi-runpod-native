@@ -1,0 +1,18 @@
+{
+  "bootstrap-sha": "c62880b",
+  "packages": {
+    ".": {
+      "package-name": "pulumi-runpod-native",
+      "component": "pulumi-runpod-native",
+      "release-type": "simple",
+      "extra-files": [
+        "sdk/nodejs/package.json",
+        "provider/schema.json"
+      ]
+    }
+  },
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true
+}

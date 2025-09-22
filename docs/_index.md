@@ -1,14 +1,14 @@
 ---
-title: RunPod
-meta_desc: Provides an overview of the RunPod Provider for Pulumi.
+title: Runpod
+meta_desc: Provides an overview of the Runpod Provider for Pulumi.
 layout: package
 ---
 
-The RunPod provider for Pulumi can be used to provision [RunPod](https://www.runpod.io) resources. The RunPod provider must be configured with RunPod's API keys to deploy and update resources in RunPod.
+The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources. The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
 ## Config
 
-To begin with, please set your RunPod API key using Pulumi.
+To begin with, please set your Runpod API key using Pulumi.
 
 ```bash
 pulumi config set --secret runpod:token
@@ -26,7 +26,7 @@ Please make sure that you are inside the Python virtual environment created by P
 
 ```typescript
 import * as pulumi from "@pulumi/pulumi";
-import * as runpod from "@runpod-infra/pulumi";
+import * as runpod from "@runpod/pulumi-runpod";
 
 const myTemplate = new runpod.Template("testTemplate", {
   containerDiskInGb: 5,

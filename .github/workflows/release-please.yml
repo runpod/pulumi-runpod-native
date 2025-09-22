@@ -1,0 +1,152 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release-created: ${{ steps.release.outputs.release_created }}
+      tag-name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - name: Run Release Please
+        id: release
+        uses: google-github-actions/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish-artifacts:
+    if: needs.release-please.outputs.release-created
+    needs: release-please
+    runs-on: ubuntu-latest
+    env:
+      PROVIDER: "runpod"
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      PUBLISH_NPM: true
+      NPM_REGISTRY_URL: https://registry.npmjs.org
+      NUGET_PUBLISH_KEY: ${{ secrets.NUGET_PUBLISH_KEY }}
+      NUGET_FEED_URL: https://api.nuget.org/v3/index.json
+      PUBLISH_NUGET: true
+      # PyPI configuration - matches the original working setup
+      PYPI_USERNAME: __token__
+      PYPI_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
+      PYPI_REPOSITORY_URL: ""
+      PUBLISH_PYPI: true
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+
+      - name: Install pulumictl
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
+        with:
+          tag: v0.0.46
+          repo: pulumi/pulumictl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Pulumi CLI
+        uses: pulumi/action-install-pulumi-cli@v2.0.0
+        with:
+          pulumi-version: 3.112.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          registry-url: ${{ env.NPM_REGISTRY_URL }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Build and Generate SDKs
+        run: |
+          VERSION=${{ needs.release-please.outputs.tag-name }} make build
+          VERSION=${{ needs.release-please.outputs.tag-name }} make nodejs_sdk
+          VERSION=${{ needs.release-please.outputs.tag-name }} make python_sdk
+          VERSION=${{ needs.release-please.outputs.tag-name }} make go_sdk
+
+      - name: Setup Python package validation
+        run: |
+          sudo apt-get update
+          sudo pip install twine
+
+      - name: Fix Python package permissions and validate
+        run: |
+          sudo chown -R $USER:$USER ${{ github.workspace }}/sdk/python
+          sudo chown -R $USER:$USER ${{ github.workspace }}/sdk/python/dist
+          twine check ${{ github.workspace }}/sdk/python/dist/*
+
+      - name: Publish NPM package
+        if: env.PUBLISH_NPM == 'true'
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          access: "public"
+          token: ${{ env.NPM_TOKEN }}
+          package: ${{ github.workspace }}/sdk/nodejs/bin/package.json
+
+      - name: Publish to PyPI
+        if: env.PUBLISH_PYPI == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN_TEST }}
+          packages-dir: ${{ github.workspace }}/sdk/python/dist
+          verbose: true
+
+      - name: Publish NuGet package
+        if: env.PUBLISH_NUGET == 'true'
+        run: |
+          dotnet nuget push sdk/dotnet/bin/Debug/*.nupkg -s ${{ env.NUGET_FEED_URL }} -k ${{ env.NUGET_PUBLISH_KEY }}
+
+  publish-binary:
+    if: needs.release-please.outputs.release-created
+    needs: release-please
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+
+      - name: Install pulumictl
+        uses: jaxxstorm/action-install-gh-release@v1.11.0
+        with:
+          tag: v0.0.46
+          repo: pulumi/pulumictl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Release Tag
+        run: echo "GORELEASER_CURRENT_TAG=${{ needs.release-please.outputs.tag-name }}" >> $GITHUB_ENV
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          args: -p 3 release --clean
+          version: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
