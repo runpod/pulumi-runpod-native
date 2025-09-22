@@ -84,7 +84,7 @@ python_sdk:: PYPI_VERSION := ${VERSION}
 python_sdk::
 	rm -rf sdk/python
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language python $(SCHEMA_FILE)
-	pip install -r requirements.txt
+	python3 -m pip install -r requirements.txt --break-system-packages --only-binary=:all:
 	cp README.md ${PACKDIR}/python/
 	cd ${PACKDIR}/python/ && \
 		$(SED_CMD) && \

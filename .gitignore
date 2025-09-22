@@ -11,16 +11,20 @@ yarn.lock
 ci-scripts
 /nuget/
 provider/**/schema-embed.json
-examples/dotnet/**
-examples/nodejs/** */
-examples/go/** */
-examples/python/** */
-examples/** */
-*.pyc
 
-newenv/** */
-examples/python/newenv/**
+# Generated SDK files
+sdk/go/
+sdk/nodejs/
+sdk/python/
+
+# SDK build artifacts
+sdk/dotnet/version.txt
+sdk/java/.gradle
+sdk/java/build/
+sdk/java/build.gradle
+sdk/python/venv
+
+# Local development
+*.pyc
 .secrets
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
-sdk/python/build/lib/runpodinfra/config/__init__.pyi
-plmi/*
+.claude/
