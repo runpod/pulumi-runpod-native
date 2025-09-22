@@ -74,7 +74,6 @@
             "token"
         ]
     },
-    "publisher": "Runpod",
     "repository": "https://github.com/runpod/pulumi-runpod-native",
     "resources": {
         "runpod:index:Endpoint": {
