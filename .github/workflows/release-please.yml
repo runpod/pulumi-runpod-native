@@ -70,12 +70,28 @@ jobs:
           node-version: 18.x
           registry-url: ${{ env.NPM_REGISTRY_URL }}
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
       - name: Build and Generate SDKs
         run: |
           VERSION=${{ needs.release-please.outputs.tag-name }} make build
           VERSION=${{ needs.release-please.outputs.tag-name }} make nodejs_sdk
           VERSION=${{ needs.release-please.outputs.tag-name }} make python_sdk
           VERSION=${{ needs.release-please.outputs.tag-name }} make go_sdk
+
+      - name: Setup Python package validation
+        run: |
+          sudo apt-get update
+          sudo pip install twine
+
+      - name: Fix Python package permissions and validate
+        run: |
+          sudo chown -R $USER:$USER ${{ github.workspace }}/sdk/python
+          sudo chown -R $USER:$USER ${{ github.workspace }}/sdk/python/dist
+          twine check ${{ github.workspace }}/sdk/python/dist/*
 
       - name: Publish NPM package
         if: env.PUBLISH_NPM == 'true'
@@ -91,7 +107,7 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN_TEST }}
-          packages-dir: sdk/python/dist
+          packages-dir: ${{ github.workspace }}/sdk/python/dist
           verbose: true
 
       - name: Publish NuGet package
