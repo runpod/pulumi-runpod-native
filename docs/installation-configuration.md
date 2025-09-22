@@ -1,12 +1,12 @@
 ---
-title: RunPod Setup
-meta_desc: Information on how to install the RunPod Provider for Pulumi.
+title: Runpod Setup
+meta_desc: Information on how to install the Runpod Provider for Pulumi.
 layout: package
 ---
 
 ## Installation
 
-The RunPod provider is available as a package in these Pulumi languages:
+The Runpod provider is available as a package in these Pulumi languages:
 
 * JavaScript/TypeScript: [`@runpod/pulumi-runpod`](https://www.npmjs.com/package/@runpod/pulumi-runpod)
 * Python: [`runpodinfra`](https://pypi.org/project/runpodinfra/)
@@ -73,7 +73,7 @@ pip install runpodinfra
 
 ## Configuration
 
-To begin with, please set your RunPod API key using Pulumi.
+To begin with, please set your Runpod API key using Pulumi.
 
 ```bash
 pulumi config set runpod:token --secret
