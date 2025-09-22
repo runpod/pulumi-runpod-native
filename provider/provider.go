@@ -81,7 +81,7 @@ func Provider() p.Provider {
 					"requires": map[string]string{
 						"pulumi": ">=3.0.0,<4.0.0",
 					},
-					"packageName": "runpodinfra",
+					"packageName": "pulumi-runpod",
 				},
 				"csharp": map[string]any{
 					"packageReferences": map[string]string{

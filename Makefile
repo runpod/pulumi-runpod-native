@@ -58,7 +58,7 @@ nodejs_sdk:: VERSION := ${VERSION}
 nodejs_sdk::
 	rm -rf sdk/nodejs
 	PULUMI_CONVERT=$(PULUMI_CONVERT) PULUMI_DISABLE_AUTOMATIC_PLUGIN_ACQUISITION=$(PULUMI_CONVERT) pulumi package gen-sdk --language nodejs $(SCHEMA_FILE)
-	cp README.md ${PACKDIR}/python/
+	cp README.md ${PACKDIR}/nodejs/
 	cd ${PACKDIR}/nodejs/ && \
 		yarn install && \
 		yarn run tsc && \
