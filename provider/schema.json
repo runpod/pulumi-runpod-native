@@ -16,6 +16,8 @@
     "keywords": [
         "pulumi",
         "runpod",
+        "category/cloud",
+        "kind/native",
         "gpus",
         "ml",
         "ai"
@@ -41,7 +43,7 @@
             "packageName": "@runpod/pulumi-runpod"
         },
         "python": {
-            "packageName": "runpodinfra",
+            "packageName": "pulumi-runpod",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
