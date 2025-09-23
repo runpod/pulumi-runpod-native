@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -21,15 +19,11 @@ jobs:
           go-version: "1.24"
           cache-dependency-path: provider/go.sum
 
-      - name: Install Pulumi CLI and pulumictl
+      - name: Build provider binary directly
         run: |
-          curl -fsSL https://get.pulumi.com | sh && echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
-          curl -fsSLo pulumictl.tar.gz https://github.com/pulumi/pulumictl/releases/download/v0.0.50/pulumictl-v0.0.50-linux-amd64.tar.gz
-          tar -xzf pulumictl.tar.gz
-          sudo mv pulumictl /usr/local/bin/
+          cd provider
+          go mod tidy
+          go build -o ../bin/pulumi-resource-runpod ./cmd/pulumi-resource-runpod
 
-      - name: Build provider
-        run: make provider
-
-      - name: Verify provider binary
+      - name: Verify binary works
         run: ./bin/pulumi-resource-runpod --help
