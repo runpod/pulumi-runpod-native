@@ -1,0 +1,100 @@
+name: Backwards Compatibility Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'provider/**'
+      - 'Makefile'
+
+env:
+  GO_VERSION: "1.21"
+
+jobs:
+  schema-compatibility:
+    name: Schema Compatibility Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          path: 'pr-branch'
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: 'main-branch'
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install Pulumi CLI
+        run: |
+          curl -fsSL https://get.pulumi.com | sh
+          echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
+
+      - name: Build schemas for comparison
+        run: |
+          echo "Building schema from main branch..."
+          cd main-branch
+          make provider codegen
+          cp provider/schema.json ../main-schema.json
+
+          echo "Building schema from PR branch..."
+          cd ../pr-branch
+          make provider codegen
+          cp provider/schema.json ../pr-schema.json
+
+      - name: Compare schemas for breaking changes
+        run: |
+          echo "Comparing schemas for breaking changes..."
+
+          # Install jq for JSON parsing
+          sudo apt-get update && sudo apt-get install -y jq
+
+          # Extract package names for comparison
+          MAIN_PYTHON_PKG=$(jq -r '.language.python.packageName' main-schema.json)
+          PR_PYTHON_PKG=$(jq -r '.language.python.packageName' pr-schema.json)
+
+          MAIN_NODE_PKG=$(jq -r '.language.nodejs.packageName' main-schema.json)
+          PR_NODE_PKG=$(jq -r '.language.nodejs.packageName' pr-schema.json)
+
+          echo "Package name comparison:"
+          echo "Python: $MAIN_PYTHON_PKG -> $PR_PYTHON_PKG"
+          echo "Node.js: $MAIN_NODE_PKG -> $PR_NODE_PKG"
+
+          # Check for unexpected package name changes
+          if [ "$MAIN_PYTHON_PKG" != "$PR_PYTHON_PKG" ]; then
+            echo "⚠️  Python package name changed: $MAIN_PYTHON_PKG -> $PR_PYTHON_PKG"
+            echo "Please verify this is intentional and update docs/migration guides if needed"
+          fi
+
+          if [ "$MAIN_NODE_PKG" != "$PR_NODE_PKG" ]; then
+            echo "⚠️  Node.js package name changed: $MAIN_NODE_PKG -> $PR_NODE_PKG"
+            echo "Please verify this is intentional and update docs/migration guides if needed"
+          fi
+
+          # Check for removed resources (breaking changes)
+          echo "Checking for removed resources..."
+          MAIN_RESOURCES=$(jq -r '.resources | keys[]' main-schema.json | sort)
+          PR_RESOURCES=$(jq -r '.resources | keys[]' pr-schema.json | sort)
+
+          for resource in $MAIN_RESOURCES; do
+            if ! echo "$PR_RESOURCES" | grep -q "^$resource$"; then
+              echo "❌ BREAKING: Resource '$resource' was removed"
+              exit 1
+            fi
+          done
+
+          echo "✅ No breaking changes detected in resources"
+
+      - name: Test SDK generation compatibility
+        run: |
+          echo "Testing that SDKs can be generated with new schema..."
+          cd pr-branch
+          make go_sdk nodejs_sdk python_sdk dotnet_sdk
+          echo "✅ All SDKs generate successfully"

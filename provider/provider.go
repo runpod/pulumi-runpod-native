@@ -74,7 +74,7 @@ func Provider() p.Provider {
 					},
 					"devDependencies": map[string]string{
 						"@types/node": "^14",
-						"typescript": "^4.0.0",
+						"typescript":  "^4.0.0",
 					},
 				},
 				"python": map[string]any{

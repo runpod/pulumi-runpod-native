@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  GO_VERSION: "1.21"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run Go vet
+        run: |
+          cd provider && go vet ./...
+
+      - name: Run Go fmt check
+        run: |
+          if [ "$(gofmt -s -l provider/ tests/ | wc -l)" -gt 0 ]; then
+            echo "❌ Go files not formatted:"
+            gofmt -s -l provider/ tests/
+            exit 1
+          fi
+
+  build:
+    name: Build Provider and SDKs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0'
+
+      - name: Install Pulumi CLI
+        run: |
+          curl -fsSL https://get.pulumi.com | sh
+          echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
+
+      - name: Go mod tidy
+        run: |
+          cd provider && go mod tidy
+          cd ../tests && go mod tidy
+
+      - name: Build provider
+        run: make provider
+
+      - name: Generate schema
+        run: make codegen
+
+      - name: Build all SDKs
+        run: |
+          make go_sdk
+          make nodejs_sdk
+          make python_sdk
+          make dotnet_sdk
+
+      - name: Check git worktree is clean
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "❌ Git worktree is not clean after SDK generation:"
+            git status --porcelain
+            git diff
+            exit 1
+          fi
+
+      - name: Test provider runs
+        run: ./bin/pulumi-resource-runpod --help >/dev/null
+
+      - name: Verify no SDK files are committed
+        run: |
+          if git ls-files | grep -E "^sdk/(go|nodejs|python|dotnet)/" | grep -v ".gitignore"; then
+            echo "❌ SDK files found in git - these should be generated, not committed"
+            git ls-files | grep -E "^sdk/(go|nodejs|python|dotnet)/"
+            exit 1
+          fi
+
+      - name: Check TypeScript compilation
+        run: |
+          if [ -f "sdk/nodejs/tsconfig.json" ]; then
+            cd sdk/nodejs
+            yarn run tsc --noEmit
+          fi

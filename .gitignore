@@ -23,6 +23,7 @@ sdk/java/.gradle
 sdk/java/build/
 sdk/java/build.gradle
 sdk/python/venv
+sdk/dotnet
 
 # Local development
 *.pyc
