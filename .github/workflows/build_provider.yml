@@ -24,7 +24,7 @@ jobs:
       - name: Install Pulumi CLI and pulumictl
         run: |
           curl -fsSL https://get.pulumi.com | sh && echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
-          curl -fsSLo pulumictl.tar.gz https://github.com/pulumi/pulumictl/releases/latest/download/pulumictl-v1.0.3-linux-amd64.tar.gz
+          curl -fsSLo pulumictl.tar.gz https://github.com/pulumi/pulumictl/releases/download/v0.0.50/pulumictl-v0.0.50-linux-amd64.tar.gz
           tar -xzf pulumictl.tar.gz
           sudo mv pulumictl /usr/local/bin/
 
