@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go build:*)",
+      "Bash(go mod:*)",
+      "Bash(make generate-gql:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

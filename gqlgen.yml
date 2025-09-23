@@ -1,0 +1,40 @@
+# gqlgen configuration file
+# Ref: https://gqlgen.com/config
+
+schema:
+  - provider/graphql/schema.graphql
+
+exec:
+  filename: provider/graphql/generated.go
+  package: graphql
+
+model:
+  filename: provider/graphql/models.go
+  package: graphql
+
+resolver:
+  layout: follow-schema
+  dir: provider/graphql
+  package: graphql
+  filename_template: "{name}.resolvers.go"
+
+# Let gqlgen manage the gql.go file
+autobind:
+  - "github.com/runpod/pulumi-runpod-native/provider/graphql"
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+
+# Skip generation for the server (we're only client-side)
+skip_validation: true
+skip_mod_tidy: true

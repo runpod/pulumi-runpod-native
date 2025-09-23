@@ -32,7 +32,18 @@ codegen::
 	(cd provider && go build -o $(WORKING_DIR)/bin/${CODEGEN} -ldflags "-X ${PROJECT}/${VERSION_PATH}=${VERSION}" ${PROJECT}/${PROVIDER_PATH}/cmd/$(CODEGEN))
 	$(WORKING_DIR)/bin/${CODEGEN} $(SCHEMA_FILE) --version ${VERSION}
 
-generate:
+check-graphql-env:
+	@if [ -z "$$GRAPHQL_URI" ] || [ -z "$$RUNPOD_API_KEY" ]; then \
+		echo "Error: GRAPHQL_URI and/or RUNPOD_API_KEY environment variables not set"; \
+		echo "Please set these environment variables to use GraphQL code generation"; \
+		exit 1; \
+	fi
+
+generate-graphql: check-graphql-env
+	@echo "Generating GraphQL client from RunPod API..."
+	@cd provider/graphql && gqlgenc generate
+
+generate: generate-graphql
 	@echo "Generating Go client from Swagger definition..."
 	@go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 	@go generate ./${PROVIDER_PATH}/provider.go
