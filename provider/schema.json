@@ -16,8 +16,6 @@
     "keywords": [
         "pulumi",
         "runpod",
-        "category/cloud",
-        "kind/native",
         "gpus",
         "ml",
         "ai"
@@ -43,14 +41,13 @@
             "packageName": "@runpod/pulumi-runpod"
         },
         "python": {
-            "packageName": "pulumi-runpod",
+            "packageName": "runpodinfra",
             "requires": {
                 "pulumi": ">=3.0.0,<4.0.0"
             }
         }
     },
     "license": "Apache-2.0",
-    "publisher": "Runpod",
     "logoUrl": "https://avatars.githubusercontent.com/u/95939477?s=200&v=4",
     "name": "runpod",
     "pluginDownloadURL": "github://api.github.com/runpod/pulumi-runpod-native",

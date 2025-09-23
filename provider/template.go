@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"reflect"
+	"strings"
 
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
@@ -46,7 +47,7 @@ type TemplateArgs struct {
 	ContainerRegistryAuthId string   `pulumi:"containerRegistryAuthId,optional" structs:"containerRegistryAuthId,omitempty"`
 	DockerArgs              string   `pulumi:"dockerArgs" structs:"dockerArgs,omitempty"`
 	Env                     []PodEnv `pulumi:"env" structs:"env,omitempty"`
-	ImageName               string   `pulumi:"imageName" structs:"imageName,omitempty"`
+	ImageName               string   `pulumi:"imageName,optional" structs:"imageName,omitempty"`
 	IsPublic                bool     `pulumi:"isPublic,optional" structs:"isPublic,omitempty"`
 	IsServerless            bool     `pulumi:"isServerless,optional" structs:"isServerless,omitempty"`
 	Name                    string   `pulumi:"name" structs:"name,omitempty"`
@@ -65,8 +66,14 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if input.ImageName == "" || input.Readme == "" || input.Name == "" {
-		return name, state, fmt.Errorf("imageName, readme and name are required")
+	// Validate required fields according to actual GraphQL schema
+	if input.Name == "" {
+		return name, state, fmt.Errorf("name is required")
+	}
+
+	// ImageName is optional but if provided, cannot be empty
+	if input.ImageName != "" && len(strings.TrimSpace(input.ImageName)) == 0 {
+		return name, state, fmt.Errorf("imageName cannot be empty if provided")
 	}
 
 	// Create GraphQL client
@@ -140,8 +147,14 @@ func (*Template) Update(ctx p.Context, id string, olds TemplateState, news Templ
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if news.ImageName == "" || news.Readme == "" || news.Name == "" {
-		return state, fmt.Errorf("imageName, readme and name are required")
+	// Validate required fields according to actual GraphQL schema
+	if news.Name == "" {
+		return state, fmt.Errorf("name is required")
+	}
+
+	// ImageName is optional but if provided, cannot be empty
+	if news.ImageName != "" && len(strings.TrimSpace(news.ImageName)) == 0 {
+		return state, fmt.Errorf("imageName cannot be empty if provided")
 	}
 
 	// Create GraphQL client

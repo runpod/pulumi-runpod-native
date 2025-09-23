@@ -40,7 +40,7 @@ type Endpoint struct {
 type EndpointArgs struct {
 	Name            string  `pulumi:"name" structs:"name,omitempty"`
 	TemplateId      *string `pulumi:"templateId,optional" structs:"templateId,omitempty"`
-	GpuIds          string  `pulumi:"gpuIds" structs:"gpuIds"`
+	GpuIds          string  `pulumi:"gpuIds,optional" structs:"gpuIds,omitempty"`
 	IdleTimeout     int     `pulumi:"idleTimeout,optional" structs:"idleTimeout,omitempty"`
 	Locations       string  `pulumi:"locations,optional" structs:"locations,omitempty"`
 	NetworkVolumeId string  `pulumi:"networkVolumeId,optional" structs:"networkVolumeId,omitempty"`
@@ -62,8 +62,15 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if input.Name == "" || input.GpuIds == "" || input.TemplateId == nil {
-		return name, state, fmt.Errorf("TemplateId, gpuIds and name are required")
+	// Name is always required
+	if input.Name == "" {
+		return name, state, fmt.Errorf("name is required")
+	}
+
+	// For GPU endpoints, either gpuIds or templateId+instanceIds is required
+	// For now, we require gpuIds to maintain compatibility
+	if input.GpuIds == "" {
+		return name, state, fmt.Errorf("gpuIds is required for GPU endpoints")
 	}
 
 	// Create GraphQL client using generated types
@@ -123,8 +130,15 @@ func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news Endpo
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	if news.Name == "" || news.GpuIds == "" || news.TemplateId == nil {
-		return state, fmt.Errorf("templateId, gpuIds and name are required")
+	// Name is always required
+	if news.Name == "" {
+		return state, fmt.Errorf("name is required")
+	}
+
+	// For GPU endpoints, either gpuIds or templateId+instanceIds is required
+	// For now, we require gpuIds to maintain compatibility
+	if news.GpuIds == "" {
+		return state, fmt.Errorf("gpuIds is required for GPU endpoints")
 	}
 
 	// Create GraphQL client using generated types
