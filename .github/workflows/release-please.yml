@@ -37,9 +37,9 @@ jobs:
       NUGET_PUBLISH_KEY: ${{ secrets.NUGET_PUBLISH_KEY }}
       NUGET_FEED_URL: https://api.nuget.org/v3/index.json
       PUBLISH_NUGET: true
-      # PyPI configuration - matches the original working setup
+      # PyPI configuration
       PYPI_USERNAME: __token__
-      PYPI_PASSWORD: ${{ secrets.PYPI_TOKEN_TEST }}
+      PYPI_PASSWORD: ${{ secrets.PYPI_TOKEN }}
       PYPI_REPOSITORY_URL: ""
       PUBLISH_PYPI: true
     steps:

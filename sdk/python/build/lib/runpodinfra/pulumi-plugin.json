@@ -1,5 +1,0 @@
-{
-  "resource": true,
-  "name": "runpod",
-  "server": "github://api.github.com/runpod/pulumi-runpod-native"
-}

@@ -1,0 +1,29 @@
+name: Build Provider
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache-dependency-path: provider/go.sum
+
+      - name: Build provider binary directly
+        run: |
+          cd provider
+          go mod tidy
+          go build -o ../bin/pulumi-resource-runpod ./cmd/pulumi-resource-runpod
+
+      - name: Verify binary works
+        run: ./bin/pulumi-resource-runpod --help

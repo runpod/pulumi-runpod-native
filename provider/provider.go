@@ -73,14 +73,15 @@ func Provider() p.Provider {
 						"@pulumi/pulumi": "^3.42.0",
 					},
 					"devDependencies": map[string]string{
-						"typescript": "^3.7.0",
+						"@types/node": "^14",
+						"typescript":  "^4.0.0",
 					},
 				},
 				"python": map[string]any{
 					"requires": map[string]string{
 						"pulumi": ">=3.0.0,<4.0.0",
 					},
-					"packageName": "runpodinfra",
+					"packageName": "pulumi-runpod",
 				},
 				"csharp": map[string]any{
 					"packageReferences": map[string]string{
