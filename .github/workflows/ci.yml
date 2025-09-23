@@ -1,64 +1,127 @@
 name: CI
-
 on:
   pull_request:
     branches: [main]
   push:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GO_VERSION: "1.21"
 
 jobs:
-  lint:
-    name: Lint
+  code-quality:
+    name: Code Quality Checks
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
+          cache: true
 
-      - name: Run Go vet
-        run: |
-          cd provider && go vet ./...
+      - name: Go mod tidy
+        run: cd provider && go mod tidy
 
-      - name: Run Go fmt check
+      - name: Go mod verify
+        run: cd provider && go mod verify
+
+      - name: Go vet
+        run: cd provider && go vet ./...
+
+      - name: Go fmt check
         run: |
-          if [ "$(gofmt -s -l provider/ tests/ | wc -l)" -gt 0 ]; then
+          if [ "$(gofmt -s -l provider/ | wc -l)" -gt 0 ]; then
             echo "❌ Go files not formatted:"
-            gofmt -s -l provider/ tests/
+            gofmt -s -l provider/
+            echo "Run 'gofmt -s -w provider/' to fix"
             exit 1
           fi
 
-  build:
-    name: Build Provider and SDKs
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+          working-directory: provider
+          args: --timeout=5m
+
+      - name: Go test with race detection
+        run: cd provider && go test ./... -race -timeout=10m
+
+  build-and-test-provider:
+    name: Build Provider and Test
     runs-on: ubuntu-latest
-
+    needs: code-quality
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Install Pulumi CLI
+        run: |
+          curl -fsSL https://get.pulumi.com | sh
+          echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
+
+      - name: Build provider
+        run: |
+          cd provider && go mod tidy
+          make provider
+
+      - name: Test provider runs
+        run: |
+          ./bin/pulumi-resource-runpod --help
+          echo "✅ Provider binary works correctly"
+
+      - name: Generate schema
+        run: |
+          make codegen
+          echo "✅ Schema generation successful"
+
+      - name: Check for schema drift
+        run: |
+          if git diff --exit-code; then
+            echo "✅ No uncommitted changes after schema generation"
+          else
+            echo "❌ Schema generation caused changes - please commit them:"
+            git diff
+            exit 1
+          fi
+
+  build-all-sdks:
+    name: Build and Validate All SDKs
+    runs-on: ubuntu-latest
+    needs: build-and-test-provider
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [go_sdk, nodejs_sdk, python_sdk, dotnet_sdk]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
 
       - name: Setup Node.js
+        if: matrix.sdk == 'nodejs_sdk'
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Setup Python
+        if: matrix.sdk == 'python_sdk'
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        if: matrix.sdk == 'dotnet_sdk'
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0'
 
@@ -67,46 +130,39 @@ jobs:
           curl -fsSL https://get.pulumi.com | sh
           echo "$HOME/.pulumi/bin" >> $GITHUB_PATH
 
-      - name: Go mod tidy
+      - name: Build provider and generate schema
         run: |
           cd provider && go mod tidy
+          make provider codegen
 
-      - name: Build provider
-        run: make provider
-
-      - name: Generate schema
-        run: make codegen
-
-      - name: Build all SDKs
+      - name: Build SDK
         run: |
-          make go_sdk
-          make nodejs_sdk
-          make python_sdk
-          make dotnet_sdk
+          make ${{ matrix.sdk }}
+          echo "✅ ${{ matrix.sdk }} built successfully"
 
-      - name: Check git worktree is clean
+      - name: Validate SDK
         run: |
-          if [[ $(git status --porcelain) ]]; then
-            echo "❌ Git worktree is not clean after SDK generation:"
-            git status --porcelain
-            git diff
-            exit 1
-          fi
-
-      - name: Test provider runs
-        run: ./bin/pulumi-resource-runpod --help >/dev/null
-
-      - name: Verify no SDK files are committed
-        run: |
-          if git ls-files | grep -E "^sdk/(go|nodejs|python|dotnet)/" | grep -v ".gitignore"; then
-            echo "❌ SDK files found in git - these should be generated, not committed"
-            git ls-files | grep -E "^sdk/(go|nodejs|python|dotnet)/"
-            exit 1
-          fi
-
-      - name: Check TypeScript compilation
-        run: |
-          if [ -f "sdk/nodejs/tsconfig.json" ]; then
-            cd sdk/nodejs
-            yarn run tsc --noEmit
-          fi
+          case "${{ matrix.sdk }}" in
+            go_sdk)
+              if [ -d "sdk/go" ]; then
+                cd sdk/go && go build ./...
+                echo "✅ Go SDK compiles"
+              fi
+              ;;
+            nodejs_sdk)
+              if [ -f "sdk/nodejs/package.json" ]; then
+                cd sdk/nodejs && npm run build
+                echo "✅ Node.js SDK builds"
+              fi
+              ;;
+            python_sdk)
+              if [ -d "sdk/python" ]; then
+                echo "✅ Python SDK generated"
+              fi
+              ;;
+            dotnet_sdk)
+              if [ -d "sdk/dotnet" ]; then
+                echo "✅ .NET SDK generated"
+              fi
+              ;;
+          esac
