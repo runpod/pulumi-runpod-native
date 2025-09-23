@@ -41,11 +41,13 @@ jobs:
         run: |
           echo "Building schema from main branch..."
           cd main-branch
+          cd provider && go mod tidy && cd ..
           make provider codegen
           cp provider/schema.json ../main-schema.json
 
           echo "Building schema from PR branch..."
           cd ../pr-branch
+          cd provider && go mod tidy && cd ..
           make provider codegen
           cp provider/schema.json ../pr-schema.json
 

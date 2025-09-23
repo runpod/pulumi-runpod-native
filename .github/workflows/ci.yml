@@ -70,7 +70,6 @@ jobs:
       - name: Go mod tidy
         run: |
           cd provider && go mod tidy
-          cd ../tests && go mod tidy
 
       - name: Build provider
         run: make provider
