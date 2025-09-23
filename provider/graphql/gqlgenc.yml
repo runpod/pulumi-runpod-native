@@ -1,0 +1,15 @@
+endpoint:
+  url: ${GRAPHQL_URI}
+  headers:
+    Authorization: "Bearer ${RUNPOD_API_KEY}"
+
+query:
+  - queries/*.graphql
+
+model:
+  package: graphql
+  filename: generated/models_gen.go
+
+client:
+  package: graphql
+  filename: generated/client_gen.go

@@ -1,15 +1,11 @@
 package provider
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
 	"strings"
 	"time"
 
-	"github.com/fatih/structs"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 )
@@ -70,92 +66,55 @@ func (*Endpoint) Create(ctx p.Context, name string, input EndpointArgs, preview 
 		return name, state, fmt.Errorf("TemplateId, gpuIds and name are required")
 	}
 
-	gqlVariable := structs.Map(input)
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
 
-	gqlInput := GqlInput{
-		Query: `
-		mutation SaveEndpoint (
-	    $gpuIds: String!
-	    $templateId: String!
-	    $name: String!
-	    $idleTimeout: Int 
-	    $locations: String
-	    $networkVolumeId: String
-	    $scalerType: String
-	    $scalerValue: Int
-	    $workersMax: Int
-	    $workersMin: Int 
-		) {
-		saveEndpoint(input: {
-	    gpuIds: $gpuIds,
-	    templateId: $templateId,
-	    name: $name,
-	    idleTimeout: $idleTimeout,
-	    locations: $locations,
-	    networkVolumeId: $networkVolumeId,
-	    scalerType: $scalerType,
-	    scalerValue: $scalerValue,
-	    workersMax: $workersMax,
-	    workersMin: $workersMin 
-		}) {
-			id
-			name
-		}
-	}`,
-		Variables: gqlVariable,
-	}
-
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated SaveEndpoint function
+	response, err := gqlClient.GetClient().SaveEndpoint(
+		context.Background(),
+		input.GpuIds,                    // gpuIds (required)
+		*input.TemplateId,               // templateID (required)
+		input.Name,                      // name (required)
+		intPtr(input.IdleTimeout),       // idleTimeout
+		stringPtr(input.Locations),      // locations
+		stringPtr(input.NetworkVolumeId), // networkVolumeID
+		stringPtr(input.ScalerType),     // scalerType
+		intPtr(input.ScalerValue),       // scalerValue
+		intPtr(input.WorkersMax),        // workersMax
+		intPtr(input.WorkersMin),        // workersMin
+	)
 
 	if err != nil {
-		return name, state, err
+		return name, state, fmt.Errorf("save endpoint mutation failed: %v", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-
-	if err != nil {
-		return name, state, err
+	// Extract the endpoint from the response
+	if response.GetSaveEndpoint() == nil {
+		return name, state, fmt.Errorf("no endpoint returned from save mutation")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
+	endpointData := response.GetSaveEndpoint()
 
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return name, state, err
+	// Convert generated type back to our Endpoint struct
+	var endpointId, endpointName string
+	if endpointData.GetID() != nil {
+		endpointId = *endpointData.GetID()
+	}
+	if endpointData.GetName() != nil {
+		endpointName = *endpointData.GetName()
 	}
 
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return name, state, err
-	}
-
-	output := &OutputDeployEndpoint{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return name, state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return name, state, err
-	}
-
-	endpoint := output.Data.SaveEndpoint
-	if endpoint.Id == "" {
-		err = fmt.Errorf("graphql endpoint is nil: %s", string(data))
-		return name, state, err
+	endpoint := Endpoint{
+		Id:   endpointId,
+		Name: endpointName,
 	}
 
 	state.Endpoint = endpoint
 
 	return name, state, nil
 }
+
+// Helper functions for pointer conversions - moved to pod.go to avoid duplication
 
 func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news EndpointArgs, preview bool) (EndpointState, error) {
 	state := EndpointState{EndpointArgs: news}
@@ -168,86 +127,48 @@ func (*Endpoint) Update(ctx p.Context, id string, olds EndpointState, news Endpo
 		return state, fmt.Errorf("templateId, gpuIds and name are required")
 	}
 
-	gqlVariable := structs.Map(news)
-	gqlVariable["id"] = olds.Endpoint.Id
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
 
-	gqlInput := GqlInput{
-		Query: `
-	mutation SaveEndpoint (
-	    $id: String!
-	    $gpuIds: String!
-	    $templateId: String!
-	    $name: String!
-	    $idleTimeout: Int 
-	    $locations: String
-	    $networkVolumeId: String
-	    $scalerType: String
-	    $scalerValue: Int
-	    $workersMax: Int
-	    $workersMin: Int 
-		) {
-		saveEndpoint(input: {
-	    id: $id,
-	    gpuIds: $gpuIds,
-	    templateId: $templateId,
-	    name: $name,
-	    idleTimeout: $idleTimeout,
-	    locations: $locations,
-	    networkVolumeId: $networkVolumeId,
-	    scalerType: $scalerType,
-	    scalerValue: $scalerValue,
-	    workersMax: $workersMax,
-	    workersMin: $workersMin 
-		}) {
-			id
-			name
-		}
-	}`,
-		Variables: gqlVariable,
-	}
+	// Call the generated UpdateEndpoint function
+	response, err := gqlClient.GetClient().UpdateEndpoint(
+		context.Background(),
+		olds.Endpoint.Id,               // id (required)
+		news.GpuIds,                    // gpuIds (required)
+		*news.TemplateId,               // templateID (required)
+		news.Name,                      // name (required)
+		intPtr(news.IdleTimeout),       // idleTimeout
+		stringPtr(news.Locations),      // locations
+		stringPtr(news.NetworkVolumeId), // networkVolumeID
+		stringPtr(news.ScalerType),     // scalerType
+		intPtr(news.ScalerValue),       // scalerValue
+		intPtr(news.WorkersMax),        // workersMax
+		intPtr(news.WorkersMin),        // workersMin
+	)
 
-	jsonValue, err := json.Marshal(gqlInput)
 	if err != nil {
-		return state, err
+		return state, fmt.Errorf("update endpoint mutation failed: %v", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return state, err
+	// Extract the endpoint from the response
+	if response.GetSaveEndpoint() == nil {
+		return state, fmt.Errorf("no endpoint returned from update mutation")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
+	endpointData := response.GetSaveEndpoint()
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return state, err
+	// Convert generated type back to our Endpoint struct
+	var endpointId, endpointName string
+	if endpointData.GetID() != nil {
+		endpointId = *endpointData.GetID()
+	}
+	if endpointData.GetName() != nil {
+		endpointName = *endpointData.GetName()
 	}
 
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return state, err
-	}
-
-	output := &OutputDeployEndpoint{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return state, err
-	}
-
-	endpoint := output.Data.SaveEndpoint
-	if endpoint.Id == "" {
-		err = fmt.Errorf("graphql endpoint is nil: %s", string(data))
-		return state, err
+	endpoint := Endpoint{
+		Id:   endpointId,
+		Name: endpointName,
 	}
 
 	state.Endpoint = endpoint
@@ -338,57 +259,18 @@ func (*Endpoint) Delete(ctx p.Context, id string, props EndpointState) error {
 
 func deleteEndpoint(ctx p.Context, id string) error {
 	config := infer.GetConfig[Config](ctx)
-	gqlVariable := map[string]interface{}{"id": id}
 
-	gqlInput := GqlInput{
-		Query: `
-		mutation DeleteEndpoint ($id: String!) {
-			deleteEndpoint(id: $id)
-		}`,
-		Variables: gqlVariable,
-	}
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated DeleteEndpoint function
+	_, err := gqlClient.GetClient().DeleteEndpoint(
+		context.Background(),
+		id, // id (required)
+	)
+
 	if err != nil {
-		return err
-	}
-
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	var output struct {
-		Errors []struct {
-			Message string
-		}
-	}
-
-	err = json.Unmarshal(data, &output)
-	if err != nil {
-		return err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return err
+		return fmt.Errorf("delete endpoint mutation failed: %v", err)
 	}
 
 	return nil

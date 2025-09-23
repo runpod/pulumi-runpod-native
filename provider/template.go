@@ -1,16 +1,10 @@
 package provider
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
-	"net/http/httputil"
 	"reflect"
-	"time"
 
-	"github.com/fatih/structs"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 )
@@ -20,18 +14,6 @@ type TemplateState struct {
 	Template Template `pulumi:"template"`
 }
 
-type OutputDeployTemplate struct {
-	Errors []struct {
-		Message   string
-		Locations []struct {
-			Line   int
-			Column int
-		}
-	}
-	Data struct {
-		SaveTemplate Template
-	}
-}
 
 type Template struct {
 	AdvancedStart           bool     `pulumi:"advancedStart"`
@@ -87,98 +69,63 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 		return name, state, fmt.Errorf("imageName, readme and name are required")
 	}
 
-	gqlVariable := structs.Map(input)
+	// Create GraphQL client
+	client := NewGraphQLClient(config.Token)
 
-	gqlInput := GqlInput{
-		Query: `
-		mutation SaveTemplate (
-			$containerDiskInGb: Int!
-			$containerRegistryAuthId: String
-			$dockerArgs: String!
-			$env: [EnvironmentVariableInput!]!
-			$imageName: String!
-			$isPublic: Boolean
-			$isServerless: Boolean
-			$name: String!
-			$ports: String
-			$readme: String
-			$startJupyter: Boolean
-			$startSsh: Boolean
-			$volumeInGb: Int!
-			$volumeMountPath: String
-		) {
-		saveTemplate(input: {
-			containerDiskInGb: $containerDiskInGb,
-			containerRegistryAuthId: $containerRegistryAuthId,
-			dockerArgs: $dockerArgs,
-			env: $env,
-			imageName: $imageName,
-			isPublic: $isPublic,
-			isServerless: $isServerless,
-			name: $name,
-			ports: $ports,
-			readme: $readme,
-			startJupyter: $startJupyter,
-			startSsh: $startSsh,
-			volumeInGb: $volumeInGb,
-			volumeMountPath: $volumeMountPath
-		}) {
-			id
-			imageName
-			name
-		}
-	}`,
-		Variables: gqlVariable,
+	// Convert PodEnv to EnvironmentVariableInput
+	var envVars []*EnvironmentVariableInput
+	for _, env := range input.Env {
+		envVars = append(envVars, &EnvironmentVariableInput{
+			Key:   env.Key,
+			Value: env.Value,
+		})
 	}
 
-	jsonValue, err := json.Marshal(gqlInput)
-
+	// Call the generated SaveTemplate mutation
+	result, err := client.GetClient().SaveTemplate(
+		context.Background(),
+		nil, // id - nil for create
+		input.ContainerDiskInGb,
+		&input.ContainerRegistryAuthId,
+		input.DockerArgs,
+		envVars,
+		input.ImageName,
+		&input.IsPublic,
+		&input.IsServerless,
+		input.Name,
+		&input.Ports,
+		&input.Readme,
+		&input.StartJupyter,
+		&input.StartSsh,
+		input.VolumeInGb,
+		&input.VolumeMountPath,
+	)
 	if err != nil {
-		return name, state, err
+		return name, state, fmt.Errorf("failed to save template: %w", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-
-	_, err = httputil.DumpRequest(req, true)
-	if err != nil {
-		return name, state, err
+	if result.SaveTemplate == nil {
+		return name, state, fmt.Errorf("template creation failed: no template returned")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return name, state, err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return name, state, err
-	}
-
-	fmt.Println(string(data))
-
-	output := &OutputDeployTemplate{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return name, state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return name, state, err
-	}
-
-	template := output.Data.SaveTemplate
-	if template.Id == "" {
-		err = fmt.Errorf("graphql template is nil: %s", string(data))
-		return name, state, err
+	// Convert result to Template struct
+	template := Template{
+		Id:        *result.SaveTemplate.ID,
+		ImageName: *result.SaveTemplate.ImageName,
+		Name:      *result.SaveTemplate.Name,
+		// Set other fields from input since they're not returned by the mutation
+		ContainerDiskInGb:       input.ContainerDiskInGb,
+		ContainerRegistryAuthId: input.ContainerRegistryAuthId,
+		DockerArgs:              input.DockerArgs,
+		Env:                     input.Env,
+		IsPublic:                input.IsPublic,
+		IsServerless:            input.IsServerless,
+		Ports:                   input.Ports,
+		Readme:                  input.Readme,
+		StartJupyter:            input.StartJupyter,
+		StartSsh:                input.StartSsh,
+		VolumeInGb:              input.VolumeInGb,
+		VolumeMountPath:         input.VolumeMountPath,
 	}
 
 	state.Template = template
@@ -197,94 +144,64 @@ func (*Template) Update(ctx p.Context, id string, olds TemplateState, news Templ
 		return state, fmt.Errorf("imageName, readme and name are required")
 	}
 
-	gqlVariable := structs.Map(news)
-	gqlVariable["id"] = olds.Template.Id
-	gqlInput := GqlInput{
-		Query: `
-		mutation SaveTemplate (
-			$id: String!
-			$containerDiskInGb: Int!
-			$containerRegistryAuthId: String
-			$dockerArgs: String!
-			$env: [EnvironmentVariableInput!]!
-			$imageName: String!
-			$isPublic: Boolean
-			$isServerless: Boolean
-			$name: String!
-			$ports: String
-			$readme: String
-			$startJupyter: Boolean
-			$startSsh: Boolean
-			$volumeInGb: Int!
-			$volumeMountPath: String
-		) {
-		saveTemplate(input: {
-			id: $id,
-			containerDiskInGb: $containerDiskInGb,
-			containerRegistryAuthId: $containerRegistryAuthId,
-			dockerArgs: $dockerArgs,
-			env: $env,
-			imageName: $imageName,
-			isPublic: $isPublic,
-			isServerless: $isServerless,
-			name: $name,
-			ports: $ports,
-			readme: $readme,
-			startJupyter: $startJupyter,
-			startSsh: $startSsh,
-			volumeInGb: $volumeInGb,
-			volumeMountPath: $volumeMountPath
-		}) {
-			id
-			imageName
-			name
-		}
-	}`,
-		Variables: gqlVariable,
+	// Create GraphQL client
+	client := NewGraphQLClient(config.Token)
+
+	// Convert PodEnv to EnvironmentVariableInput
+	var envVars []*EnvironmentVariableInput
+	for _, env := range news.Env {
+		envVars = append(envVars, &EnvironmentVariableInput{
+			Key:   env.Key,
+			Value: env.Value,
+		})
 	}
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated SaveTemplate mutation with the existing ID for update
+	templateId := olds.Template.Id
+	result, err := client.GetClient().SaveTemplate(
+		context.Background(),
+		&templateId, // id - provide existing ID for update
+		news.ContainerDiskInGb,
+		&news.ContainerRegistryAuthId,
+		news.DockerArgs,
+		envVars,
+		news.ImageName,
+		&news.IsPublic,
+		&news.IsServerless,
+		news.Name,
+		&news.Ports,
+		&news.Readme,
+		&news.StartJupyter,
+		&news.StartSsh,
+		news.VolumeInGb,
+		&news.VolumeMountPath,
+	)
 	if err != nil {
-		return state, err
+		return state, fmt.Errorf("failed to update template: %w", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return state, err
+	if result.SaveTemplate == nil {
+		return state, fmt.Errorf("template update failed: no template returned")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return state, err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return state, err
-	}
-
-	output := &OutputDeployTemplate{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return state, err
-	}
-
-	template := output.Data.SaveTemplate
-	if template.Id == "" {
-		err = fmt.Errorf("graphql template is nil: %s", string(data))
-		return state, err
+	// Convert result to Template struct
+	template := Template{
+		Id:        *result.SaveTemplate.ID,
+		ImageName: *result.SaveTemplate.ImageName,
+		Name:      *result.SaveTemplate.Name,
+		// Set other fields from input since they're not returned by the mutation
+		ContainerDiskInGb:       news.ContainerDiskInGb,
+		ContainerRegistryAuthId: news.ContainerRegistryAuthId,
+		DockerArgs:              news.DockerArgs,
+		Env:                     news.Env,
+		IsPublic:                news.IsPublic,
+		IsServerless:            news.IsServerless,
+		Ports:                   news.Ports,
+		Readme:                  news.Readme,
+		StartJupyter:            news.StartJupyter,
+		StartSsh:                news.StartSsh,
+		VolumeInGb:              news.VolumeInGb,
+		VolumeMountPath:         news.VolumeMountPath,
 	}
 
 	state.Template = template
@@ -348,59 +265,18 @@ func (*Template) Diff(ctx p.Context, id string, olds TemplateState, news Templat
 
 func (*Template) Delete(ctx p.Context, id string, props TemplateState) error {
 	config := infer.GetConfig[Config](ctx)
-	gqlVariable := map[string]interface{}{"templateName": props.Template.Name}
 
-	gqlInput := GqlInput{
-		Query: `
-		mutation DeleteTemplate ($templateName: String!) {
-			deleteTemplate(templateName: $templateName)
-		}`,
-		Variables: gqlVariable,
-	}
+	// Create GraphQL client
+	client := NewGraphQLClient(config.Token)
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated DeleteTemplate mutation
+	_, err := client.GetClient().DeleteTemplate(
+		context.Background(),
+		props.Template.Name,
+	)
 	if err != nil {
-		return err
-	}
-
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	var output struct {
-		Errors []struct {
-			Message string
-		}
-	}
-
-	err = json.Unmarshal(data, &output)
-	if err != nil {
-		return err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return err
+		return fmt.Errorf("failed to delete template: %w", err)
 	}
 
 	return nil
-
 }

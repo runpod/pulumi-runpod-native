@@ -1,0 +1,113 @@
+mutation DeployMutation(
+  $aiApiId: String
+  $cloudType: CloudTypeEnum
+  $containerDiskInGb: Int
+  $countryCode: String
+  $deployCost: Float
+  $dockerArgs: String
+  $env: [EnvironmentVariableInput]
+  $gpuCount: Int
+  $gpuTypeId: String
+  $gpuTypeIdList: [String]
+  $imageName: String
+  $minDisk: Int
+  $minDownload: Int
+  $minMemoryInGb: Int
+  $minUpload: Int
+  $minVcpuCount: Int
+  $name: String
+  $networkVolumeId: String
+  $port: Port
+  $ports: String
+  $startJupyter: Boolean
+  $startSsh: Boolean
+  $stopAfter: DateTime
+  $supportPublicIp: Boolean
+  $templateId: String
+  $terminateAfter: DateTime
+  $volumeInGb: Int
+  $volumeKey: String
+  $volumeMountPath: String
+  $dataCenterId: String
+  $savingsPlan: SavingsPlanInput
+  $cudaVersion: String
+) {
+  podFindAndDeployOnDemand(input: {
+    aiApiId: $aiApiId
+    cloudType: $cloudType
+    containerDiskInGb: $containerDiskInGb
+    countryCode: $countryCode
+    deployCost: $deployCost
+    dockerArgs: $dockerArgs
+    env: $env
+    gpuCount: $gpuCount
+    gpuTypeId: $gpuTypeId
+    gpuTypeIdList: $gpuTypeIdList
+    imageName: $imageName
+    minDisk: $minDisk
+    minDownload: $minDownload
+    minMemoryInGb: $minMemoryInGb
+    minUpload: $minUpload
+    minVcpuCount: $minVcpuCount
+    name: $name
+    networkVolumeId: $networkVolumeId
+    port: $port
+    ports: $ports
+    startJupyter: $startJupyter
+    startSsh: $startSsh
+    stopAfter: $stopAfter
+    supportPublicIp: $supportPublicIp
+    templateId: $templateId
+    terminateAfter: $terminateAfter
+    volumeInGb: $volumeInGb
+    volumeKey: $volumeKey
+    volumeMountPath: $volumeMountPath
+    dataCenterId: $dataCenterId
+    savingsPlan: $savingsPlan
+    cudaVersion: $cudaVersion
+  }) {
+    id
+    imageName
+    machineId
+    containerDiskInGb
+  }
+}
+
+mutation UpdatePodMutation(
+  $podId: String!
+  $dockerArgs: String
+  $imageName: String!
+  $env: [EnvironmentVariableInput]
+  $port: Port
+  $ports: String
+  $containerDiskInGb: Int!
+  $volumeInGb: Int
+  $volumeMountPath: String
+  $containerRegistryAuthId: String
+) {
+  podEditJob(input: {
+    podId: $podId
+    dockerArgs: $dockerArgs
+    imageName: $imageName
+    env: $env
+    port: $port
+    ports: $ports
+    containerDiskInGb: $containerDiskInGb
+    volumeInGb: $volumeInGb
+    volumeMountPath: $volumeMountPath
+    containerRegistryAuthId: $containerRegistryAuthId
+  }) {
+    id
+    imageName
+    machineId
+    containerDiskInGb
+  }
+}
+
+mutation PodTerminateMutation(
+  $podId: String!
+) {
+  podTerminate(input: {
+    podId: $podId
+  })
+}

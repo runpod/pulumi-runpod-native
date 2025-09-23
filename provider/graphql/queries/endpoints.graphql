@@ -1,0 +1,63 @@
+mutation SaveEndpoint(
+  $gpuIds: String!
+  $templateId: String!
+  $name: String!
+  $idleTimeout: Int
+  $locations: String
+  $networkVolumeId: String
+  $scalerType: String
+  $scalerValue: Int
+  $workersMax: Int
+  $workersMin: Int
+) {
+  saveEndpoint(input: {
+    gpuIds: $gpuIds
+    templateId: $templateId
+    name: $name
+    idleTimeout: $idleTimeout
+    locations: $locations
+    networkVolumeId: $networkVolumeId
+    scalerType: $scalerType
+    scalerValue: $scalerValue
+    workersMax: $workersMax
+    workersMin: $workersMin
+  }) {
+    id
+    name
+  }
+}
+
+mutation UpdateEndpoint(
+  $id: String!
+  $gpuIds: String!
+  $templateId: String!
+  $name: String!
+  $idleTimeout: Int
+  $locations: String
+  $networkVolumeId: String
+  $scalerType: String
+  $scalerValue: Int
+  $workersMax: Int
+  $workersMin: Int
+) {
+  saveEndpoint(input: {
+    id: $id
+    gpuIds: $gpuIds
+    templateId: $templateId
+    name: $name
+    idleTimeout: $idleTimeout
+    locations: $locations
+    networkVolumeId: $networkVolumeId
+    scalerType: $scalerType
+    scalerValue: $scalerValue
+    workersMax: $workersMax
+    workersMin: $workersMin
+  }) {
+    id
+    name
+  }
+}
+
+mutation DeleteEndpoint($id: String!) {
+  deleteEndpoint(id: $id)
+}

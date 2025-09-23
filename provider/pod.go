@@ -1,15 +1,10 @@
 package provider
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"io"
-	"net/http"
 	"reflect"
-	"time"
 
-	"github.com/fatih/structs"
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
 )
@@ -150,133 +145,128 @@ func (*Pod) Create(ctx p.Context, name string, input PodArgs, preview bool) (str
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	gqlVariable := structs.Map(input)
-	gqlInput := GqlInput{
-		Query: `
-		mutation DeployMutation (			
-			$aiApiId: String
-			$cloudType: CloudTypeEnum
-			$containerDiskInGb: Int
-			$countryCode: String
-			$deployCost: Float
-			$dockerArgs: String
-			$env: [EnvironmentVariableInput]
-			$gpuCount: Int
-			$gpuTypeId: String
-			$gpuTypeIdList: [String]
-			$imageName: String
-			$minDisk: Int
-			$minDownload: Int
-			$minMemoryInGb: Int
-			$minUpload: Int
-			$minVcpuCount: Int
-			$name: String
-			$networkVolumeId: String
-			$port: Port
-			$ports: String
-			$startJupyter: Boolean
-			$startSsh: Boolean
-			$stopAfter: DateTime
-			$supportPublicIp: Boolean
-			$templateId: String
-			$terminateAfter: DateTime
-			$volumeInGb: Int
-			$volumeKey: String
-			$volumeMountPath: String
-			$dataCenterId: String
-			$savingsPlan: SavingsPlanInput
-			$cudaVersion: String
-		) {
-			podFindAndDeployOnDemand(input: {				
-				aiApiId: $aiApiId,
-				cloudType: $cloudType,
-				containerDiskInGb: $containerDiskInGb,
-				countryCode: $countryCode,
-				deployCost: $deployCost,
-				dockerArgs: $dockerArgs,
-				env: $env,
-				gpuCount: $gpuCount,
-				gpuTypeId: $gpuTypeId,
-				gpuTypeIdList: $gpuTypeIdList,
-				imageName: $imageName,
-				minDisk: $minDisk,
-				minDownload: $minDownload,
-				minMemoryInGb: $minMemoryInGb,
-				minUpload: $minUpload,
-				minVcpuCount: $minVcpuCount,
-				name: $name,
-				networkVolumeId: $networkVolumeId,
-				port: $port,
-				ports: $ports,
-				startJupyter: $startJupyter,
-				startSsh: $startSsh,
-				stopAfter: $stopAfter,
-				supportPublicIp: $supportPublicIp,
-				templateId: $templateId,
-				terminateAfter: $terminateAfter,
-				volumeInGb: $volumeInGb,
-				volumeKey: $volumeKey,
-				volumeMountPath: $volumeMountPath,
-				dataCenterId: $dataCenterId,
-				savingsPlan: $savingsPlan,
-				cudaVersion: $cudaVersion,
-			}) {
-				id
-    			imageName    			
-    			machineId
-				containerDiskInGb				
-			}
-		}`,
-		Variables: gqlVariable,
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
+
+	// Convert string environment variables to GraphQL input format
+	var envVars []*EnvironmentVariableInput
+	for _, env := range input.Env {
+		envVars = append(envVars, &EnvironmentVariableInput{
+			Key:   env.Key,
+			Value: env.Value,
+		})
 	}
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Convert inputs to generated types
+	var cloudType *CloudTypeEnum
+	if input.CloudType != "" {
+		ct := CloudTypeEnum(input.CloudType)
+		cloudType = &ct
+	}
+
+	// Call the generated DeployMutation function
+	response, err := gqlClient.GetClient().DeployMutation(
+		context.Background(),
+		stringPtr(input.AiApiId),              // aiAPIID
+		cloudType,                             // cloudType
+		intPtr(input.ContainerDiskInGb),       // containerDiskInGb
+		stringPtr(input.CountryCode),          // countryCode
+		float64Ptr(input.DeployCost),          // deployCost
+		stringPtr(input.DockerArgs),           // dockerArgs
+		envVars,                               // env
+		intPtr(input.GpuCount),                // gpuCount
+		stringPtr(input.GpuTypeId),            // gpuTypeID
+		stringSlicePtr(input.GpuTypeIdList),   // gpuTypeIDList
+		stringPtr(input.ImageName),            // imageName
+		intPtr(input.MinDisk),                 // minDisk
+		intPtr(input.MinDownload),             // minDownload
+		intPtr(input.MinMemoryInGb),           // minMemoryInGb
+		intPtr(input.MinUpload),               // minUpload
+		intPtr(input.MinVcpuCount),            // minVcpuCount
+		stringPtr(name),                       // name
+		stringPtr(input.NetworkVolumeId),      // networkVolumeID
+		intPtrToStringPtr(input.Port),         // port
+		stringPtr(input.Ports),                // ports
+		boolPtr(input.StartJupyter),           // startJupyter
+		boolPtr(input.StartSsh),               // startSSH
+		stringPtr(input.StopAfter),            // stopAfter
+		boolPtr(input.SupportPublicIp),        // supportPublicIP
+		stringPtr(input.TemplateId),           // templateID
+		stringPtr(input.TerminateAfter),       // terminateAfter
+		intPtr(input.VolumeInGb),              // volumeInGb
+		stringPtr(input.VolumeKey),            // volumeKey
+		stringPtr(input.VolumeMountPath),      // volumeMountPath
+		stringPtr(input.DataCenterId),         // dataCenterID
+		nil,                                   // savingsPlan - TODO: convert this type
+		stringPtr(input.CudaVersion),          // cudaVersion
+	)
+
 	if err != nil {
-		return name, state, err
+		return name, state, fmt.Errorf("deploy mutation failed: %v", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return name, state, err
+	// Extract the pod from the response
+	if response.GetPodFindAndDeployOnDemand() == nil {
+		return name, state, fmt.Errorf("no pod returned from deploy mutation")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
+	podData := response.GetPodFindAndDeployOnDemand()
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return name, state, err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return name, state, err
-	}
-
-	output := &OutputDeployPod{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return name, state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return name, state, err
-	}
-
-	pod := output.Data.PodFindAndDeployOnDemand
-	if pod.Id == "" {
-		err = fmt.Errorf("graphql pod is nil: %s", string(data))
-		return name, state, err
+	// Convert generated type back to our Pod struct
+	pod := Pod{
+		Id:                podData.GetID(),
+		ImageName:         *podData.GetImageName(),
+		MachineId:         podData.GetMachineID(),
+		ContainerDiskInGb: *podData.GetContainerDiskInGb(),
 	}
 
 	state.Pod = pod
-
 	return name, state, nil
+}
+
+// Helper functions for pointer conversions
+func stringPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
+}
+
+func intPtr(i int) *int {
+	if i == 0 {
+		return nil
+	}
+	return &i
+}
+
+func intPtrToStringPtr(i int) *string {
+	if i == 0 {
+		return nil
+	}
+	s := fmt.Sprintf("%d", i)
+	return &s
+}
+
+func float64Ptr(f float64) *float64 {
+	if f == 0 {
+		return nil
+	}
+	return &f
+}
+
+func boolPtr(b bool) *bool {
+	return &b
+}
+
+func stringSlicePtr(s []string) []*string {
+	if len(s) == 0 {
+		return nil
+	}
+	result := make([]*string, len(s))
+	for i, str := range s {
+		result[i] = &str
+	}
+	return result
 }
 
 func (*Pod) Update(ctx p.Context, id string, olds PodState, news PodArgs, preview bool) (PodState, error) {
@@ -286,89 +276,53 @@ func (*Pod) Update(ctx p.Context, id string, olds PodState, news PodArgs, previe
 	}
 	config := infer.GetConfig[Config](ctx)
 
-	gqlVariable := structs.Map(news)
-	gqlVariable["podId"] = olds.Pod.Id
-	gqlInput := GqlInput{
-		Query: `
-		mutation UpdatePodMutation (
-			$podId: String!
-			$dockerArgs: String
-			$imageName: String!
-			$env: [EnvironmentVariableInput]
-			$port: Port
-			$ports: String
-			$containerDiskInGb: Int!
-			$volumeInGb: Int
-			$volumeMountPath: String
-			$containerRegistryAuthId: String
-		) {
-			podEditJob(input: {				
-				podId: $podId,
-				dockerArgs: $dockerArgs,
-				imageName: $imageName,
-				env: $env,
-				port: $port,
-				ports: $ports,
-				containerDiskInGb: $containerDiskInGb,
-				volumeInGb: $volumeInGb,
-				volumeMountPath: $volumeMountPath,
-				containerRegistryAuthId: $containerRegistryAuthId,
-			}) {
-				id
-    			imageName    			
-    			machineId
-				containerDiskInGb								
-			}
-		}`,
-		Variables: gqlVariable,
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
+
+	// Convert string environment variables to GraphQL input format
+	var envVars []*EnvironmentVariableInput
+	for _, env := range news.Env {
+		envVars = append(envVars, &EnvironmentVariableInput{
+			Key:   env.Key,
+			Value: env.Value,
+		})
 	}
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated UpdatePodMutation function
+	response, err := gqlClient.GetClient().UpdatePodMutation(
+		context.Background(),
+		olds.Pod.Id,                                    // podID (required)
+		stringPtr(news.DockerArgs),                     // dockerArgs
+		news.ImageName,                                 // imageName (required)
+		envVars,                                        // env
+		intPtrToStringPtr(news.Port),                   // port
+		stringPtr(news.Ports),                          // ports
+		news.ContainerDiskInGb,                         // containerDiskInGb (required)
+		intPtr(news.VolumeInGb),                        // volumeInGb
+		stringPtr(news.VolumeMountPath),                // volumeMountPath
+		nil,                                            // containerRegistryAuthId
+	)
+
 	if err != nil {
-		return state, err
+		return state, fmt.Errorf("update pod mutation failed: %v", err)
 	}
 
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return state, err
+	// Extract the pod from the response
+	if response.GetPodEditJob() == nil {
+		return state, fmt.Errorf("no pod returned from update mutation")
 	}
 
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
+	podData := response.GetPodEditJob()
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return state, err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return state, err
-	}
-
-	output := &OutputUpdatePod{}
-	err = json.Unmarshal(data, output)
-	if err != nil {
-		return state, err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return state, err
-	}
-
-	pod := output.Data.PodEditJob
-	if pod.Id == "" {
-		err = fmt.Errorf("graphql pod is nil: %s", string(data))
-		return state, err
+	// Convert generated type back to our Pod struct
+	pod := Pod{
+		Id:                podData.GetID(),
+		ImageName:         *podData.GetImageName(),
+		MachineId:         podData.GetMachineID(),
+		ContainerDiskInGb: *podData.GetContainerDiskInGb(),
 	}
 
 	state.Pod = pod
-
 	return state, nil
 }
 
@@ -410,63 +364,19 @@ func (*Pod) Diff(ctx p.Context, id string, olds PodState, news PodArgs) (p.DiffR
 
 func (*Pod) Delete(ctx p.Context, id string, props PodState) error {
 	config := infer.GetConfig[Config](ctx)
-	gqlVariable := map[string]interface{}{"podId": props.Pod.Id}
 
-	gqlInput := GqlInput{
-		Query: `
-		mutation podTerminateMutation (
-			$podId: String!	
-		) {
-			podTerminate(input: {				
-				podId: $podId				
-			})
-		}`,
-		Variables: gqlVariable,
-	}
+	// Create GraphQL client using generated types
+	gqlClient := NewGraphQLClient(config.Token)
 
-	jsonValue, err := json.Marshal(gqlInput)
+	// Call the generated PodTerminateMutation function
+	_, err := gqlClient.GetClient().PodTerminateMutation(
+		context.Background(),
+		props.Pod.Id, // podID (required)
+	)
+
 	if err != nil {
-		return err
-	}
-
-	url := URL + config.Token
-
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: time.Second * 20}
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	defer resp.Body.Close()
-
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-
-	var output struct {
-		Errors []struct {
-			Message string
-		}
-	}
-
-	err = json.Unmarshal(data, &output)
-	if err != nil {
-		return err
-	}
-
-	if len(output.Errors) > 0 {
-		err = fmt.Errorf("graphql err: %s", output.Errors[0].Message)
-		return err
+		return fmt.Errorf("pod terminate mutation failed: %v", err)
 	}
 
 	return nil
-
 }
