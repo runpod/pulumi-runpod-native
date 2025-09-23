@@ -5,9 +5,9 @@ go 1.24.0
 require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/structs v1.1.0
-	github.com/pulumi/pulumi-go-provider v0.16.0
-	github.com/pulumi/pulumi-go-provider/integration v0.10.0
-	github.com/pulumi/pulumi/sdk/v3 v3.111.1
+	github.com/pulumi/pulumi-go-provider v0.15.0
+	github.com/pulumi/pulumi-go-provider/integration v0.9.0
+	github.com/pulumi/pulumi/sdk/v3 v3.110.0
 )
 
 require (
