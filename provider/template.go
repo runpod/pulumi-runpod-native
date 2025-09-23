@@ -140,6 +140,9 @@ func (*Template) Create(ctx p.Context, name string, input TemplateArgs, preview 
 	url := URL + config.Token
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+	if err != nil {
+		return name, state, err
+	}
 
 	_, err = httputil.DumpRequest(req, true)
 	if err != nil {
