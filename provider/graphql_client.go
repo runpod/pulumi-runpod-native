@@ -18,7 +18,7 @@ func NewGraphQLClient(token string) *GraphQLClient {
 	}
 
 	// Create GraphQL client
-	endpoint := "https://api.runpod.dev/graphql?api_key=" + token
+	endpoint := "https://api.runpod.io/graphql?api_key=" + token
 
 	client := NewClient(httpClient, endpoint, nil)
 

@@ -24,3 +24,7 @@ examples/python/newenv/**
 sdk/python/build/lib/runpodinfra/config/__init__.pyi
 sdk/python/build/lib/runpodinfra/config/__init__.pyi
 plmi/*
+.claude/
+.env
+provider/test-provider
+**/test-provider
