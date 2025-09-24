@@ -50,6 +50,7 @@
         }
     },
     "license": "Apache-2.0",
+    "publisher": "Runpod",
     "logoUrl": "https://avatars.githubusercontent.com/u/95939477?s=200&v=4",
     "name": "runpod",
     "pluginDownloadURL": "github://api.github.com/runpod/pulumi-runpod-native",
