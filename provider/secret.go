@@ -1,11 +1,8 @@
 package provider
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 
 	p "github.com/pulumi/pulumi-go-provider"
 	"github.com/pulumi/pulumi-go-provider/infer"
@@ -68,70 +65,36 @@ func (s *Secret) Create(ctx p.Context, name string, input SecretArgs, preview bo
 		"input": inputMap,
 	}
 
-	requestBody := map[string]interface{}{
-		"query":     mutation,
-		"variables": variables,
+	request := GraphQLRequest{
+		Query:     mutation,
+		Variables: variables,
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
 	if err != nil {
-		return "", state, fmt.Errorf("failed to marshal GraphQL request: %w", err)
-	}
-
-	// Make HTTP request to RunPod GraphQL API
-	url := "https://zackmckenna-api.runpod.dev/graphql?api_key=" + cfg.Token
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return "", state, fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", state, fmt.Errorf("failed to make request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", state, fmt.Errorf("failed to read response: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return "", state, fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
+		return "", state, err
 	}
 
 	// Parse GraphQL response
-	var gqlResponse struct {
-		Data struct {
-			SecretCreate struct {
-				Id          string  `json:"id"`
-				Name        string  `json:"name"`
-				Description *string `json:"description"`
-				CreatedAt   string  `json:"createdAt"`
-				UpdatedAt   string  `json:"updatedAt"`
-			} `json:"secretCreate"`
-		} `json:"data"`
-		Errors []struct {
-			Message string `json:"message"`
-		} `json:"errors"`
+	var secretCreateData struct {
+		SecretCreate struct {
+			Id          string  `json:"id"`
+			Name        string  `json:"name"`
+			Description *string `json:"description"`
+			CreatedAt   string  `json:"createdAt"`
+			UpdatedAt   string  `json:"updatedAt"`
+		} `json:"secretCreate"`
 	}
 
-	if err := json.Unmarshal(body, &gqlResponse); err != nil {
+	if err := json.Unmarshal(resp.Data, &secretCreateData); err != nil {
 		return "", state, fmt.Errorf("failed to parse response: %w", err)
 	}
 
-	if len(gqlResponse.Errors) > 0 {
-		return "", state, fmt.Errorf("GraphQL error: %s", gqlResponse.Errors[0].Message)
-	}
-
 	// Update state with response data
-	state.SecretId = gqlResponse.Data.SecretCreate.Id
-	state.Description = gqlResponse.Data.SecretCreate.Description
-	state.CreatedAt = gqlResponse.Data.SecretCreate.CreatedAt
-	state.UpdatedAt = gqlResponse.Data.SecretCreate.UpdatedAt
+	state.SecretId = secretCreateData.SecretCreate.Id
+	state.Description = secretCreateData.SecretCreate.Description
+	state.CreatedAt = secretCreateData.SecretCreate.CreatedAt
+	state.UpdatedAt = secretCreateData.SecretCreate.UpdatedAt
 
 	return name, state, nil
 }
@@ -160,73 +123,40 @@ func (s *Secret) Read(ctx p.Context, id string, inputs SecretArgs, state SecretS
 		"id": state.SecretId,
 	}
 
-	requestBody := map[string]interface{}{
-		"query":     query,
-		"variables": variables,
+	request := GraphQLRequest{
+		Query:     query,
+		Variables: variables,
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
 	if err != nil {
-		return "", inputs, state, fmt.Errorf("failed to marshal GraphQL request: %w", err)
+		return "", inputs, state, err
 	}
 
-	url := "https://zackmckenna-api.runpod.dev/graphql?api_key=" + cfg.Token
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return "", inputs, state, fmt.Errorf("failed to create request: %w", err)
+	var secretData struct {
+		Secret *struct {
+			Id          string  `json:"id"`
+			Name        string  `json:"name"`
+			Description *string `json:"description"`
+			CreatedAt   string  `json:"createdAt"`
+			UpdatedAt   string  `json:"updatedAt"`
+		} `json:"secret"`
 	}
 
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", inputs, state, fmt.Errorf("failed to make request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", inputs, state, fmt.Errorf("failed to read response: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return "", inputs, state, fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
-	}
-
-	var gqlResponse struct {
-		Data struct {
-			Secret *struct {
-				Id          string  `json:"id"`
-				Name        string  `json:"name"`
-				Description *string `json:"description"`
-				CreatedAt   string  `json:"createdAt"`
-				UpdatedAt   string  `json:"updatedAt"`
-			} `json:"secret"`
-		} `json:"data"`
-		Errors []struct {
-			Message string `json:"message"`
-		} `json:"errors"`
-	}
-
-	if err := json.Unmarshal(body, &gqlResponse); err != nil {
+	if err := json.Unmarshal(resp.Data, &secretData); err != nil {
 		return "", inputs, state, fmt.Errorf("failed to parse response: %w", err)
 	}
 
-	if len(gqlResponse.Errors) > 0 {
-		return "", inputs, state, fmt.Errorf("GraphQL error: %s", gqlResponse.Errors[0].Message)
-	}
-
-	if gqlResponse.Data.Secret == nil {
+	if secretData.Secret == nil {
 		return "", inputs, state, fmt.Errorf("secret not found")
 	}
 
 	// Update state with fresh data
-	state.SecretId = gqlResponse.Data.Secret.Id
-	state.Name = gqlResponse.Data.Secret.Name
-	state.Description = gqlResponse.Data.Secret.Description
-	state.CreatedAt = gqlResponse.Data.Secret.CreatedAt
-	state.UpdatedAt = gqlResponse.Data.Secret.UpdatedAt
+	state.SecretId = secretData.Secret.Id
+	state.Name = secretData.Secret.Name
+	state.Description = secretData.Secret.Description
+	state.CreatedAt = secretData.Secret.CreatedAt
+	state.UpdatedAt = secretData.Secret.UpdatedAt
 
 	return id, inputs, state, nil
 }
@@ -264,68 +194,35 @@ func (s *Secret) Update(ctx p.Context, id string, olds SecretState, news SecretA
 		},
 	}
 
-	requestBody := map[string]interface{}{
-		"query":     mutation,
-		"variables": variables,
+	request := GraphQLRequest{
+		Query:     mutation,
+		Variables: variables,
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
 	if err != nil {
-		return state, fmt.Errorf("failed to marshal GraphQL request: %w", err)
+		return state, err
 	}
 
-	url := "https://zackmckenna-api.runpod.dev/graphql?api_key=" + cfg.Token
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return state, fmt.Errorf("failed to create request: %w", err)
+	var updateData struct {
+		SecretValueUpdate struct {
+			Id          string  `json:"id"`
+			Name        string  `json:"name"`
+			Description *string `json:"description"`
+			CreatedAt   string  `json:"createdAt"`
+			UpdatedAt   string  `json:"updatedAt"`
+		} `json:"secretValueUpdate"`
 	}
 
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return state, fmt.Errorf("failed to make request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return state, fmt.Errorf("failed to read response: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return state, fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
-	}
-
-	var gqlResponse struct {
-		Data struct {
-			SecretValueUpdate struct {
-				Id          string  `json:"id"`
-				Name        string  `json:"name"`
-				Description *string `json:"description"`
-				CreatedAt   string  `json:"createdAt"`
-				UpdatedAt   string  `json:"updatedAt"`
-			} `json:"secretValueUpdate"`
-		} `json:"data"`
-		Errors []struct {
-			Message string `json:"message"`
-		} `json:"errors"`
-	}
-
-	if err := json.Unmarshal(body, &gqlResponse); err != nil {
+	if err := json.Unmarshal(resp.Data, &updateData); err != nil {
 		return state, fmt.Errorf("failed to parse response: %w", err)
 	}
 
-	if len(gqlResponse.Errors) > 0 {
-		return state, fmt.Errorf("GraphQL error: %s", gqlResponse.Errors[0].Message)
-	}
-
 	// Update state with response data
-	state.SecretId = gqlResponse.Data.SecretValueUpdate.Id
-	state.Description = gqlResponse.Data.SecretValueUpdate.Description
-	state.CreatedAt = gqlResponse.Data.SecretValueUpdate.CreatedAt
-	state.UpdatedAt = gqlResponse.Data.SecretValueUpdate.UpdatedAt
+	state.SecretId = updateData.SecretValueUpdate.Id
+	state.Description = updateData.SecretValueUpdate.Description
+	state.CreatedAt = updateData.SecretValueUpdate.CreatedAt
+	state.UpdatedAt = updateData.SecretValueUpdate.UpdatedAt
 
 	return state, nil
 }
@@ -348,55 +245,14 @@ func (s *Secret) Delete(ctx p.Context, id string, state SecretState) error {
 		"id": state.SecretId,
 	}
 
-	requestBody := map[string]interface{}{
-		"query":     mutation,
-		"variables": variables,
+	request := GraphQLRequest{
+		Query:     mutation,
+		Variables: variables,
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	_, err := MakeGraphQLRequest(ctx, cfg.Token, request)
 	if err != nil {
-		return fmt.Errorf("failed to marshal GraphQL request: %w", err)
-	}
-
-	url := "https://zackmckenna-api.runpod.dev/graphql?api_key=" + cfg.Token
-	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewBuffer(jsonData))
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to make request: %w", err)
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response: %w", err)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
-	}
-
-	var gqlResponse struct {
-		Data struct {
-			SecretDelete interface{} `json:"secretDelete"`
-		} `json:"data"`
-		Errors []struct {
-			Message string `json:"message"`
-		} `json:"errors"`
-	}
-
-	if err := json.Unmarshal(body, &gqlResponse); err != nil {
-		return fmt.Errorf("failed to parse response: %w", err)
-	}
-
-	if len(gqlResponse.Errors) > 0 {
-		return fmt.Errorf("GraphQL error: %s", gqlResponse.Errors[0].Message)
+		return err
 	}
 
 	// secretDelete returns Void (null) on success, so we just check for absence of errors
