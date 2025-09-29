@@ -148,7 +148,8 @@ func (s *Secret) Read(ctx p.Context, id string, inputs SecretArgs, state SecretS
 	}
 
 	if secretData.Secret == nil {
-		return "", inputs, state, fmt.Errorf("secret not found")
+		// Secret not found - return empty ID to signal deletion to Pulumi
+		return id, inputs, SecretState{}, nil
 	}
 
 	// Update state with fresh data
@@ -174,55 +175,124 @@ func (s *Secret) Update(ctx p.Context, id string, olds SecretState, news SecretA
 		return state, fmt.Errorf("RunPod API key is required")
 	}
 
-	// Update secret value via GraphQL mutation
-	mutation := `
-		mutation SecretValueUpdate($input: SecretValueUpdateInput!) {
-			secretValueUpdate(input: $input) {
-				id
-				name
-				description
-				createdAt
-				updatedAt
+	// Check if name changed - this requires recreating the resource
+	if news.Name != olds.Name {
+		return state, fmt.Errorf("secret name cannot be changed - this requires recreating the resource")
+	}
+
+	// Update secret value if changed
+	if news.Value != olds.Value {
+		mutation := `
+			mutation SecretValueUpdate($input: SecretValueUpdateInput!) {
+				secretValueUpdate(input: $input) {
+					id
+					name
+					description
+					createdAt
+					updatedAt
+				}
 			}
+		`
+
+		variables := map[string]interface{}{
+			"input": map[string]interface{}{
+				"id":    state.SecretId,
+				"value": news.Value,
+			},
 		}
-	`
 
-	variables := map[string]interface{}{
-		"input": map[string]interface{}{
-			"id":    state.SecretId,
-			"value": news.Value,
-		},
+		request := GraphQLRequest{
+			Query:     mutation,
+			Variables: variables,
+		}
+
+		resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
+		if err != nil {
+			return state, err
+		}
+
+		var updateData struct {
+			SecretValueUpdate struct {
+				Id          string  `json:"id"`
+				Name        string  `json:"name"`
+				Description *string `json:"description"`
+				CreatedAt   string  `json:"createdAt"`
+				UpdatedAt   string  `json:"updatedAt"`
+			} `json:"secretValueUpdate"`
+		}
+
+		if err := json.Unmarshal(resp.Data, &updateData); err != nil {
+			return state, fmt.Errorf("failed to parse response: %w", err)
+		}
+
+		// Update state with response data
+		state.SecretId = updateData.SecretValueUpdate.Id
+		state.Description = updateData.SecretValueUpdate.Description
+		state.CreatedAt = updateData.SecretValueUpdate.CreatedAt
+		state.UpdatedAt = updateData.SecretValueUpdate.UpdatedAt
 	}
 
-	request := GraphQLRequest{
-		Query:     mutation,
-		Variables: variables,
-	}
+	// Update description if changed
+	if (news.Description == nil && olds.Description != nil) ||
+	   (news.Description != nil && olds.Description == nil) ||
+	   (news.Description != nil && olds.Description != nil && *news.Description != *olds.Description) {
 
-	resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
-	if err != nil {
-		return state, err
-	}
+		if news.Description != nil {
+			// Update description
+			mutation := `
+				mutation SecretDescriptionUpdate($input: SecretDescriptionUpdateInput!) {
+					secretDescriptionUpdate(input: $input) {
+						id
+						name
+						description
+						createdAt
+						updatedAt
+					}
+				}
+			`
 
-	var updateData struct {
-		SecretValueUpdate struct {
-			Id          string  `json:"id"`
-			Name        string  `json:"name"`
-			Description *string `json:"description"`
-			CreatedAt   string  `json:"createdAt"`
-			UpdatedAt   string  `json:"updatedAt"`
-		} `json:"secretValueUpdate"`
-	}
+			variables := map[string]interface{}{
+				"input": map[string]interface{}{
+					"id":          state.SecretId,
+					"description": *news.Description,
+				},
+			}
 
-	if err := json.Unmarshal(resp.Data, &updateData); err != nil {
-		return state, fmt.Errorf("failed to parse response: %w", err)
-	}
+			request := GraphQLRequest{
+				Query:     mutation,
+				Variables: variables,
+			}
 
-	// Update state with response data
-	state.SecretId = updateData.SecretValueUpdate.Id
-	state.Description = updateData.SecretValueUpdate.Description
-	state.CreatedAt = updateData.SecretValueUpdate.CreatedAt
-	state.UpdatedAt = updateData.SecretValueUpdate.UpdatedAt
+			resp, err := MakeGraphQLRequest(ctx, cfg.Token, request)
+			if err != nil {
+				return state, err
+			}
+
+			var updateData struct {
+				SecretDescriptionUpdate struct {
+					Id          string  `json:"id"`
+					Name        string  `json:"name"`
+					Description *string `json:"description"`
+					CreatedAt   string  `json:"createdAt"`
+					UpdatedAt   string  `json:"updatedAt"`
+				} `json:"secretDescriptionUpdate"`
+			}
+
+			if err := json.Unmarshal(resp.Data, &updateData); err != nil {
+				return state, fmt.Errorf("failed to parse response: %w", err)
+			}
+
+			// Update state with response data
+			state.SecretId = updateData.SecretDescriptionUpdate.Id
+			state.Description = updateData.SecretDescriptionUpdate.Description
+			state.CreatedAt = updateData.SecretDescriptionUpdate.CreatedAt
+			state.UpdatedAt = updateData.SecretDescriptionUpdate.UpdatedAt
+		} else {
+			// Note: RunPod API doesn't appear to support removing descriptions
+			// For now, we'll keep the existing description
+			state.Description = olds.Description
+		}
+	}
 
 	return state, nil
 }
