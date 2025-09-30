@@ -13,31 +13,22 @@ if sys.version_info >= (3, 11):
 else:
     from typing_extensions import NotRequired, TypedDict, TypeAlias
 from . import _utilities
-from . import outputs
 
-__all__ = ['NetworkStorageArgs', 'NetworkStorage']
+__all__ = ['SecretArgs', 'Secret']
 
 @pulumi.input_type
-class NetworkStorageArgs:
+class SecretArgs:
     def __init__(__self__, *,
-                 data_center_id: pulumi.Input[_builtins.str],
                  name: pulumi.Input[_builtins.str],
-                 size: pulumi.Input[_builtins.int]):
+                 value: pulumi.Input[_builtins.str],
+                 description: Optional[pulumi.Input[_builtins.str]] = None):
         """
-        The set of arguments for constructing a NetworkStorage resource.
+        The set of arguments for constructing a Secret resource.
         """
-        pulumi.set(__self__, "data_center_id", data_center_id)
         pulumi.set(__self__, "name", name)
-        pulumi.set(__self__, "size", size)
-
-    @_builtins.property
-    @pulumi.getter(name="dataCenterId")
-    def data_center_id(self) -> pulumi.Input[_builtins.str]:
-        return pulumi.get(self, "data_center_id")
-
-    @data_center_id.setter
-    def data_center_id(self, value: pulumi.Input[_builtins.str]):
-        pulumi.set(self, "data_center_id", value)
+        pulumi.set(__self__, "value", value)
+        if description is not None:
+            pulumi.set(__self__, "description", description)
 
     @_builtins.property
     @pulumi.getter
@@ -50,26 +41,35 @@ class NetworkStorageArgs:
 
     @_builtins.property
     @pulumi.getter
-    def size(self) -> pulumi.Input[_builtins.int]:
-        return pulumi.get(self, "size")
+    def value(self) -> pulumi.Input[_builtins.str]:
+        return pulumi.get(self, "value")
 
-    @size.setter
-    def size(self, value: pulumi.Input[_builtins.int]):
-        pulumi.set(self, "size", value)
+    @value.setter
+    def value(self, value: pulumi.Input[_builtins.str]):
+        pulumi.set(self, "value", value)
+
+    @_builtins.property
+    @pulumi.getter
+    def description(self) -> Optional[pulumi.Input[_builtins.str]]:
+        return pulumi.get(self, "description")
+
+    @description.setter
+    def description(self, value: Optional[pulumi.Input[_builtins.str]]):
+        pulumi.set(self, "description", value)
 
 
-@pulumi.type_token("runpod:index:NetworkStorage")
-class NetworkStorage(pulumi.CustomResource):
+@pulumi.type_token("runpod:index:Secret")
+class Secret(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_center_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 description: Optional[pulumi.Input[_builtins.str]] = None,
                  name: Optional[pulumi.Input[_builtins.str]] = None,
-                 size: Optional[pulumi.Input[_builtins.int]] = None,
+                 value: Optional[pulumi.Input[_builtins.str]] = None,
                  __props__=None):
         """
-        Create a NetworkStorage resource with the given unique name, props, and options.
+        Create a Secret resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
@@ -77,17 +77,17 @@ class NetworkStorage(pulumi.CustomResource):
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: NetworkStorageArgs,
+                 args: SecretArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
-        Create a NetworkStorage resource with the given unique name, props, and options.
+        Create a Secret resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
-        :param NetworkStorageArgs args: The arguments to use to populate this resource's properties.
+        :param SecretArgs args: The arguments to use to populate this resource's properties.
         :param pulumi.ResourceOptions opts: Options for the resource.
         """
         ...
     def __init__(__self__, resource_name: str, *args, **kwargs):
-        resource_args, opts = _utilities.get_resource_args_opts(NetworkStorageArgs, pulumi.ResourceOptions, *args, **kwargs)
+        resource_args, opts = _utilities.get_resource_args_opts(SecretArgs, pulumi.ResourceOptions, *args, **kwargs)
         if resource_args is not None:
             __self__._internal_init(resource_name, opts, **resource_args.__dict__)
         else:
@@ -96,9 +96,9 @@ class NetworkStorage(pulumi.CustomResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
-                 data_center_id: Optional[pulumi.Input[_builtins.str]] = None,
+                 description: Optional[pulumi.Input[_builtins.str]] = None,
                  name: Optional[pulumi.Input[_builtins.str]] = None,
-                 size: Optional[pulumi.Input[_builtins.int]] = None,
+                 value: Optional[pulumi.Input[_builtins.str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -106,20 +106,20 @@ class NetworkStorage(pulumi.CustomResource):
         if opts.id is None:
             if __props__ is not None:
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
-            __props__ = NetworkStorageArgs.__new__(NetworkStorageArgs)
+            __props__ = SecretArgs.__new__(SecretArgs)
 
-            if data_center_id is None and not opts.urn:
-                raise TypeError("Missing required property 'data_center_id'")
-            __props__.__dict__["data_center_id"] = data_center_id
+            __props__.__dict__["description"] = description
             if name is None and not opts.urn:
                 raise TypeError("Missing required property 'name'")
             __props__.__dict__["name"] = name
-            if size is None and not opts.urn:
-                raise TypeError("Missing required property 'size'")
-            __props__.__dict__["size"] = size
-            __props__.__dict__["network_storage"] = None
-        super(NetworkStorage, __self__).__init__(
-            'runpod:index:NetworkStorage',
+            if value is None and not opts.urn:
+                raise TypeError("Missing required property 'value'")
+            __props__.__dict__["value"] = value
+            __props__.__dict__["created_at"] = None
+            __props__.__dict__["secret_id"] = None
+            __props__.__dict__["updated_at"] = None
+        super(Secret, __self__).__init__(
+            'runpod:index:Secret',
             resource_name,
             __props__,
             opts)
@@ -127,9 +127,9 @@ class NetworkStorage(pulumi.CustomResource):
     @staticmethod
     def get(resource_name: str,
             id: pulumi.Input[str],
-            opts: Optional[pulumi.ResourceOptions] = None) -> 'NetworkStorage':
+            opts: Optional[pulumi.ResourceOptions] = None) -> 'Secret':
         """
-        Get an existing NetworkStorage resource's state with the given name, id, and optional extra
+        Get an existing Secret resource's state with the given name, id, and optional extra
         properties used to qualify the lookup.
 
         :param str resource_name: The unique name of the resulting resource.
@@ -138,18 +138,25 @@ class NetworkStorage(pulumi.CustomResource):
         """
         opts = pulumi.ResourceOptions.merge(opts, pulumi.ResourceOptions(id=id))
 
-        __props__ = NetworkStorageArgs.__new__(NetworkStorageArgs)
+        __props__ = SecretArgs.__new__(SecretArgs)
 
-        __props__.__dict__["data_center_id"] = None
+        __props__.__dict__["created_at"] = None
+        __props__.__dict__["description"] = None
         __props__.__dict__["name"] = None
-        __props__.__dict__["network_storage"] = None
-        __props__.__dict__["size"] = None
-        return NetworkStorage(resource_name, opts=opts, __props__=__props__)
+        __props__.__dict__["secret_id"] = None
+        __props__.__dict__["updated_at"] = None
+        __props__.__dict__["value"] = None
+        return Secret(resource_name, opts=opts, __props__=__props__)
 
     @_builtins.property
-    @pulumi.getter(name="dataCenterId")
-    def data_center_id(self) -> pulumi.Output[_builtins.str]:
-        return pulumi.get(self, "data_center_id")
+    @pulumi.getter(name="createdAt")
+    def created_at(self) -> pulumi.Output[_builtins.str]:
+        return pulumi.get(self, "created_at")
+
+    @_builtins.property
+    @pulumi.getter
+    def description(self) -> pulumi.Output[Optional[_builtins.str]]:
+        return pulumi.get(self, "description")
 
     @_builtins.property
     @pulumi.getter
@@ -157,12 +164,17 @@ class NetworkStorage(pulumi.CustomResource):
         return pulumi.get(self, "name")
 
     @_builtins.property
-    @pulumi.getter(name="networkStorage")
-    def network_storage(self) -> pulumi.Output['outputs.NetworkStorage']:
-        return pulumi.get(self, "network_storage")
+    @pulumi.getter(name="secretId")
+    def secret_id(self) -> pulumi.Output[_builtins.str]:
+        return pulumi.get(self, "secret_id")
+
+    @_builtins.property
+    @pulumi.getter(name="updatedAt")
+    def updated_at(self) -> pulumi.Output[_builtins.str]:
+        return pulumi.get(self, "updated_at")
 
     @_builtins.property
     @pulumi.getter
-    def size(self) -> pulumi.Output[_builtins.int]:
-        return pulumi.get(self, "size")
+    def value(self) -> pulumi.Output[_builtins.str]:
+        return pulumi.get(self, "value")
 

@@ -27,6 +27,8 @@ func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi
 		r = &NetworkStorage{}
 	case "runpod:index:Pod":
 		r = &Pod{}
+	case "runpod:index:Secret":
+		r = &Secret{}
 	case "runpod:index:Template":
 		r = &Template{}
 	default:

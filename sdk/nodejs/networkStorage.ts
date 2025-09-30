@@ -33,10 +33,10 @@ export class NetworkStorage extends pulumi.CustomResource {
         return obj['__pulumiType'] === NetworkStorage.__pulumiType;
     }
 
-    public readonly dataCenterId!: pulumi.Output<string>;
-    public readonly name!: pulumi.Output<string>;
-    public /*out*/ readonly networkStorage!: pulumi.Output<outputs.NetworkStorage>;
-    public readonly size!: pulumi.Output<number>;
+    declare public readonly dataCenterId: pulumi.Output<string>;
+    declare public readonly name: pulumi.Output<string>;
+    declare public /*out*/ readonly networkStorage: pulumi.Output<outputs.NetworkStorage>;
+    declare public readonly size: pulumi.Output<number>;
 
     /**
      * Create a NetworkStorage resource with the given unique name, arguments, and options.
@@ -49,18 +49,18 @@ export class NetworkStorage extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.dataCenterId === undefined) && !opts.urn) {
+            if (args?.dataCenterId === undefined && !opts.urn) {
                 throw new Error("Missing required property 'dataCenterId'");
             }
-            if ((!args || args.name === undefined) && !opts.urn) {
+            if (args?.name === undefined && !opts.urn) {
                 throw new Error("Missing required property 'name'");
             }
-            if ((!args || args.size === undefined) && !opts.urn) {
+            if (args?.size === undefined && !opts.urn) {
                 throw new Error("Missing required property 'size'");
             }
-            resourceInputs["dataCenterId"] = args ? args.dataCenterId : undefined;
-            resourceInputs["name"] = args ? args.name : undefined;
-            resourceInputs["size"] = args ? args.size : undefined;
+            resourceInputs["dataCenterId"] = args?.dataCenterId;
+            resourceInputs["name"] = args?.name;
+            resourceInputs["size"] = args?.size;
             resourceInputs["networkStorage"] = undefined /*out*/;
         } else {
             resourceInputs["dataCenterId"] = undefined /*out*/;
