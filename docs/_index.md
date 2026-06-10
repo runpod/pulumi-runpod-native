@@ -67,7 +67,7 @@ const myRandomPod = new runpod.Pod("myRandomPod", {
   minMemoryInGb: 15,
   gpuTypeId: "NVIDIA GeForce RTX 4090",
   name: "RunPod Pytorch",
-  imageName: "runpod/pytorch:latest",
+  imageName: "runpod/pytorch:2.8.0-py3.11-cuda12.8.1-cudnn-devel-ubuntu22.04",
   dockerArgs: "",
   ports: "8888/http",
   volumeMountPath: "/workspace",
