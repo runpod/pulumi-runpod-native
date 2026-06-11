@@ -41,6 +41,7 @@ func Provider() p.Provider {
 			infer.Resource[*Template, TemplateArgs, TemplateState](),
 			infer.Resource[*Pod, PodArgs, PodState](),
 			infer.Resource[*Endpoint, EndpointArgs, EndpointState](),
+			infer.Resource[*Secret, SecretArgs, SecretState](),
 		},
 		Config: infer.Config[*Config](),
 		ModuleMap: map[tokens.ModuleName]tokens.ModuleName{

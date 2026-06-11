@@ -10,36 +10,42 @@ using Pulumi;
 
 namespace RunpodInfra.Runpod
 {
-    [RunpodResourceType("runpod:index:NetworkStorage")]
-    public partial class NetworkStorage : global::Pulumi.CustomResource
+    [RunpodResourceType("runpod:index:Secret")]
+    public partial class Secret : global::Pulumi.CustomResource
     {
-        [Output("dataCenterId")]
-        public Output<string> DataCenterId { get; private set; } = null!;
+        [Output("createdAt")]
+        public Output<string> CreatedAt { get; private set; } = null!;
+
+        [Output("description")]
+        public Output<string?> Description { get; private set; } = null!;
 
         [Output("name")]
         public Output<string> Name { get; private set; } = null!;
 
-        [Output("networkStorage")]
-        public Output<Outputs.NetworkStorage> NetworkStorage { get; private set; } = null!;
+        [Output("secretId")]
+        public Output<string> SecretId { get; private set; } = null!;
 
-        [Output("size")]
-        public Output<int> Size { get; private set; } = null!;
+        [Output("updatedAt")]
+        public Output<string> UpdatedAt { get; private set; } = null!;
+
+        [Output("value")]
+        public Output<string> Value { get; private set; } = null!;
 
 
         /// <summary>
-        /// Create a NetworkStorage resource with the given unique name, arguments, and options.
+        /// Create a Secret resource with the given unique name, arguments, and options.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resource</param>
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public NetworkStorage(string name, NetworkStorageArgs args, CustomResourceOptions? options = null)
-            : base("runpod:index:NetworkStorage", name, args ?? new NetworkStorageArgs(), MakeResourceOptions(options, ""))
+        public Secret(string name, SecretArgs args, CustomResourceOptions? options = null)
+            : base("runpod:index:Secret", name, args ?? new SecretArgs(), MakeResourceOptions(options, ""))
         {
         }
 
-        private NetworkStorage(string name, Input<string> id, CustomResourceOptions? options = null)
-            : base("runpod:index:NetworkStorage", name, null, MakeResourceOptions(options, id))
+        private Secret(string name, Input<string> id, CustomResourceOptions? options = null)
+            : base("runpod:index:Secret", name, null, MakeResourceOptions(options, id))
         {
         }
 
@@ -56,33 +62,33 @@ namespace RunpodInfra.Runpod
             return merged;
         }
         /// <summary>
-        /// Get an existing NetworkStorage resource's state with the given name, ID, and optional extra
+        /// Get an existing Secret resource's state with the given name, ID, and optional extra
         /// properties used to qualify the lookup.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resulting resource.</param>
         /// <param name="id">The unique provider ID of the resource to lookup.</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public static NetworkStorage Get(string name, Input<string> id, CustomResourceOptions? options = null)
+        public static Secret Get(string name, Input<string> id, CustomResourceOptions? options = null)
         {
-            return new NetworkStorage(name, id, options);
+            return new Secret(name, id, options);
         }
     }
 
-    public sealed class NetworkStorageArgs : global::Pulumi.ResourceArgs
+    public sealed class SecretArgs : global::Pulumi.ResourceArgs
     {
-        [Input("dataCenterId", required: true)]
-        public Input<string> DataCenterId { get; set; } = null!;
+        [Input("description")]
+        public Input<string>? Description { get; set; }
 
         [Input("name", required: true)]
         public Input<string> Name { get; set; } = null!;
 
-        [Input("size", required: true)]
-        public Input<int> Size { get; set; } = null!;
+        [Input("value", required: true)]
+        public Input<string> Value { get; set; } = null!;
 
-        public NetworkStorageArgs()
+        public SecretArgs()
         {
         }
-        public static new NetworkStorageArgs Empty => new NetworkStorageArgs();
+        public static new SecretArgs Empty => new SecretArgs();
     }
 }

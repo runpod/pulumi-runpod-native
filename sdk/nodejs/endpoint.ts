@@ -33,17 +33,17 @@ export class Endpoint extends pulumi.CustomResource {
         return obj['__pulumiType'] === Endpoint.__pulumiType;
     }
 
-    public /*out*/ readonly endpoint!: pulumi.Output<outputs.Endpoint>;
-    public readonly gpuIds!: pulumi.Output<string>;
-    public readonly idleTimeout!: pulumi.Output<number | undefined>;
-    public readonly locations!: pulumi.Output<string | undefined>;
-    public readonly name!: pulumi.Output<string>;
-    public readonly networkVolumeId!: pulumi.Output<string | undefined>;
-    public readonly scalerType!: pulumi.Output<string | undefined>;
-    public readonly scalerValue!: pulumi.Output<number | undefined>;
-    public readonly templateId!: pulumi.Output<string | undefined>;
-    public readonly workersMax!: pulumi.Output<number | undefined>;
-    public readonly workersMin!: pulumi.Output<number | undefined>;
+    declare public /*out*/ readonly endpoint: pulumi.Output<outputs.Endpoint>;
+    declare public readonly gpuIds: pulumi.Output<string>;
+    declare public readonly idleTimeout: pulumi.Output<number | undefined>;
+    declare public readonly locations: pulumi.Output<string | undefined>;
+    declare public readonly name: pulumi.Output<string>;
+    declare public readonly networkVolumeId: pulumi.Output<string | undefined>;
+    declare public readonly scalerType: pulumi.Output<string | undefined>;
+    declare public readonly scalerValue: pulumi.Output<number | undefined>;
+    declare public readonly templateId: pulumi.Output<string | undefined>;
+    declare public readonly workersMax: pulumi.Output<number | undefined>;
+    declare public readonly workersMin: pulumi.Output<number | undefined>;
 
     /**
      * Create a Endpoint resource with the given unique name, arguments, and options.
@@ -56,22 +56,22 @@ export class Endpoint extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.gpuIds === undefined) && !opts.urn) {
+            if (args?.gpuIds === undefined && !opts.urn) {
                 throw new Error("Missing required property 'gpuIds'");
             }
-            if ((!args || args.name === undefined) && !opts.urn) {
+            if (args?.name === undefined && !opts.urn) {
                 throw new Error("Missing required property 'name'");
             }
-            resourceInputs["gpuIds"] = args ? args.gpuIds : undefined;
-            resourceInputs["idleTimeout"] = args ? args.idleTimeout : undefined;
-            resourceInputs["locations"] = args ? args.locations : undefined;
-            resourceInputs["name"] = args ? args.name : undefined;
-            resourceInputs["networkVolumeId"] = args ? args.networkVolumeId : undefined;
-            resourceInputs["scalerType"] = args ? args.scalerType : undefined;
-            resourceInputs["scalerValue"] = args ? args.scalerValue : undefined;
-            resourceInputs["templateId"] = args ? args.templateId : undefined;
-            resourceInputs["workersMax"] = args ? args.workersMax : undefined;
-            resourceInputs["workersMin"] = args ? args.workersMin : undefined;
+            resourceInputs["gpuIds"] = args?.gpuIds;
+            resourceInputs["idleTimeout"] = args?.idleTimeout;
+            resourceInputs["locations"] = args?.locations;
+            resourceInputs["name"] = args?.name;
+            resourceInputs["networkVolumeId"] = args?.networkVolumeId;
+            resourceInputs["scalerType"] = args?.scalerType;
+            resourceInputs["scalerValue"] = args?.scalerValue;
+            resourceInputs["templateId"] = args?.templateId;
+            resourceInputs["workersMax"] = args?.workersMax;
+            resourceInputs["workersMin"] = args?.workersMin;
             resourceInputs["endpoint"] = undefined /*out*/;
         } else {
             resourceInputs["endpoint"] = undefined /*out*/;
