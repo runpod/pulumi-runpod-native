@@ -225,6 +225,9 @@
                     },
                     "type": "array"
                 },
+                "globalNetwork": {
+                    "type": "boolean"
+                },
                 "gpuCount": {
                     "type": "integer"
                 },
@@ -328,6 +331,9 @@
                         "$ref": "#/types/runpod:index:PodEnv"
                     },
                     "type": "array"
+                },
+                "globalNetwork": {
+                    "type": "boolean"
                 },
                 "gpuCount": {
                     "type": "integer"
@@ -694,6 +700,9 @@
                         "type": "string"
                     },
                     "type": "array"
+                },
+                "globalNetwork": {
+                    "type": "boolean"
                 },
                 "gpuCount": {
                     "type": "integer"
