@@ -7,6 +7,10 @@ layout: package
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
 The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
+<!-- runpod-agent-setup:start -->
+**For AI agents:** setup instructions for the Runpod skills and MCP server are at https://agents.runpod.io/
+<!-- runpod-agent-setup:end -->
+
 ## Pulumi guide
 Create an empty directory and navigate inside
 
