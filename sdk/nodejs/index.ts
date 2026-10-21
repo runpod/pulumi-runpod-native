@@ -25,6 +25,11 @@ export type Provider = import("./provider").Provider;
 export const Provider: typeof import("./provider").Provider = null as any;
 utilities.lazyLoad(exports, ["Provider"], () => require("./provider"));
 
+export { SecretArgs } from "./secret";
+export type Secret = import("./secret").Secret;
+export const Secret: typeof import("./secret").Secret = null as any;
+utilities.lazyLoad(exports, ["Secret"], () => require("./secret"));
+
 export { TemplateArgs } from "./template";
 export type Template = import("./template").Template;
 export const Template: typeof import("./template").Template = null as any;
@@ -50,6 +55,8 @@ const _module = {
                 return new NetworkStorage(name, <any>undefined, { urn })
             case "runpod:index:Pod":
                 return new Pod(name, <any>undefined, { urn })
+            case "runpod:index:Secret":
+                return new Secret(name, <any>undefined, { urn })
             case "runpod:index:Template":
                 return new Template(name, <any>undefined, { urn })
             default:

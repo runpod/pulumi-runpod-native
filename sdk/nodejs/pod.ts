@@ -33,39 +33,39 @@ export class Pod extends pulumi.CustomResource {
         return obj['__pulumiType'] === Pod.__pulumiType;
     }
 
-    public readonly aiApiId!: pulumi.Output<string | undefined>;
-    public readonly cloudType!: pulumi.Output<string | undefined>;
-    public readonly containerDiskInGb!: pulumi.Output<number | undefined>;
-    public readonly countryCode!: pulumi.Output<string | undefined>;
-    public readonly cudaVersion!: pulumi.Output<string | undefined>;
-    public readonly dataCenterId!: pulumi.Output<string | undefined>;
-    public readonly deployCost!: pulumi.Output<number | undefined>;
-    public readonly dockerArgs!: pulumi.Output<string | undefined>;
-    public readonly env!: pulumi.Output<outputs.PodEnv[] | undefined>;
-    public readonly gpuCount!: pulumi.Output<number>;
-    public readonly gpuTypeId!: pulumi.Output<string>;
-    public readonly gpuTypeIdList!: pulumi.Output<string[] | undefined>;
-    public readonly imageName!: pulumi.Output<string>;
-    public readonly minDisk!: pulumi.Output<number | undefined>;
-    public readonly minDownload!: pulumi.Output<number | undefined>;
-    public readonly minMemoryInGb!: pulumi.Output<number | undefined>;
-    public readonly minUpload!: pulumi.Output<number | undefined>;
-    public readonly minVcpuCount!: pulumi.Output<number | undefined>;
-    public readonly name!: pulumi.Output<string | undefined>;
-    public readonly networkVolumeId!: pulumi.Output<string | undefined>;
-    public /*out*/ readonly pod!: pulumi.Output<outputs.Pod>;
-    public readonly port!: pulumi.Output<number | undefined>;
-    public readonly ports!: pulumi.Output<string | undefined>;
-    public readonly savingsPlan!: pulumi.Output<outputs.SavingsPlanInput | undefined>;
-    public readonly startJupyter!: pulumi.Output<boolean | undefined>;
-    public readonly startSsh!: pulumi.Output<boolean | undefined>;
-    public readonly stopAfter!: pulumi.Output<string | undefined>;
-    public readonly supportPublicIp!: pulumi.Output<boolean | undefined>;
-    public readonly templateId!: pulumi.Output<string | undefined>;
-    public readonly terminateAfter!: pulumi.Output<string | undefined>;
-    public readonly volumeInGb!: pulumi.Output<number | undefined>;
-    public readonly volumeKey!: pulumi.Output<string | undefined>;
-    public readonly volumeMountPath!: pulumi.Output<string | undefined>;
+    declare public readonly aiApiId: pulumi.Output<string | undefined>;
+    declare public readonly cloudType: pulumi.Output<string | undefined>;
+    declare public readonly containerDiskInGb: pulumi.Output<number | undefined>;
+    declare public readonly countryCode: pulumi.Output<string | undefined>;
+    declare public readonly cudaVersion: pulumi.Output<string | undefined>;
+    declare public readonly dataCenterId: pulumi.Output<string | undefined>;
+    declare public readonly deployCost: pulumi.Output<number | undefined>;
+    declare public readonly dockerArgs: pulumi.Output<string | undefined>;
+    declare public readonly env: pulumi.Output<outputs.PodEnv[] | undefined>;
+    declare public readonly gpuCount: pulumi.Output<number>;
+    declare public readonly gpuTypeId: pulumi.Output<string>;
+    declare public readonly gpuTypeIdList: pulumi.Output<string[] | undefined>;
+    declare public readonly imageName: pulumi.Output<string>;
+    declare public readonly minDisk: pulumi.Output<number | undefined>;
+    declare public readonly minDownload: pulumi.Output<number | undefined>;
+    declare public readonly minMemoryInGb: pulumi.Output<number | undefined>;
+    declare public readonly minUpload: pulumi.Output<number | undefined>;
+    declare public readonly minVcpuCount: pulumi.Output<number | undefined>;
+    declare public readonly name: pulumi.Output<string | undefined>;
+    declare public readonly networkVolumeId: pulumi.Output<string | undefined>;
+    declare public /*out*/ readonly pod: pulumi.Output<outputs.Pod>;
+    declare public readonly port: pulumi.Output<number | undefined>;
+    declare public readonly ports: pulumi.Output<string | undefined>;
+    declare public readonly savingsPlan: pulumi.Output<outputs.SavingsPlanInput | undefined>;
+    declare public readonly startJupyter: pulumi.Output<boolean | undefined>;
+    declare public readonly startSsh: pulumi.Output<boolean | undefined>;
+    declare public readonly stopAfter: pulumi.Output<string | undefined>;
+    declare public readonly supportPublicIp: pulumi.Output<boolean | undefined>;
+    declare public readonly templateId: pulumi.Output<string | undefined>;
+    declare public readonly terminateAfter: pulumi.Output<string | undefined>;
+    declare public readonly volumeInGb: pulumi.Output<number | undefined>;
+    declare public readonly volumeKey: pulumi.Output<string | undefined>;
+    declare public readonly volumeMountPath: pulumi.Output<string | undefined>;
 
     /**
      * Create a Pod resource with the given unique name, arguments, and options.
@@ -78,47 +78,47 @@ export class Pod extends pulumi.CustomResource {
         let resourceInputs: pulumi.Inputs = {};
         opts = opts || {};
         if (!opts.id) {
-            if ((!args || args.gpuCount === undefined) && !opts.urn) {
+            if (args?.gpuCount === undefined && !opts.urn) {
                 throw new Error("Missing required property 'gpuCount'");
             }
-            if ((!args || args.gpuTypeId === undefined) && !opts.urn) {
+            if (args?.gpuTypeId === undefined && !opts.urn) {
                 throw new Error("Missing required property 'gpuTypeId'");
             }
-            if ((!args || args.imageName === undefined) && !opts.urn) {
+            if (args?.imageName === undefined && !opts.urn) {
                 throw new Error("Missing required property 'imageName'");
             }
-            resourceInputs["aiApiId"] = args ? args.aiApiId : undefined;
-            resourceInputs["cloudType"] = args ? args.cloudType : undefined;
-            resourceInputs["containerDiskInGb"] = args ? args.containerDiskInGb : undefined;
-            resourceInputs["countryCode"] = args ? args.countryCode : undefined;
-            resourceInputs["cudaVersion"] = args ? args.cudaVersion : undefined;
-            resourceInputs["dataCenterId"] = args ? args.dataCenterId : undefined;
-            resourceInputs["deployCost"] = args ? args.deployCost : undefined;
-            resourceInputs["dockerArgs"] = args ? args.dockerArgs : undefined;
-            resourceInputs["env"] = args ? args.env : undefined;
-            resourceInputs["gpuCount"] = args ? args.gpuCount : undefined;
-            resourceInputs["gpuTypeId"] = args ? args.gpuTypeId : undefined;
-            resourceInputs["gpuTypeIdList"] = args ? args.gpuTypeIdList : undefined;
-            resourceInputs["imageName"] = args ? args.imageName : undefined;
-            resourceInputs["minDisk"] = args ? args.minDisk : undefined;
-            resourceInputs["minDownload"] = args ? args.minDownload : undefined;
-            resourceInputs["minMemoryInGb"] = args ? args.minMemoryInGb : undefined;
-            resourceInputs["minUpload"] = args ? args.minUpload : undefined;
-            resourceInputs["minVcpuCount"] = args ? args.minVcpuCount : undefined;
-            resourceInputs["name"] = args ? args.name : undefined;
-            resourceInputs["networkVolumeId"] = args ? args.networkVolumeId : undefined;
-            resourceInputs["port"] = args ? args.port : undefined;
-            resourceInputs["ports"] = args ? args.ports : undefined;
-            resourceInputs["savingsPlan"] = args ? args.savingsPlan : undefined;
-            resourceInputs["startJupyter"] = args ? args.startJupyter : undefined;
-            resourceInputs["startSsh"] = args ? args.startSsh : undefined;
-            resourceInputs["stopAfter"] = args ? args.stopAfter : undefined;
-            resourceInputs["supportPublicIp"] = args ? args.supportPublicIp : undefined;
-            resourceInputs["templateId"] = args ? args.templateId : undefined;
-            resourceInputs["terminateAfter"] = args ? args.terminateAfter : undefined;
-            resourceInputs["volumeInGb"] = args ? args.volumeInGb : undefined;
-            resourceInputs["volumeKey"] = args ? args.volumeKey : undefined;
-            resourceInputs["volumeMountPath"] = args ? args.volumeMountPath : undefined;
+            resourceInputs["aiApiId"] = args?.aiApiId;
+            resourceInputs["cloudType"] = args?.cloudType;
+            resourceInputs["containerDiskInGb"] = args?.containerDiskInGb;
+            resourceInputs["countryCode"] = args?.countryCode;
+            resourceInputs["cudaVersion"] = args?.cudaVersion;
+            resourceInputs["dataCenterId"] = args?.dataCenterId;
+            resourceInputs["deployCost"] = args?.deployCost;
+            resourceInputs["dockerArgs"] = args?.dockerArgs;
+            resourceInputs["env"] = args?.env;
+            resourceInputs["gpuCount"] = args?.gpuCount;
+            resourceInputs["gpuTypeId"] = args?.gpuTypeId;
+            resourceInputs["gpuTypeIdList"] = args?.gpuTypeIdList;
+            resourceInputs["imageName"] = args?.imageName;
+            resourceInputs["minDisk"] = args?.minDisk;
+            resourceInputs["minDownload"] = args?.minDownload;
+            resourceInputs["minMemoryInGb"] = args?.minMemoryInGb;
+            resourceInputs["minUpload"] = args?.minUpload;
+            resourceInputs["minVcpuCount"] = args?.minVcpuCount;
+            resourceInputs["name"] = args?.name;
+            resourceInputs["networkVolumeId"] = args?.networkVolumeId;
+            resourceInputs["port"] = args?.port;
+            resourceInputs["ports"] = args?.ports;
+            resourceInputs["savingsPlan"] = args?.savingsPlan;
+            resourceInputs["startJupyter"] = args?.startJupyter;
+            resourceInputs["startSsh"] = args?.startSsh;
+            resourceInputs["stopAfter"] = args?.stopAfter;
+            resourceInputs["supportPublicIp"] = args?.supportPublicIp;
+            resourceInputs["templateId"] = args?.templateId;
+            resourceInputs["terminateAfter"] = args?.terminateAfter;
+            resourceInputs["volumeInGb"] = args?.volumeInGb;
+            resourceInputs["volumeKey"] = args?.volumeKey;
+            resourceInputs["volumeMountPath"] = args?.volumeMountPath;
             resourceInputs["pod"] = undefined /*out*/;
         } else {
             resourceInputs["aiApiId"] = undefined /*out*/;
