@@ -1,3 +1,5 @@
+# Pulumi Runpod Native Provider
+
 > [!WARNING]
 > **This provider is deprecated and unmaintained.** It calls the Runpod GraphQL API and will get no further releases. Use the [Runpod Terraform provider](https://registry.terraform.io/providers/runpod/runpod/latest) 2.0.0, which runs on the Runpod REST v2 API. You can keep writing Pulumi programs: see [Migrating to the Terraform provider](#migrating-to-the-terraform-provider).
 
