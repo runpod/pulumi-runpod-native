@@ -4,6 +4,16 @@ meta_desc: Provides an overview of the Runpod Provider for Pulumi.
 layout: package
 ---
 
+## Deprecated
+
+**This provider is deprecated and unmaintained.** It calls the Runpod GraphQL API and will get no further releases. Use the [Runpod Terraform provider](https://registry.terraform.io/providers/runpod/runpod/latest) 2.0.0, which runs on the Runpod REST v2 API. Pulumi programs can consume it directly:
+
+```bash
+pulumi package add terraform-provider registry.terraform.io/runpod/runpod
+```
+
+Resource mapping and migration notes are in the repository README.
+
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources. The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
 ## Config

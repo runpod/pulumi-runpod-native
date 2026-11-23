@@ -4,6 +4,40 @@ meta_desc: Provides an overview of the Runpod Provider for Pulumi.
 layout: package
 ---
 
+> [!WARNING]
+> **This provider is deprecated and unmaintained.** It calls the Runpod GraphQL API and will get no further releases. Use the [Runpod Terraform provider](https://registry.terraform.io/providers/runpod/runpod/latest) 2.0.0, which runs on the Runpod REST v2 API. You can keep writing Pulumi programs: see [Migrating to the Terraform provider](#migrating-to-the-terraform-provider).
+
+## Migrating to the Terraform provider
+
+Pulumi can consume a Terraform provider directly. From your Pulumi project:
+
+```bash
+pulumi package add terraform-provider registry.terraform.io/runpod/runpod
+```
+
+That generates a local SDK for your project's language and pins Runpod provider 2.0.0 in `Pulumi.yaml`. Set your API key:
+
+```bash
+pulumi config set --secret runpod:apiKey YOUR_API_KEY
+```
+
+The provider also reads `RUNPOD_API_KEY` from the environment. Note that the config key is `runpod:apiKey`, not this provider's `runpod:token`.
+
+### Resource mapping
+
+| This provider | Terraform provider 2.0.0, through Pulumi |
+|---|---|
+| `runpod.Pod` | `runpod.Pod` |
+| `runpod.Template` | `runpod.Template` |
+| `runpod.Endpoint` | `runpod.ServerlessEndpoint` |
+| `runpod.NetworkStorage` | `runpod.NetworkVolume` |
+
+Every resource this provider has maps across. The Terraform provider also covers global volumes, Instant Clusters, account SSH keys and container registry credentials.
+
+---
+
+**Everything below describes the deprecated provider and is kept for existing users.**
+
 The Runpod provider for Pulumi can be used to provision [Runpod](https://www.runpod.io) resources.
 The Runpod provider must be configured with Runpod's API keys to deploy and update resources in Runpod.
 
